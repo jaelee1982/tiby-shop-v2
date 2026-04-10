@@ -4,6 +4,7 @@ import { Collection } from "@/components/home/Collection";
 import { SceneGallery } from "@/components/home/SceneGallery";
 import { HowToUse } from "@/components/home/HowToUse";
 import { BrandStory } from "@/components/home/BrandStory";
+import { InstagramFeed } from "@/components/home/InstagramFeed";
 import { WhereToBuy } from "@/components/home/WhereToBuy";
 
 export default function Home() {
@@ -15,6 +16,7 @@ export default function Home() {
       <SceneGallery />
       <HowToUse />
       <BrandStory />
+      <InstagramFeed />
       <WhereToBuy />
     </>
   );
