@@ -9,6 +9,9 @@ export type Product = {
   tagline: string;
   concept: string;
   profile: string;
+  heroHook: string;
+  heroSub: string;
+  problems: { em: string; text: string }[];
   notes: {
     top: string;
     mid: string;
@@ -17,7 +20,7 @@ export type Product = {
   image: string;
   imageSide: string;
   heroImage: string;
-  scenes: { image: string; title: string; category: string }[];
+  scenes: { image: string; title: string; category: string; sub: string }[];
   reviews: { text: string; author: string; stars: number }[];
 };
 
@@ -36,41 +39,82 @@ export const products: Product[] = [
     concept:
       "ビターオレンジのきらめきから、ジャスミン・ピーチ・ローズのロマンティックなブーケへ。アンバーのやさしい余韻が長く漂います。",
     profile: "Fresh Floral Musk Amber",
+    heroHook: "髪のニオイ、\n誰かに気づかれて\nいませんか？",
+    heroSub:
+      "せっかくのコーデも、香水も。\n髪の印象ひとつで、すべてが変わる。\nTIBYは、すれ違う瞬間に残る——\nヘア専用の香りです。",
+    problems: [
+      {
+        em: "「電車でふわっと香りが漂ったとき」",
+        text: "自分の髪からとは言えなかった",
+      },
+      {
+        em: "「普通の香水は重すぎて」",
+        text: "髪につけるのをためらってしまう",
+      },
+      {
+        em: "「夕方になると",
+        text: "髪のニオイが気になって自信が持てなくなる」",
+      },
+    ],
     notes: {
       top: "Bergamot · Orange · Peach",
-      mid: "Orchid · Rose · Jasmine",
+      mid: "Orchid · Rose · Jasmine · Lily",
       base: "Musk · Amber",
     },
     image: `${CDN}/LOVE_ME_ME_pink_front1_1.png`,
     imageSide: `${CDN}/LOVE_ME_ME_pink_side_2.png`,
-    heroImage: `${CDN}/tiby_lovememe_hairperfume_03_hero.jpg`,
+    heroImage: `${CDN}/tiby_lovememe_hairperfume_04_hero.jpg`,
     scenes: [
       {
-        image: `${CDN}/love-me-me-scene-weekend.png`,
-        title: "お出かけの日",
-        category: "Weekend",
+        image: `${CDN}/love-me-me-scene-date_1.png`,
+        title: "デートの前に",
+        category: "Date",
+        sub: "すれ違う瞬間の、ズルい残り香",
       },
       {
-        image: `${CDN}/love-me-me-scene-date_1.png`,
-        title: "デートの日",
-        category: "Date",
+        image: `${CDN}/tiby_lovememe_hairperfume_10_usage.jpg`,
+        title: "外出前の仕上げに",
+        category: "Getting Ready",
+        sub: "15〜25cm離してシュッと一吹き",
+      },
+      {
+        image: `${CDN}/love-me-me-scene-campus.png`,
+        title: "キャンパスでも",
+        category: "Campus",
+        sub: "さりげなく漂う、やさしい香り",
+      },
+      {
+        image: `${CDN}/love-me-me-scene-weekend.png`,
+        title: "お出かけの日に",
+        category: "Weekend",
+        sub: "鞄に入れて、いつでも使える",
       },
     ],
     reviews: [
       {
-        text: "髪を揺らすたびにふわっと香って、友達に「いい匂い！」って言われました。",
-        author: "Mika, 22",
+        text: "「香水は重いと感じていたけど、これは軽くてちょうどいい。朝つけると夕方までふわっと感じます」",
+        author: "@yuki___ · 20代 / 東京",
         stars: 5,
       },
       {
-        text: "香水は苦手だけど、これはちょうどいい。毎日使ってます。",
-        author: "Yui, 19",
+        text: "「¥999なのに香りがしっかりしていて驚いた。ドンキで見つけてからリピートしてます」",
+        author: "@hana.s · 20代 / 大阪",
         stars: 5,
       },
       {
-        text: "ピーチとローズの組み合わせが最高。リピ確定！",
-        author: "Hana, 25",
+        text: "「彼氏に『なんかいい匂いする』って言われた！髪専用って初めて使ったけど全然違う」",
+        author: "@miho.__ · 20代 / 神奈川",
         stars: 4,
+      },
+      {
+        text: "「スプレーが細かくて使いやすい。ピーチとローズの混ざり方が絶妙で毎朝のルーティンになってます」",
+        author: "@rin.__ · 20代 / 愛知",
+        stars: 5,
+      },
+      {
+        text: "「3本全部買った！シーンで使い分けてます。コスパ最高すぎる」",
+        author: "@saki.m · 20代 / 福岡",
+        stars: 5,
       },
     ],
   },
@@ -86,6 +130,23 @@ export const products: Product[] = [
     concept:
       "ココナッツとバニラの甘く温かい香り。肌に寄り添い、柔らかく香ります。",
     profile: "Citrus Floral Vanilla",
+    heroHook: "やさしく包まれたい、\nそんな日の\n香り。",
+    heroSub:
+      "バニラとムスクが織りなす\n甘く温かな余韻。\n抱きしめたくなる、\nやさしい温もりの香り。",
+    problems: [
+      {
+        em: "「甘い香りが好きだけど」",
+        text: "香水だと強すぎて周りの目が気になる",
+      },
+      {
+        em: "「リラックスしたい夜に」",
+        text: "ちょうどいい香りが見つからない",
+      },
+      {
+        em: "「自分だけに香る」",
+        text: "やさしい甘さがほしい",
+      },
+    ],
     notes: {
       top: "Lemon · Tangerine",
       mid: "Orchid · Lily of the Valley",
@@ -99,28 +160,52 @@ export const products: Product[] = [
         image: `${CDN}/tiby_cafe_hug_meme_lunch_after.png`,
         title: "ひとりの午後",
         category: "Daily",
+        sub: "カフェで読書。自分だけに漂う癒し",
       },
       {
         image: `${CDN}/tiby_hugmeme_hairperfume_10_hero.jpg`,
-        title: "おやすみ前",
+        title: "おやすみ前に",
         category: "Night",
+        sub: "枕にそっと。好きな香りで眠りにつく",
+      },
+      {
+        image: `${CDN}/tiby_hugmeme_hairperfume_08_usage.jpg`,
+        title: "オフィスでも",
+        category: "Office",
+        sub: "さりげなく、やわらかく香る",
+      },
+      {
+        image: `${CDN}/tiby_hugmeme_hairperfume_14_hero.jpg`,
+        title: "休日のお出かけ",
+        category: "Weekend",
+        sub: "バニラの甘さに包まれて",
       },
     ],
     reviews: [
       {
-        text: "バニラの香りが甘すぎず、ちょうどいい。おやすみ前に使ってます。",
-        author: "Rina, 21",
+        text: "「バニラの香りが甘すぎず、ちょうどいい。おやすみ前に使ってます」",
+        author: "@rina_22 · 20代 / 東京",
         stars: 5,
       },
       {
-        text: "彼に「いい匂い」って言われた！リピートします。",
-        author: "Saki, 23",
+        text: "「彼に『いい匂い』って言われた！リピートします」",
+        author: "@saki.23 · 20代 / 大阪",
         stars: 5,
       },
       {
-        text: "柔らかい香りで一日中癒されます。お気に入り。",
-        author: "Nao, 20",
+        text: "「柔らかい香りで一日中癒されます。お気に入り」",
+        author: "@nao_20 · 20代 / 名古屋",
         stars: 4,
+      },
+      {
+        text: "「サンダルウッドとバニラの組み合わせが最高。大人っぽい甘さ」",
+        author: "@yumi.__ · 20代 / 横浜",
+        stars: 5,
+      },
+      {
+        text: "「3つの中で一番好き。毎日使っても飽きない」",
+        author: "@mai.k · 20代 / 京都",
+        stars: 5,
       },
     ],
   },
@@ -136,6 +221,23 @@ export const products: Product[] = [
     concept:
       "フルーティーだけど甘すぎなくて、大人っぽい。デートに最適。",
     profile: "Fruity Floral",
+    heroHook: "すれ違った瞬間、\n振り返らせる\n香り。",
+    heroSub:
+      "アップルとラズベリーの\nフルーティーな可憐さ。\nすれ違う瞬間に残る、\n記憶に刻まれる香り。",
+    problems: [
+      {
+        em: "「フルーティーな香りが好きだけど」",
+        text: "子どもっぽくなりたくない",
+      },
+      {
+        em: "「デートの前に」",
+        text: "さりげなく印象に残りたい",
+      },
+      {
+        em: "「すれ違った瞬間に」",
+        text: "振り返ってほしい",
+      },
+    ],
     notes: {
       top: "Apple · Raspberry",
       mid: "Orchid · Gardenia · Freesia",
@@ -147,30 +249,54 @@ export const products: Product[] = [
     scenes: [
       {
         image: `${CDN}/kiss_me_me_restaurant.jpg`,
-        title: "特別な夜",
+        title: "特別な夜に",
         category: "Night Out",
+        sub: "エレガントに漂う大人のエチケット",
       },
       {
         image: `${CDN}/tiby_date__at_night_kiss_meme.png`,
         title: "デートの夜",
         category: "Date",
+        sub: "記憶に残る、魅惑的な残り香",
+      },
+      {
+        image: `${CDN}/Tiby_tokyo_subway_kiss_meme.png`,
+        title: "すれ違う瞬間",
+        category: "Commute",
+        sub: "エレベーターや街角で",
+      },
+      {
+        image: `${CDN}/kiss_elevator.jpg`,
+        title: "エレベーターで",
+        category: "Elevator",
+        sub: "ふわっと香る、ズルい残り香",
       },
     ],
     reviews: [
       {
-        text: "フルーティーで爽やか！通学中にさりげなく香る感じが好き。",
-        author: "Aoi, 18",
+        text: "「フルーティーで爽やか！通学中にさりげなく香る感じが好き」",
+        author: "@aoi_18 · 10代 / 千葉",
         stars: 5,
       },
       {
-        text: "デートの前にいつもつけてます。褒められ率が高い！",
-        author: "Mei, 24",
+        text: "「デートの前にいつもつけてます。褒められ率が高い！」",
+        author: "@mei.24 · 20代 / 東京",
         stars: 5,
       },
       {
-        text: "アップルとラズベリーの香りが新鮮。他にない香り。",
-        author: "Kana, 22",
+        text: "「アップルとラズベリーの香りが新鮮。他にない香り」",
+        author: "@kana.22 · 20代 / 大阪",
         stars: 4,
+      },
+      {
+        text: "「大人っぽいフルーティー。甘すぎないのが最高」",
+        author: "@riko.__ · 20代 / 福岡",
+        stars: 5,
+      },
+      {
+        text: "「友達全員に勧めてる。この値段でこの香りはズルい」",
+        author: "@moe.21 · 20代 / 神戸",
+        stars: 5,
       },
     ],
   },
