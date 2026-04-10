@@ -16,7 +16,7 @@ export async function GET() {
   }
 
   try {
-    const url = `${META_API}/${IG_ACCOUNT_ID}/media?fields=id,caption,media_type,media_url,thumbnail_url,permalink,timestamp,like_count&limit=9&access_token=${token}`;
+    const url = `${META_API}/${IG_ACCOUNT_ID}/media?fields=id,caption,media_type,media_url,thumbnail_url,permalink,timestamp,like_count&limit=8&access_token=${token}`;
     const res = await fetch(url, { next: { revalidate: 3600 } });
     const data = await res.json();
 

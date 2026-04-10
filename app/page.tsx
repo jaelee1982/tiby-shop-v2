@@ -5,6 +5,7 @@ import { SceneGallery } from "@/components/home/SceneGallery";
 import { HowToUse } from "@/components/home/HowToUse";
 import { BrandStory } from "@/components/home/BrandStory";
 import { InstagramFeed } from "@/components/home/InstagramFeed";
+import { XReviews } from "@/components/home/XReviews";
 import { WhereToBuy } from "@/components/home/WhereToBuy";
 
 export default function Home() {
@@ -17,6 +18,7 @@ export default function Home() {
       <HowToUse />
       <BrandStory />
       <InstagramFeed />
+      <XReviews />
       <WhereToBuy />
     </>
   );
