@@ -41,3 +41,10 @@
   to = "https://tiby.me/layering/:splat"
   status = 200
   force = true
+
+# Proxy tiby.me's SPA build assets (JS/CSS bundles)
+[[redirects]]
+  from = "/assets/*"
+  to = "https://tiby.me/assets/:splat"
+  status = 200
+  force = true
