@@ -4,3 +4,40 @@
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+
+# tiby.me proxy — bring stores/quiz/layering under tiby.shop domain
+[[redirects]]
+  from = "/stores"
+  to = "https://tiby.me/stores"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/stores/*"
+  to = "https://tiby.me/stores/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/quiz"
+  to = "https://tiby.me/quiz"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/quiz/*"
+  to = "https://tiby.me/quiz/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/layering"
+  to = "https://tiby.me/layering"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/layering/*"
+  to = "https://tiby.me/layering/:splat"
+  status = 200
+  force = true
