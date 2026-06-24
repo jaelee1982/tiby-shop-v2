@@ -84,7 +84,8 @@ function Hero({ skuId, setSkuId }: { skuId: SkuId; setSkuId: (id: SkuId) => void
 
           <div className="t-price-row">
             <div className="t-price-box">
-              <div className="t-price">¥999<span>税込</span></div>
+              <div className="t-price">¥999<span>税抜</span></div>
+              <div className="t-price-tax">税込 ¥1,099</div>
             </div>
             <button className="t-cta">カートに入れる</button>
           </div>

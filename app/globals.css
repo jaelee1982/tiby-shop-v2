@@ -105,6 +105,7 @@ html, body {
 .t-price-row { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
 .t-price { font-family: var(--font-price); font-weight: 800; font-size: 44px; line-height: 1; letter-spacing: -0.02em; color: var(--tiby-ink); }
 .t-price span { font-family: var(--font-body-jp); font-weight: 500; font-size: 12px; color: var(--fg-3); margin-left: 6px; vertical-align: middle; }
+.t-price-tax { font-family: var(--font-body-jp); font-weight: 500; font-size: 12px; color: var(--fg-3); margin-top: 4px; }
 .t-cta { background: var(--tiby-ink); color: #fff; border: 0; padding: 16px 28px; border-radius: 999px; font-family: var(--font-body-jp); font-weight: 700; font-size: 15px; cursor: pointer; transition: all var(--dur-base) var(--ease-out); }
 .t-cta:hover { background: #333; transform: translateY(-1px); }
 .t-cta-light { background: #fff; color: var(--tiby-ink); }
