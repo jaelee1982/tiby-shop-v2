@@ -17,6 +17,11 @@ export type Product = {
     mid: string;
     base: string;
   };
+  notesDesc: {
+    top: string;
+    mid: string;
+    base: string;
+  };
   image: string;
   imageSide: string;
   heroImage: string;
@@ -61,6 +66,11 @@ export const products: Product[] = [
       top: "Bergamot · Orange · Peach",
       mid: "Orchid · Rose · Jasmine · Lily",
       base: "Musk · Amber",
+    },
+    notesDesc: {
+      top: "ピーチ、ベルガモット、オレンジを含むフレッシュな香り",
+      mid: "ローズ、ジャスミン、フリージアなどのフローラルな香り",
+      base: "ムスクやアンバーの温かみがある甘い香り",
     },
     image: `${CDN}/LOVE_ME_ME_pink_front1_1.png`,
     imageSide: `${CDN}/LOVE_ME_ME_pink_side_2.png`,
@@ -154,6 +164,11 @@ export const products: Product[] = [
       mid: "Orchid · Lily of the Valley",
       base: "Musk · Sandalwood · Vanilla",
     },
+    notesDesc: {
+      top: "レモンやタンジェリンの柑橘系の香り",
+      mid: "オーキッドやクチナシのココナッツみたいな甘くて濃厚な香り",
+      base: "バニラとムスクの甘く優しい香り",
+    },
     image: `${CDN}/LOVE_ME_ME_Green_front1_3.png`,
     imageSide: `${CDN}/LOVE_ME_ME_Green_side_1.png`,
     heroImage: `${CDN}/tiby_hugmeme_hairperfume_07_hero.jpg`,
@@ -245,6 +260,11 @@ export const products: Product[] = [
       top: "Apple · Raspberry",
       mid: "Orchid · Gardenia · Freesia",
       base: "Musk · Amber · Wood",
+    },
+    notesDesc: {
+      top: "アップルやラズベリーの甘いフルーツの香り",
+      mid: "シクラメンのスパイシーさとオーキッドのエレガントさを兼ね備えた高級感のある香り",
+      base: "アンバーとウッディの温かみがある甘い香り",
     },
     image: `${CDN}/LOVE_ME_ME_purple_front1_1.png`,
     imageSide: `${CDN}/LOVE_ME_ME_purple_side_1.png`,

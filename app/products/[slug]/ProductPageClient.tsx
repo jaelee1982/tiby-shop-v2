@@ -209,22 +209,20 @@ export function ProductPageClient({
               </p>
             </ScrollReveal>
 
-            {/* Fragrance Notes — 3 column cards */}
+            {/* Fragrance Notes — TOP / MIDDLE / BASE */}
             <ScrollReveal delay={0.15}>
-              <div className="grid grid-cols-3 gap-3 mb-10">
+              <div className="border-t border-cream-faint mb-10">
                 {(["top", "mid", "base"] as const).map((key) => (
                   <div
                     key={key}
-                    className="border border-cream-faint p-4 text-center"
+                    className="flex gap-4 md:gap-6 py-4 border-b border-cream-faint"
                   >
-                    <span className="text-[9px] tracking-[2px] uppercase text-cream/30 block mb-3">
-                      {key === "base" ? "Base Note" : `${key.charAt(0).toUpperCase() + key.slice(1)} Note`}
+                    <span className="text-[10px] tracking-[2px] uppercase text-cream/35 shrink-0 w-[60px] pt-[3px]">
+                      {key === "base" ? "Base" : key === "mid" ? "Middle" : "Top"}
                     </span>
-                    <div className="text-[11px] text-cream-dim leading-[2]">
-                      {product.notes[key].split(" · ").map((note, i) => (
-                        <span key={i} className="block">{note}</span>
-                      ))}
-                    </div>
+                    <span className="font-jp text-[12px] text-cream-dim leading-[1.9]">
+                      {product.notesDesc[key]}
+                    </span>
                   </div>
                 ))}
               </div>
