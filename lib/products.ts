@@ -17,6 +17,11 @@ export type Product = {
     mid: string;
     base: string;
   };
+  notesDesc: {
+    top: string;
+    mid: string;
+    base: string;
+  };
   image: string;
   imageSide: string;
   heroImage: string;
@@ -35,7 +40,8 @@ export const products: Product[] = [
     color: "love",
     colorHex: "#F0906E",
     colorDim: "rgba(240,144,110,0.15)",
-    tagline: "近づいたとき、気づいてほしい香り。\nすれ違った瞬間の、ズルい残り香。",
+    tagline:
+      "みずみずしいピーチと柑橘系に、華やかなフローラルとやさしいムスクが重なる上品な香り。",
     concept:
       "ビターオレンジのきらめきから、ジャスミン・ピーチ・ローズのロマンティックなブーケへ。アンバーのやさしい余韻が長く漂います。",
     profile: "Fresh Floral Musk Amber",
@@ -60,6 +66,11 @@ export const products: Product[] = [
       top: "Bergamot · Orange · Peach",
       mid: "Orchid · Rose · Jasmine · Lily",
       base: "Musk · Amber",
+    },
+    notesDesc: {
+      top: "ピーチ、ベルガモット、オレンジを含むフレッシュな香り",
+      mid: "ローズ、ジャスミン、フリージアなどのフローラルな香り",
+      base: "ムスクやアンバーの温かみがある甘い香り",
     },
     image: `${CDN}/LOVE_ME_ME_pink_front1_1.png`,
     imageSide: `${CDN}/LOVE_ME_ME_pink_side_2.png`,
@@ -126,7 +137,8 @@ export const products: Product[] = [
     color: "hug",
     colorHex: "#6DBFBA",
     colorDim: "rgba(109,191,186,0.15)",
-    tagline: "抱きしめたくなる、やさしい温もり。\nバニラ＆ムスクの甘い余韻。",
+    tagline:
+      "フレッシュな柑橘系とココナッツを思わせる濃厚でエキゾチックな甘さが重なり、バニラとムスクがやさしく包み込む香り。",
     concept:
       "ココナッツとバニラの甘く温かい香り。肌に寄り添い、柔らかく香ります。",
     profile: "Citrus Floral Vanilla",
@@ -151,6 +163,11 @@ export const products: Product[] = [
       top: "Lemon · Tangerine",
       mid: "Orchid · Lily of the Valley",
       base: "Musk · Sandalwood · Vanilla",
+    },
+    notesDesc: {
+      top: "レモンやタンジェリンの柑橘系の香り",
+      mid: "オーキッドやクチナシのココナッツみたいな甘くて濃厚な香り",
+      base: "バニラとムスクの甘く優しい香り",
     },
     image: `${CDN}/LOVE_ME_ME_Green_front1_3.png`,
     imageSide: `${CDN}/LOVE_ME_ME_Green_side_1.png`,
@@ -217,7 +234,8 @@ export const products: Product[] = [
     color: "kiss",
     colorHex: "#A99FCC",
     colorDim: "rgba(169,159,204,0.15)",
-    tagline: "すれ違う瞬間に残る、\nフルーティーで可憐な香り。",
+    tagline:
+      "甘いフルーツの香りから、アンバーとウッディの温もりへ変化するエレガントで高級感のある香り。",
     concept:
       "フルーティーだけど甘すぎなくて、大人っぽい。デートに最適。",
     profile: "Fruity Floral",
@@ -242,6 +260,11 @@ export const products: Product[] = [
       top: "Apple · Raspberry",
       mid: "Orchid · Gardenia · Freesia",
       base: "Musk · Amber · Wood",
+    },
+    notesDesc: {
+      top: "アップルやラズベリーの甘いフルーツの香り",
+      mid: "シクラメンのスパイシーさとオーキッドのエレガントさを兼ね備えた高級感のある香り",
+      base: "アンバーとウッディの温かみがある甘い香り",
     },
     image: `${CDN}/LOVE_ME_ME_purple_front1_1.png`,
     imageSide: `${CDN}/LOVE_ME_ME_purple_side_1.png`,

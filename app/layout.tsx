@@ -1,40 +1,20 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Josefin_Sans, Zen_Maru_Gothic } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 
-const cormorant = Cormorant_Garamond({
-  subsets: ["latin"],
-  weight: ["300", "400"],
-  style: ["normal", "italic"],
-  variable: "--font-serif",
-  display: "swap",
-});
-
-const josefin = Josefin_Sans({
-  subsets: ["latin"],
-  weight: ["200", "300", "400"],
-  variable: "--font-sans",
-  display: "swap",
-});
-
-const zenMaru = Zen_Maru_Gothic({
-  subsets: ["latin"],
-  weight: ["300", "400"],
-  variable: "--font-jp",
-  display: "swap",
-});
+// Fonts (Jost · Montserrat · Noto Serif/Sans JP) are loaded via the design-system
+// @import in globals.css — see TIBY Design System colors_and_type.css §4.2.
 
 export const metadata: Metadata = {
-  title: "TIBY — Hair Perfume",
+  title: "Tiby — Hair Perfume",
   description:
-    "香水は決めすぎるけど、これはズルい。TIBY Hair Perfume ¥999 — 30ml. 全国ドン・キホーテ219店舗にて発売中。",
+    "香りが決めすぎるけど、これはズルい。Tiby Hair Perfume ¥999（税込）— 全国ドン・キホーテにて発売中。",
   openGraph: {
-    title: "TIBY — Hair Perfume",
-    description: "すれ違った瞬間の、ズルい残り香。¥999 · 30ml",
+    title: "Tiby — Hair Perfume",
+    description: "すれ違った瞬間の、ズルい残り香。¥999（税込）",
     url: "https://tiby.shop",
-    siteName: "TIBY",
+    siteName: "Tiby",
     locale: "ja_JP",
     type: "website",
   },
@@ -50,10 +30,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="ja"
-      className={`${cormorant.variable} ${josefin.variable} ${zenMaru.variable}`}
-    >
+    <html lang="ja">
       <body>
         <Navbar />
         <main>{children}</main>

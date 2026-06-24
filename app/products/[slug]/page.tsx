@@ -29,7 +29,5 @@ export default async function ProductPage({ params }: Props) {
   const product = getProduct(slug);
   if (!product) notFound();
 
-  const otherProducts = products.filter((p) => p.slug !== slug);
-
-  return <ProductPageClient product={product} otherProducts={otherProducts} />;
+  return <ProductPageClient slug={slug} />;
 }

@@ -1,62 +1,36 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import Link from "next/link";
 
-const links = [
-  { href: "/#shop", label: "Shop" },
-  { href: "/#about", label: "About" },
-  { href: "https://tiby.me/stores", label: "Stores", external: true },
-  { href: "https://tiby.me", label: "Quiz", external: true },
-];
-
+// Sticky glass nav — TIBY Design System (ui_kits/pdp/app.jsx · Nav)
 export function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 80);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
   return (
-    <nav
-      className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 py-5 transition-all duration-500 ${
-        scrolled
-          ? "bg-bg/85 backdrop-blur-xl border-b border-cream-faint"
-          : "mix-blend-difference"
-      }`}
-    >
-      <Link
-        href="/"
-        className="font-serif font-light text-[22px] tracking-[6px] text-cream no-underline"
-      >
-        Tiby
-      </Link>
-
-      <ul className="hidden md:flex gap-9 list-none">
-        {links.map((link) => (
-          <li key={link.label}>
-            {link.external ? (
-              <a
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[11px] tracking-[2.5px] uppercase text-cream-dim hover:text-cream transition-colors duration-300"
-              >
-                {link.label}
-              </a>
-            ) : (
-              <Link
-                href={link.href}
-                className="text-[11px] tracking-[2.5px] uppercase text-cream-dim hover:text-cream transition-colors duration-300"
-              >
-                {link.label}
-              </Link>
-            )}
-          </li>
-        ))}
-      </ul>
+    <nav className="t-nav">
+      <div className="t-nav-inner">
+        <Link className="t-wordmark" href="/">
+          <span>Tiby</span>
+        </Link>
+        <div className="t-nav-links">
+          <Link href="/#story">Story</Link>
+          <Link href="/products/love-me-me">Products</Link>
+          <a href="https://tiby.me/layering" target="_blank" rel="noopener noreferrer">Layering</a>
+          <a href="https://tiby.me/stores" target="_blank" rel="noopener noreferrer">Store</a>
+        </div>
+        <div className="t-nav-right">
+          <button className="t-icon-btn" aria-label="Search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.35-4.35" />
+            </svg>
+          </button>
+          <button className="t-icon-btn" aria-label="Cart">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
+              <path d="M3 6h18" />
+              <path d="M16 10a4 4 0 0 1-8 0" />
+            </svg>
+          </button>
+          <span className="t-lang">JP</span>
+        </div>
+      </div>
     </nav>
   );
 }
