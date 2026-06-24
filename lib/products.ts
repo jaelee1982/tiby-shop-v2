@@ -35,7 +35,8 @@ export const products: Product[] = [
     color: "love",
     colorHex: "#F0906E",
     colorDim: "rgba(240,144,110,0.15)",
-    tagline: "近づいたとき、気づいてほしい香り。\nすれ違った瞬間の、ズルい残り香。",
+    tagline:
+      "みずみずしいピーチと柑橘系に、華やかなフローラルとやさしいムスクが重なる上品な香り。",
     concept:
       "ビターオレンジのきらめきから、ジャスミン・ピーチ・ローズのロマンティックなブーケへ。アンバーのやさしい余韻が長く漂います。",
     profile: "Fresh Floral Musk Amber",
@@ -126,7 +127,8 @@ export const products: Product[] = [
     color: "hug",
     colorHex: "#6DBFBA",
     colorDim: "rgba(109,191,186,0.15)",
-    tagline: "抱きしめたくなる、やさしい温もり。\nバニラ＆ムスクの甘い余韻。",
+    tagline:
+      "フレッシュな柑橘系とココナッツを思わせる濃厚でエキゾチックな甘さが重なり、バニラとムスクがやさしく包み込む香り。",
     concept:
       "ココナッツとバニラの甘く温かい香り。肌に寄り添い、柔らかく香ります。",
     profile: "Citrus Floral Vanilla",
@@ -217,7 +219,8 @@ export const products: Product[] = [
     color: "kiss",
     colorHex: "#A99FCC",
     colorDim: "rgba(169,159,204,0.15)",
-    tagline: "すれ違う瞬間に残る、\nフルーティーで可憐な香り。",
+    tagline:
+      "甘いフルーツの香りから、アンバーとウッディの温もりへ変化するエレガントで高級感のある香り。",
     concept:
       "フルーティーだけど甘すぎなくて、大人っぽい。デートに最適。",
     profile: "Fruity Floral",

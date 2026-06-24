@@ -53,12 +53,11 @@ export function Hero() {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.2, delay: 0.6 }}
-        className="font-serif font-light italic text-center z-10 leading-[1.15] tracking-tight max-w-[820px] px-6"
-        style={{ fontSize: "clamp(36px, 5.5vw, 80px)" }}
+        className="font-serif font-light italic text-center z-10 leading-[1.15] tracking-tight max-w-[900px] px-6"
+        style={{ fontSize: "clamp(28px, 5vw, 72px)" }}
       >
-        香水は決めすぎるけど、
-        <br />
-        <span className="bg-gradient-to-br from-love via-kiss to-hug bg-clip-text text-transparent">
+        <span className="block whitespace-nowrap">香水は決めすぎるけど、</span>
+        <span className="block whitespace-nowrap bg-gradient-to-br from-love via-kiss to-hug bg-clip-text text-transparent">
           これはズルい。
         </span>
       </motion.h1>
