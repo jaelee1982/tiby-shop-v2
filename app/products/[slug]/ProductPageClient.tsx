@@ -198,8 +198,8 @@ export function ProductPageClient({
               <h2 className="font-serif font-light text-4xl tracking-[2px] mb-2">
                 {product.name}
               </h2>
-              <p className="text-sm text-cream-dim mb-6">
-                ¥999 <span className="text-cream/40">税込 / 30ml</span>
+              <p className="text-sm text-cream-dim mb-6 lining-nums">
+                ¥999 <span className="text-cream/40">（税込 ¥1,099）/ 30ml</span>
               </p>
             </ScrollReveal>
 

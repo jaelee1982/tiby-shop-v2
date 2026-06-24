@@ -105,11 +105,11 @@ export function ProductCard({
       {/* Footer */}
       <div className="flex items-center justify-between">
         <div>
-          <span className="font-serif text-[28px] font-light tracking-[1px]">
+          <span className="font-sans text-[28px] font-light tracking-[1px] lining-nums">
             ¥999
           </span>
-          <span className="block text-[13px] tracking-[1px] text-cream-dim mt-0.5 font-sans">
-            30ml · 税込
+          <span className="block text-[13px] tracking-[1px] text-cream-dim mt-0.5 font-sans lining-nums">
+            税込 ¥1,099 · 30ml
           </span>
         </div>
         <Link
