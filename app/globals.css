@@ -170,8 +170,42 @@ html, body {
 .t-foot-legal { max-width: 1200px; margin: 24px auto 0; font-family: var(--font-body-latin); font-size: 11px; letter-spacing: 0.06em; color: var(--fg-3); }
 
 /* =========================================================================
-   RESPONSIVE — design reference is desktop 1200px; JP traffic is mobile-first
+   PRODUCT DETAIL — rich PDP, design-system tone (uses lib/products.ts data)
    ========================================================================= */
+.t-pdp-section { max-width: 1200px; margin: 0 auto; padding: 88px 32px; }
+.t-pdp-tagline { font-family: var(--font-display-jp); font-weight: 500; font-size: 16px; line-height: 1.7; color: var(--fg-2); margin: 18px 0 8px; max-width: 440px; }
+
+/* concept + problems */
+.t-pdp-problems { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 8px; }
+.t-pdp-problem { background: #fff; border-radius: var(--r-md); padding: 26px 24px; box-shadow: var(--shadow-1); }
+.t-pdp-problem .em { font-family: var(--font-display-jp); font-weight: 700; font-size: 15px; line-height: 1.5; color: var(--tiby-ink); display: block; margin-bottom: 8px; }
+.t-pdp-problem .tx { font-family: var(--font-body-jp); font-size: 13px; line-height: 1.7; color: var(--fg-2); }
+.t-pdp-concept { max-width: 640px; margin: 28px auto 0; text-align: center; font-family: var(--font-display-jp); font-weight: 500; font-size: 17px; line-height: 1.8; color: var(--fg-1); }
+
+/* fragrance notes */
+.t-notes-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.t-note-card { background: #fff; border-radius: var(--r-lg); padding: 30px 28px; box-shadow: var(--shadow-1); border-top: 3px solid var(--note-accent, var(--tiby-line)); }
+.t-note-stage { font-family: var(--font-display-latin); font-weight: 800; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--note-accent, var(--fg-3)); }
+.t-note-list { font-family: var(--font-display-jp); font-weight: 700; font-size: 18px; color: var(--tiby-ink); margin: 10px 0 12px; line-height: 1.4; }
+.t-note-desc { font-family: var(--font-body-jp); font-size: 13px; line-height: 1.7; color: var(--fg-2); }
+
+/* usage scenes */
+.t-scenes-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.t-scene-card { position: relative; aspect-ratio: 3/4; border-radius: var(--r-md); overflow: hidden; box-shadow: var(--shadow-1); }
+.t-scene-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform var(--dur-slow) var(--ease-out); }
+.t-scene-card:hover img { transform: scale(1.05); }
+.t-scene-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 20px; background: linear-gradient(0deg, rgba(26,26,26,0.62) 0%, transparent 58%); }
+.t-scene-cat { font-family: var(--font-display-latin); font-weight: 700; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.85); }
+.t-scene-title { font-family: var(--font-display-jp); font-weight: 700; font-size: 17px; color: #fff; margin-top: 6px; }
+.t-scene-sub { font-family: var(--font-body-jp); font-size: 12px; line-height: 1.5; color: rgba(255,255,255,0.85); margin-top: 4px; }
+
+/* reviews */
+.t-reviews-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.t-review-card { background: #fff; border-radius: var(--r-md); padding: 26px 24px; box-shadow: var(--shadow-1); display: flex; flex-direction: column; gap: 12px; }
+.t-review-stars { color: var(--tiby-love-accent); font-size: 13px; letter-spacing: 2px; }
+.t-review-text { font-family: var(--font-display-jp); font-weight: 500; font-size: 14px; line-height: 1.75; color: var(--tiby-ink); }
+.t-review-author { font-family: var(--font-body-latin); font-size: 11px; letter-spacing: 0.04em; color: var(--fg-3); margin-top: auto; }
+
 @media (max-width: 900px) {
   .t-nav-inner { grid-template-columns: auto auto; gap: 16px; padding: 14px 20px; }
   .t-nav-links { display: none; }
@@ -189,6 +223,9 @@ html, body {
   .t-bundle-inner { grid-template-columns: 1fr; padding: 64px 20px; gap: 32px; }
   .t-bundle-now { font-size: 42px; }
   .t-foot-inner { grid-template-columns: 1fr 1fr; gap: 32px; }
+  .t-pdp-section { padding: 64px 20px; }
+  .t-pdp-problems, .t-notes-row, .t-reviews-grid { grid-template-columns: 1fr; }
+  .t-scenes-grid { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 520px) {
   .t-howto-grid { grid-template-columns: 1fr; }
