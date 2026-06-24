@@ -4,6 +4,7 @@
 // (ui_kits/pdp/app.jsx). Single-SKU hero with a live switcher that recolors the
 // page, a 3-act cross-sell, fragrance timeline, how-to and a bundle peak.
 import { useState } from "react";
+import Link from "next/link";
 import { SKUS, SKU_ORDER, type SkuId } from "@/lib/skus";
 
 /* ---------- inline icons (lucide paths) ---------- */
@@ -87,7 +88,7 @@ function Hero({ skuId, setSkuId }: { skuId: SkuId; setSkuId: (id: SkuId) => void
               <div className="t-price">¥999<span>税抜</span></div>
               <div className="t-price-tax">税込 ¥1,099</div>
             </div>
-            <button className="t-cta">カートに入れる</button>
+            <Link className="t-cta" href={`/products/${sku.slug}`}>商品詳細を見る</Link>
           </div>
           <div className="t-trust">
             <span>SNSで話題 ✨</span>
@@ -102,9 +103,9 @@ function Hero({ skuId, setSkuId }: { skuId: SkuId; setSkuId: (id: SkuId) => void
   );
 }
 
-function StoryArc({ skuId, setSkuId }: { skuId: SkuId; setSkuId: (id: SkuId) => void }) {
+function StoryArc({ skuId }: { skuId: SkuId }) {
   return (
-    <section className="t-story">
+    <section className="t-story" id="story">
       <div className="t-section-head">
         <div className="t-eyebrow">The three-act story</div>
         <h2 className="t-h2-jp">ときめき · 温もり · 情熱。<br />3つの香りで、毎日が変わる。</h2>
@@ -113,7 +114,7 @@ function StoryArc({ skuId, setSkuId }: { skuId: SkuId; setSkuId: (id: SkuId) => 
         {SKU_ORDER.map((id, i) => {
           const s = SKUS[id];
           return (
-            <button key={id} className={`t-arc-card ${id === skuId ? "on" : ""}`} onClick={() => setSkuId(id)}>
+            <Link key={id} href={`/products/${s.slug}`} className={`t-arc-card ${id === skuId ? "on" : ""}`}>
               <div className="t-arc-swatch" style={{ background: `color-mix(in oklab, ${s.accent} 55%, ${s.body})` }}>
                 <span className="t-arc-act">Act {i + 1}</span>
                 <BottleImg sku={s} />
@@ -123,7 +124,7 @@ function StoryArc({ skuId, setSkuId }: { skuId: SkuId; setSkuId: (id: SkuId) => 
                 <div className="t-arc-jp">{s.jp}</div>
                 <div className="t-arc-family">{s.family}</div>
               </div>
-            </button>
+            </Link>
           );
         })}
       </div>
@@ -216,7 +217,7 @@ export function Storefront({ initialSku = "love" }: { initialSku?: SkuId }) {
   return (
     <div className="t-page">
       <Hero skuId={skuId} setSkuId={setSkuId} />
-      <StoryArc skuId={skuId} setSkuId={setSkuId} />
+      <StoryArc skuId={skuId} />
       <FragrancePyramid skuId={skuId} />
       <HowToUse />
       <Bundle />

@@ -119,7 +119,7 @@ html, body {
 /* ===== STORY ARC ===== */
 .t-story { max-width: 1200px; margin: 0 auto; padding: 96px 32px; }
 .t-arc-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-.t-arc-card { background: #fff; border: 1.5px solid transparent; border-radius: var(--r-lg); overflow: hidden; padding: 0; cursor: pointer; text-align: left; transition: all var(--dur-base) var(--ease-out); box-shadow: var(--shadow-1); font-family: inherit; }
+.t-arc-card { display: block; background: #fff; border: 1.5px solid transparent; border-radius: var(--r-lg); overflow: hidden; padding: 0; cursor: pointer; text-align: left; text-decoration: none; color: inherit; transition: all var(--dur-base) var(--ease-out); box-shadow: var(--shadow-1); font-family: inherit; }
 .t-arc-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-3); }
 .t-arc-card.on { border-color: var(--tiby-ink); }
 .t-arc-swatch { position: relative; aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; }
