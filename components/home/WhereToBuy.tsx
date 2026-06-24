@@ -17,7 +17,7 @@ export function WhereToBuy() {
             className="font-serif font-light leading-[0.85] tracking-[-8px] bg-gradient-to-b from-cream/95 to-cream/15 bg-clip-text text-transparent my-10"
             style={{ fontSize: "clamp(140px, 22vw, 340px)" }}
           >
-            219
+            229
           </div>
         </ScrollReveal>
 
@@ -38,7 +38,7 @@ export function WhereToBuy() {
 
         <ScrollReveal delay={0.15}>
           <p className="font-jp text-sm text-cream-dim mb-16">
-            全国のドン・キホーテとオンラインで販売中。
+            全国のドン・キホーテ229店舗とオンラインで好評販売中。
           </p>
         </ScrollReveal>
 
@@ -51,7 +51,7 @@ export function WhereToBuy() {
                 ドン・キホーテ
               </h3>
               <p className="font-jp text-xs text-cream-dim leading-[2] mb-5">
-                全国219店舗にてお取り扱い中。
+                全国229店舗にてお取り扱い中。
                 <br />
                 実際に手に取って試せます。
                 <br />

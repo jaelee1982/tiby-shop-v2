@@ -6,17 +6,17 @@ const steps = [
   {
     num: "STEP 01",
     title: "Shake",
-    desc: "使用前に軽く振ってください。香りの成分が均一になり、より立体的な香り立ちに。",
+    desc: "ご使用前に軽く振ってください。香りの成分が均一になり、よりふんわりと立体的に香ります。",
   },
   {
     num: "STEP 02",
     title: "Spray",
-    desc: "髪から20cmほど離して、2〜3プッシュ。毛先を中心にふんわりと纏わせます。",
+    desc: "髪から20cmほど離し、毛先を中心に2〜3プッシュしてください。",
   },
   {
     num: "STEP 03",
     title: "Style",
-    desc: "髪を軽く揺らして香りを馴染ませて。動くたびに、ふわっと残るズルい残り香。",
+    desc: "髪を軽く揺らして香りをなじませて。動くたびに、ふわりとやさしく香りが広がります。",
     final: true,
   },
 ];
@@ -26,16 +26,11 @@ export function HowToUse() {
     <section className="py-20 md:py-[140px] px-6 md:px-12 bg-bg">
       <ScrollReveal>
         <div className="max-w-[1200px] mx-auto mb-14 md:mb-20">
-          <p className="text-[11px] tracking-[5px] uppercase text-cream/35 mb-4">
-            How to Use
-          </p>
           <h2
-            className="font-serif font-light tracking-tight"
-            style={{ fontSize: "clamp(32px, 3.5vw, 52px)" }}
+            className="font-serif font-light uppercase tracking-[0.08em]"
+            style={{ fontSize: "clamp(44px, 6vw, 88px)" }}
           >
-            ふわっと香る、
-            <br />
-            3つのステップ。
+            How to Use
           </h2>
         </div>
       </ScrollReveal>

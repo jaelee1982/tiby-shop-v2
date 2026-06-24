@@ -9,7 +9,7 @@ export function MarqueeBanner() {
         items={[
           "すれ違った瞬間の、ズルい残り香",
           "Hair Perfume",
-          "全国ドン・キホーテ219店舗",
+          "全国ドン・キホーテ229店舗",
           "¥999 — 30ml",
           "近づいたとき、気づいてほしい香り",
           "TIBY",

@@ -29,7 +29,7 @@ const zenMaru = Zen_Maru_Gothic({
 export const metadata: Metadata = {
   title: "TIBY — Hair Perfume",
   description:
-    "香水は決めすぎるけど、これはズルい。TIBY Hair Perfume ¥999 — 30ml. 全国ドン・キホーテ219店舗にて発売中。",
+    "香水は決めすぎるけど、これはズルい。TIBY Hair Perfume ¥999 — 30ml. 全国ドン・キホーテ229店舗にて発売中。",
   openGraph: {
     title: "TIBY — Hair Perfume",
     description: "すれ違った瞬間の、ズルい残り香。¥999 · 30ml",

@@ -307,7 +307,7 @@ export function ProductPageClient({
               {
                 num: "03",
                 title: "¥999 の気軽さ",
-                body: "毎日使えるプライスで、3本揃えて気分やシーンで使い分けも。ドン・キホーテ全国219店舗で購入可能。",
+                body: "毎日使えるプライスで、3本揃えて気分やシーンで使い分けも。ドン・キホーテ全国229店舗で購入可能。",
               },
             ].map((item, i) => (
               <ScrollReveal key={item.num} delay={i * 0.1}>
