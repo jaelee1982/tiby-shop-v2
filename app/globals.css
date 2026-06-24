@@ -7,12 +7,12 @@
   --color-hug-dim: rgba(109, 191, 186, 0.15);
   --color-kiss: #A99FCC;
   --color-kiss-dim: rgba(169, 159, 204, 0.15);
-  --color-bg: #0a0a0a;
-  --color-surface: #111111;
-  --color-dark: #161616;
-  --color-cream: #f5f0ee;
-  --color-cream-dim: rgba(245, 240, 238, 0.5);
-  --color-cream-faint: rgba(245, 240, 238, 0.07);
+  --color-bg: #DDCDD8;
+  --color-surface: #E6DADF;
+  --color-dark: #EDE4E7;
+  --color-cream: #474343;
+  --color-cream-dim: rgba(71, 67, 67, 0.62);
+  --color-cream-faint: rgba(71, 67, 67, 0.12);
   --font-serif: "Cormorant Garamond", serif;
   --font-sans: "Josefin Sans", sans-serif;
   --font-jp: "Zen Maru Gothic", sans-serif;
@@ -33,7 +33,7 @@ body {
 /* Scrollbar */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--color-bg); }
-::-webkit-scrollbar-thumb { background: rgba(245, 240, 238, 0.15); border-radius: 2px; }
+::-webkit-scrollbar-thumb { background: rgba(71, 67, 67, 0.25); border-radius: 2px; }
 
 /* Marquee animation */
 @keyframes marquee {
@@ -56,5 +56,5 @@ body {
 /* Selection */
 ::selection {
   background: rgba(240, 144, 110, 0.3);
-  color: #f5f0ee;
+  color: #474343;
 }
