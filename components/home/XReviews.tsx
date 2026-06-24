@@ -53,12 +53,12 @@ export function XReviews() {
             ref={containerRef}
             className="max-w-[550px] mx-auto [&_iframe]:rounded-lg"
             style={{
-              colorScheme: "dark",
+              colorScheme: "light",
             }}
           >
             <a
               className="twitter-timeline"
-              data-theme="dark"
+              data-theme="light"
               data-chrome="noheader nofooter noborders transparent"
               data-tweet-limit="5"
               data-width="550"
