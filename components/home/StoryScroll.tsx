@@ -193,11 +193,11 @@ function ChapterPrice() {
       <div className="t-ch-sticky">
         <div className="t-ch-center">
           <motion.div className="t-price-hero" style={{ scale: priceScale, opacity: priceOp }}>
-            ¥999<span>税込</span>
+            ¥999<span>税抜</span>
           </motion.div>
           <motion.div className="t-price-sub" style={{ opacity: subOp, y: subY }}>
             <p>
-              全3種、どこで買っても同じ価格。
+              税込 ¥1,099。全3種、どこで買っても同じ価格。
               <br />
               まずは、あなたの香りをひとつ。
             </p>
@@ -237,8 +237,9 @@ function StaticStory() {
       </section>
       <section className="t-static-block">
         <div className="t-price-hero">
-          ¥999<span>税込</span>
+          ¥999<span>税抜</span>
         </div>
+        <p>税込 ¥1,099</p>
         <a className="t-cta" href="#shop">
           香りを選ぶ
         </a>
@@ -267,7 +268,7 @@ export function StoryScroll() {
       <ChapterPrice />
       {/* purchase stays one tap away through the whole story */}
       <motion.a className="t-buy-pill" href="#shop" style={{ opacity: pillOp, y: pillY }}>
-        ¥999<i>·</i>香りを選ぶ
+        香りを選ぶ
       </motion.a>
     </div>
   );

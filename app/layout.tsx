@@ -11,10 +11,10 @@ import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Tiby — Hair Perfume（ヘアパフューム）",
-  description: `${siteConfig.masterCopy} Tiby Hair Perfume ¥999（税込）— 公式オンラインストア・全国ドン・キホーテにて発売中。`,
+  description: `${siteConfig.masterCopy} Tiby Hair Perfume ¥999（税抜）／税込 ¥1,099 — 公式オンラインストア・全国ドン・キホーテにて発売中。`,
   openGraph: {
     title: "Tiby — Hair Perfume",
-    description: "すれ違った瞬間の、ズルい残り香。¥999（税込）",
+    description: "すれ違った瞬間の、ズルい残り香。¥999（税抜）／税込 ¥1,099",
     url: siteConfig.siteUrl,
     siteName: "Tiby",
     locale: "ja_JP",

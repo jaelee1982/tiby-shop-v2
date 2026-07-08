@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { cartTotal, getCatalogItem, type CartLine } from "@/lib/commerce";
+import { cartTotal, getCatalogItem, taxIncluded, type CartLine } from "@/lib/commerce";
 import { siteConfig } from "@/lib/site";
 
 // Creates a KOMOJU hosted-checkout session and returns its redirect URL.
@@ -59,7 +59,7 @@ export async function POST(request: Request) {
 
   const items = lines.map((l) => {
     const item = getCatalogItem(l.id)!;
-    return { sku: item.sku, name: item.name, qty: l.qty, unit_price: item.price };
+    return { sku: item.sku, name: item.name, qty: l.qty, unit_price_tax_in: taxIncluded(item.price) };
   });
 
   try {

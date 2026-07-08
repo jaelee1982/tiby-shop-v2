@@ -90,8 +90,8 @@ function Hero({ skuId, setSkuId }: { skuId: SkuId; setSkuId: (id: SkuId) => void
 
           <div className="t-price-row">
             <div className="t-price-box">
-              <div className="t-price">¥999<span>税込</span></div>
-              <div className="t-price-tax">Hair Perfume · 30ml</div>
+              <div className="t-price">¥999<span>税抜</span></div>
+              <div className="t-price-tax">税込 ¥1,099 · Hair Perfume 30ml</div>
             </div>
             <AddToCartButton id={sku.slug as CatalogItemId} />
             <Link className="t-cta-ghost" href={`/products/${sku.slug}`}>商品詳細を見る</Link>
@@ -202,7 +202,7 @@ function Bundle() {
           </p>
           <div className="t-bundle-price">
             <span className="t-bundle-strike">¥2,997</span>
-            <span className="t-bundle-now">¥2,700<small>税込</small></span>
+            <span className="t-bundle-now">¥2,700<small>税抜 · 税込 ¥2,970</small></span>
           </div>
           <AddToCartButton id="trio-set" label="セットをカートに入れる" className="t-cta t-cta-light" />
         </div>

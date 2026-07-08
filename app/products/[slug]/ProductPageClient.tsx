@@ -42,8 +42,8 @@ export function ProductPageClient({ slug }: { slug: string }) {
 
             <div className="t-price-row" style={{ marginTop: 24 }}>
               <div className="t-price-box">
-                <div className="t-price">¥999<span>税込</span></div>
-                <div className="t-price-tax">Hair Perfume · 30ml</div>
+                <div className="t-price">¥999<span>税抜</span></div>
+                <div className="t-price-tax">税込 ¥1,099 · Hair Perfume 30ml</div>
               </div>
               <AddToCartButton id={slug as CatalogItemId} />
             </div>
@@ -161,7 +161,7 @@ export function ProductPageClient({ slug }: { slug: string }) {
       <div className="t-sticky-buy">
         <div className="t-sticky-buy-info">
           <div className="t-sticky-buy-name">{product.name}</div>
-          <div className="t-sticky-buy-price">¥999（税込）</div>
+          <div className="t-sticky-buy-price">¥999（税抜）· 税込 ¥1,099</div>
         </div>
         <AddToCartButton id={slug as CatalogItemId} className="t-cta t-cta-sm" />
       </div>
