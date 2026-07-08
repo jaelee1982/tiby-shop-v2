@@ -58,7 +58,9 @@ html, body {
   font-family: var(--font-body-jp);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  overflow-x: hidden;
+  /* clip (not hidden): hidden creates a scroll container and breaks
+     position: sticky, which the intro sequence depends on */
+  overflow-x: clip;
 }
 
 ::-webkit-scrollbar { width: 4px; }
@@ -218,6 +220,35 @@ html, body {
 .t-review-stars { color: var(--tiby-love-accent); font-size: 13px; letter-spacing: 2px; }
 .t-review-text { font-family: var(--font-display-jp); font-weight: 500; font-size: 14px; line-height: 1.75; color: var(--tiby-ink); }
 .t-review-author { font-family: var(--font-body-latin); font-size: 11px; letter-spacing: 0.04em; color: var(--fg-3); margin-top: auto; }
+
+/* =========================================================================
+   INTERACTIVE INTRO — the T splits, its ingredients fall into the bottle
+   ========================================================================= */
+.t-intro { height: 240vh; position: relative; background: linear-gradient(180deg, #FBF7F2 0%, #F9F3F5 100%); }
+.t-intro-static { height: 100vh; }
+.t-intro-sticky { position: sticky; top: 0; height: 100vh; overflow: hidden; }
+.t-intro-halo { position: absolute; left: 50%; top: 58%; width: 84vmin; height: 84vmin; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(circle at 50% 45%, rgba(251,191,208,0.7) 0%, rgba(251,191,208,0.25) 45%, transparent 70%); pointer-events: none; }
+.t-intro-t { position: absolute; left: 50%; top: 44%; translate: -50% -50%; font-family: var(--font-display-latin); font-weight: 800; font-size: clamp(280px, 52vh, 560px); line-height: 1; color: var(--tiby-ink); user-select: none; pointer-events: none; will-change: transform, opacity; }
+.t-drop { position: absolute; left: 50%; top: 44%; margin-left: -42px; margin-top: -42px; width: 84px; height: 84px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 14px 30px rgba(26,26,26,0.14), inset 0 -8px 18px rgba(255,255,255,0.55); will-change: transform, opacity; }
+.t-drop span { font-family: var(--font-body-jp); font-weight: 700; font-size: 11px; letter-spacing: 0.04em; color: rgba(26,26,26,0.78); }
+.t-intro-bottle { position: absolute; left: 50%; top: 50%; translate: -50% -50%; height: 40vh; width: auto; filter: drop-shadow(0 24px 32px rgba(26,26,26,0.18)); will-change: transform, opacity; }
+.t-intro-lockup { position: absolute; left: 50%; bottom: 5vh; transform: translateX(-50%); width: min(680px, calc(100vw - 40px)); text-align: center; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.t-intro-eyebrow { font-family: var(--font-body-latin); font-weight: 700; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--fg-3); }
+.t-intro-copy { font-family: var(--font-display-jp); font-weight: 700; font-size: clamp(22px, 3.4vw, 34px); line-height: 1.5; letter-spacing: -0.01em; color: var(--tiby-ink); margin: 0; word-break: keep-all; line-break: strict; }
+.t-intro-sub { font-family: var(--font-body-jp); font-size: 14px; line-height: 1.9; color: var(--fg-2); margin: 0 0 6px; }
+.t-scroll-cue { position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.t-scroll-cue span { font-family: var(--font-body-latin); font-weight: 600; font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--fg-3); }
+.t-scroll-cue i { width: 1px; height: 34px; background: linear-gradient(180deg, var(--tiby-ink), transparent); animation: t-cue 1.6s var(--ease-out) infinite; }
+@keyframes t-cue { 0% { transform: scaleY(0); transform-origin: top; } 55% { transform: scaleY(1); transform-origin: top; } 100% { transform: scaleY(1); opacity: 0; } }
+
+@media (max-width: 900px) {
+  .t-intro { height: 200vh; }
+  .t-intro-t { font-size: clamp(200px, 40vh, 380px); }
+  .t-intro-bottle { height: 36vh; }
+  .t-drop { width: 56px; height: 56px; margin-left: -28px; margin-top: -28px; }
+  .t-drop span { font-size: 9px; }
+  .t-intro-lockup { bottom: 5vh; }
+}
 
 /* =========================================================================
    CART — nav badge, slide-in drawer, quantity steppers

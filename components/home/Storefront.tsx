@@ -7,6 +7,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { SKUS, SKU_ORDER, type SkuId } from "@/lib/skus";
 import { AddToCartButton } from "@/components/cart/AddToCartButton";
+import { HeroIntro } from "@/components/home/HeroIntro";
 import { siteConfig } from "@/lib/site";
 import type { CatalogItemId } from "@/lib/commerce";
 
@@ -58,6 +59,7 @@ function Hero({ skuId, setSkuId }: { skuId: SkuId; setSkuId: (id: SkuId) => void
   return (
     <section
       className="t-hero"
+      id="shop"
       style={{ background: `linear-gradient(180deg, color-mix(in oklab, ${sku.accent} 10%, #FBF7F2) 0%, #FBF7F2 60%, #F6F1EC 100%)` }}
     >
       <div className="t-hero-grid">
@@ -218,6 +220,7 @@ export function Storefront({ initialSku = "love" }: { initialSku?: SkuId }) {
   const [skuId, setSkuId] = useState<SkuId>(initialSku);
   return (
     <div className="t-page">
+      <HeroIntro />
       <Hero skuId={skuId} setSkuId={setSkuId} />
       <StoryArc skuId={skuId} />
       <FragrancePyramid skuId={skuId} />
