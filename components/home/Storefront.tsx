@@ -6,6 +6,9 @@
 import { useState } from "react";
 import Link from "next/link";
 import { SKUS, SKU_ORDER, type SkuId } from "@/lib/skus";
+import { AddToCartButton } from "@/components/cart/AddToCartButton";
+import { siteConfig } from "@/lib/site";
+import type { CatalogItemId } from "@/lib/commerce";
 
 /* ---------- inline icons (lucide paths) ---------- */
 function Icon({ name }: { name: "sparkles" | "heart" | "droplets" | "flower-2" }) {
@@ -66,7 +69,7 @@ function Hero({ skuId, setSkuId }: { skuId: SkuId; setSkuId: (id: SkuId) => void
           <div className="t-breadcrumb">Hair Perfume · {sku.act.split(" · ")[0]}</div>
           <h1 className="t-hero-jp">{sku.jp}</h1>
           <div className="t-hero-latin">{sku.name}</div>
-          <p className="t-hero-master">香りが決めすぎるけど、これはズルい。</p>
+          <p className="t-hero-master">{siteConfig.masterCopy}</p>
           <div className="t-family">{sku.family}</div>
 
           <div className="t-sku-switch">
@@ -85,17 +88,16 @@ function Hero({ skuId, setSkuId }: { skuId: SkuId; setSkuId: (id: SkuId) => void
 
           <div className="t-price-row">
             <div className="t-price-box">
-              <div className="t-price">¥999<span>税抜</span></div>
-              <div className="t-price-tax">税込 ¥1,099</div>
+              <div className="t-price">¥999<span>税込</span></div>
+              <div className="t-price-tax">Hair Perfume · 30ml</div>
             </div>
-            <Link className="t-cta" href={`/products/${sku.slug}`}>商品詳細を見る</Link>
+            <AddToCartButton id={sku.slug as CatalogItemId} />
+            <Link className="t-cta-ghost" href={`/products/${sku.slug}`}>商品詳細を見る</Link>
           </div>
           <div className="t-trust">
             <span>SNSで話題 ✨</span>
             <span>·</span>
-            <span>ドンキ限定取扱</span>
-            <span>·</span>
-            <span>#韓国コスメ</span>
+            <span>全国のドン・キホーテでも取扱中</span>
           </div>
         </div>
       </div>
@@ -137,7 +139,7 @@ function FragrancePyramid({ skuId }: { skuId: SkuId }) {
   return (
     <section className="t-pyramid" style={{ background: `color-mix(in oklab, ${sku.body} 10%, #F9F3F5)` }}>
       <div className="t-section-head">
-        <div className="t-eyebrow" style={{ color: sku.accent }}>Fragrance timeline · {sku.name}</div>
+        <div className="t-eyebrow" style={{ color: sku.accent }}>Scent timeline · {sku.name}</div>
         <h2 className="t-h2-jp">{sku.copy}</h2>
       </div>
       <div className="t-timeline">
@@ -188,7 +190,7 @@ function HowToUse() {
 
 function Bundle() {
   return (
-    <section className="t-bundle">
+    <section className="t-bundle" id="bundle">
       <div className="t-bundle-inner">
         <div className="t-bundle-copy">
           <div className="t-eyebrow" style={{ color: "#fff", opacity: 0.7 }}>3本セット</div>
@@ -200,7 +202,7 @@ function Bundle() {
             <span className="t-bundle-strike">¥2,997</span>
             <span className="t-bundle-now">¥2,700<small>税込</small></span>
           </div>
-          <button className="t-cta t-cta-light">セットで買う</button>
+          <AddToCartButton id="trio-set" label="セットをカートに入れる" className="t-cta t-cta-light" />
         </div>
         <div className="t-bundle-art">
           <BottleImg sku={SKUS.love} style={{ transform: "translateY(18px) rotate(-6deg)" }} />

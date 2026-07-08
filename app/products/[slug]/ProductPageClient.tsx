@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { getProduct } from "@/lib/products";
 import { SKUS, SLUG_TO_SKU, SKU_ORDER } from "@/lib/skus";
+import { AddToCartButton } from "@/components/cart/AddToCartButton";
+import type { CatalogItemId } from "@/lib/commerce";
 
 // Rich product detail page — existing content (lib/products.ts) re-skinned in the
 // TIBY Design System tone. Hero · problem · fragrance notes · scenes · reviews · cross-sell.
@@ -40,13 +42,13 @@ export function ProductPageClient({ slug }: { slug: string }) {
 
             <div className="t-price-row" style={{ marginTop: 24 }}>
               <div className="t-price-box">
-                <div className="t-price">¥999<span>税抜</span></div>
-                <div className="t-price-tax">税込 ¥1,099</div>
+                <div className="t-price">¥999<span>税込</span></div>
+                <div className="t-price-tax">Hair Perfume · 30ml</div>
               </div>
-              <button className="t-cta">カートに入れる</button>
+              <AddToCartButton id={slug as CatalogItemId} />
             </div>
             <div className="t-trust">
-              <span>SNSで話題 ✨</span><span>·</span><span>ドンキ限定取扱</span><span>·</span><span>30ml</span>
+              <span>SNSで話題 ✨</span><span>·</span><span>全国のドン・キホーテでも取扱中</span>
             </div>
           </div>
         </div>
@@ -73,7 +75,7 @@ export function ProductPageClient({ slug }: { slug: string }) {
       <section style={{ background: `color-mix(in oklab, ${sku.body} 12%, #F9F3F5)` }}>
         <div className="t-pdp-section">
           <div className="t-section-head">
-            <div className="t-eyebrow" style={{ color: accent }}>Fragrance notes · {product.name}</div>
+            <div className="t-eyebrow" style={{ color: accent }}>Scent notes · {product.name}</div>
             <h2 className="t-h2-jp">{sku.copy}</h2>
           </div>
           <div className="t-notes-row">
@@ -135,7 +137,7 @@ export function ProductPageClient({ slug }: { slug: string }) {
           <h2 className="t-h2-jp">ほかの香りも、試してみる？</h2>
         </div>
         <div className="t-arc-row" style={{ gridTemplateColumns: "repeat(2, 1fr)", maxWidth: 720, margin: "0 auto" }}>
-          {others.map((id, i) => {
+          {others.map((id) => {
             const s = SKUS[id];
             return (
               <Link key={id} className="t-arc-card" href={`/products/${s.slug}`}>
@@ -154,6 +156,15 @@ export function ProductPageClient({ slug }: { slug: string }) {
           })}
         </div>
       </section>
+
+      {/* ── STICKY MOBILE CTA ── */}
+      <div className="t-sticky-buy">
+        <div className="t-sticky-buy-info">
+          <div className="t-sticky-buy-name">{product.name}</div>
+          <div className="t-sticky-buy-price">¥999（税込）</div>
+        </div>
+        <AddToCartButton id={slug as CatalogItemId} className="t-cta t-cta-sm" />
+      </div>
     </div>
   );
 }
