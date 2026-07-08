@@ -222,32 +222,82 @@ html, body {
 .t-review-author { font-family: var(--font-body-latin); font-size: 11px; letter-spacing: 0.04em; color: var(--fg-3); margin-top: auto; }
 
 /* =========================================================================
-   INTERACTIVE INTRO — the T splits, its ingredients fall into the bottle
+   STORY SCROLL — selling-point chapters (scene → 9cm → hair → ¥999)
    ========================================================================= */
-.t-intro { height: 240vh; position: relative; background: linear-gradient(180deg, #FBF7F2 0%, #F9F3F5 100%); }
-.t-intro-static { height: 100vh; }
-.t-intro-sticky { position: sticky; top: 0; height: 100vh; overflow: hidden; }
-.t-intro-halo { position: absolute; left: 50%; top: 58%; width: 84vmin; height: 84vmin; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(circle at 50% 45%, rgba(251,191,208,0.7) 0%, rgba(251,191,208,0.25) 45%, transparent 70%); pointer-events: none; }
-.t-intro-t { position: absolute; left: 50%; top: 44%; translate: -50% -50%; font-family: var(--font-display-latin); font-weight: 800; font-size: clamp(280px, 52vh, 560px); line-height: 1; color: var(--tiby-ink); user-select: none; pointer-events: none; will-change: transform, opacity; }
-.t-drop { position: absolute; left: 50%; top: 44%; margin-left: -42px; margin-top: -42px; width: 84px; height: 84px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 14px 30px rgba(26,26,26,0.14), inset 0 -8px 18px rgba(255,255,255,0.55); will-change: transform, opacity; }
-.t-drop span { font-family: var(--font-body-jp); font-weight: 700; font-size: 11px; letter-spacing: 0.04em; color: rgba(26,26,26,0.78); }
-.t-intro-bottle { position: absolute; left: 50%; top: 50%; translate: -50% -50%; height: 40vh; width: auto; filter: drop-shadow(0 24px 32px rgba(26,26,26,0.18)); will-change: transform, opacity; }
-.t-intro-lockup { position: absolute; left: 50%; bottom: 5vh; transform: translateX(-50%); width: min(680px, calc(100vw - 40px)); text-align: center; display: flex; flex-direction: column; align-items: center; gap: 14px; }
-.t-intro-eyebrow { font-family: var(--font-body-latin); font-weight: 700; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--fg-3); }
-.t-intro-copy { font-family: var(--font-display-jp); font-weight: 700; font-size: clamp(22px, 3.4vw, 34px); line-height: 1.5; letter-spacing: -0.01em; color: var(--tiby-ink); margin: 0; word-break: keep-all; line-break: strict; }
-.t-intro-sub { font-family: var(--font-body-jp); font-size: 14px; line-height: 1.9; color: var(--fg-2); margin: 0 0 6px; }
-.t-scroll-cue { position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 8px; }
-.t-scroll-cue span { font-family: var(--font-body-latin); font-weight: 600; font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--fg-3); }
-.t-scroll-cue i { width: 1px; height: 34px; background: linear-gradient(180deg, var(--tiby-ink), transparent); animation: t-cue 1.6s var(--ease-out) infinite; }
-@keyframes t-cue { 0% { transform: scaleY(0); transform-origin: top; } 55% { transform: scaleY(1); transform-origin: top; } 100% { transform: scaleY(1); opacity: 0; } }
+.t-story-scroll { position: relative; }
+.t-ch { position: relative; }
+.t-ch-scene { height: 200vh; }
+.t-ch-size { height: 190vh; }
+.t-ch-hair { height: 220vh; }
+.t-ch-price { height: 160vh; }
+.t-ch-sticky { position: sticky; top: 0; height: 100vh; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+
+/* ① scene */
+.t-ch-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.t-ch-scrim { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(26,26,26,0.16) 0%, rgba(26,26,26,0.4) 100%); }
+.t-ch-center { position: relative; z-index: 2; display: grid; place-items: center; text-align: center; padding: 0 24px; max-width: 820px; }
+.t-ch-line { grid-area: 1 / 1; margin: 0; font-family: var(--font-display-jp); font-weight: 700; font-size: clamp(24px, 4vw, 42px); line-height: 1.7; letter-spacing: -0.01em; color: #fff; text-shadow: 0 2px 24px rgba(26,26,26,0.35); word-break: keep-all; line-break: strict; }
+
+/* ② size — credit-card anchor */
+.t-ch-size .t-ch-sticky { background: linear-gradient(180deg, #FBF7F2 0%, #F9F3F5 100%); }
+.t-size-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 56px; align-items: center; width: 100%; max-width: 1080px; padding: 0 32px; }
+.t-size-stage { display: flex; align-items: flex-end; justify-content: center; gap: 44px; height: 52vh; }
+.t-size-card { height: 100%; width: auto; color: var(--tiby-ink); opacity: 0.75; }
+.t-size-card text { font-family: var(--font-body-latin); font-weight: 600; font-size: 4.5px; letter-spacing: 0.28em; fill: currentColor; opacity: 0.45; }
+.t-size-bottle { height: 100%; width: auto; filter: drop-shadow(0 20px 28px rgba(26,26,26,0.16)); }
+.t-size-dim { height: 52vh; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.t-size-dim i { flex: 1; width: 1px; background: var(--tiby-ink); opacity: 0.4; }
+.t-size-dim span { font-family: var(--font-price); font-weight: 700; font-size: 15px; letter-spacing: 0.04em; color: var(--tiby-ink); }
+.t-size-copy .t-eyebrow { color: var(--fg-3); }
+.t-size-copy p { font-family: var(--font-body-jp); font-size: 15px; line-height: 2.1; color: var(--fg-2); margin: 18px 0 0; }
+
+/* ③ hair — light yet lasting */
+.t-ch-hair .t-ch-sticky { background: #F9F3F5; }
+.t-hair-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; width: 100%; max-width: 1120px; padding: 0 32px; }
+.t-hair-media { position: relative; height: 64vh; border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--shadow-3); }
+.t-hair-media img { width: 100%; height: 100%; object-fit: cover; }
+.t-puff { position: absolute; bottom: 32%; width: 28px; height: 28px; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(251,191,208,0.4) 65%, transparent 100%); filter: blur(2px); pointer-events: none; }
+.t-hair-copy .t-eyebrow { color: var(--fg-3); }
+.t-hair-rail { margin-top: 30px; max-width: 420px; }
+.t-hair-track { position: relative; height: 2px; background: var(--tiby-line); border-radius: 2px; margin-bottom: 22px; }
+.t-hair-dot { position: absolute; top: 50%; translate: -50% -50%; width: 12px; height: 12px; border-radius: 50%; background: var(--tiby-ink); }
+.t-hair-steps { display: flex; flex-direction: column; gap: 14px; }
+.t-hair-step strong { display: block; font-family: var(--font-body-latin); font-weight: 800; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--tiby-love-accent); margin-bottom: 3px; }
+.t-hair-step span { font-family: var(--font-body-jp); font-size: 14px; line-height: 1.7; color: var(--fg-1); }
+
+/* ④ price */
+.t-ch-price .t-ch-sticky { background: var(--tiby-ink); }
+.t-price-hero { font-family: var(--font-price); font-weight: 800; font-size: clamp(96px, 15vw, 210px); letter-spacing: -0.04em; line-height: 1; color: #fff; }
+.t-price-hero span { font-family: var(--font-body-jp); font-weight: 500; font-size: clamp(14px, 1.6vw, 19px); letter-spacing: 0.04em; color: rgba(255,255,255,0.7); margin-left: 18px; vertical-align: middle; }
+.t-price-sub p { font-family: var(--font-display-jp); font-weight: 500; font-size: 16px; line-height: 2; color: rgba(255,255,255,0.85); margin: 26px 0 30px; }
+.t-price-sub .t-cta { background: #fff; color: var(--tiby-ink); }
+.t-price-sub .t-cta:hover { background: #f3eded; }
+
+/* floating buy pill */
+.t-buy-pill { position: fixed; right: 20px; bottom: 20px; z-index: 45; display: inline-flex; align-items: center; gap: 8px; background: var(--tiby-ink); color: #fff; text-decoration: none; padding: 13px 22px; border-radius: 999px; font-family: var(--font-body-jp); font-weight: 700; font-size: 13px; box-shadow: var(--shadow-3); }
+.t-buy-pill i { font-style: normal; opacity: 0.45; }
+.t-buy-pill:hover { background: #333; }
+
+/* static fallback */
+.t-story-static .t-ch-scene { position: relative; height: 88vh; display: flex; align-items: center; justify-content: center; }
+.t-static-block { padding: 96px 24px; text-align: center; max-width: 720px; margin: 0 auto; }
+.t-static-block p { font-family: var(--font-body-jp); font-size: 15px; line-height: 2; color: var(--fg-2); margin: 16px 0 24px; }
+.t-story-static .t-price-hero { color: var(--tiby-ink); font-size: clamp(64px, 10vw, 120px); }
 
 @media (max-width: 900px) {
-  .t-intro { height: 200vh; }
-  .t-intro-t { font-size: clamp(200px, 40vh, 380px); }
-  .t-intro-bottle { height: 36vh; }
-  .t-drop { width: 56px; height: 56px; margin-left: -28px; margin-top: -28px; }
-  .t-drop span { font-size: 9px; }
-  .t-intro-lockup { bottom: 5vh; }
+  .t-ch-scene { height: 180vh; }
+  .t-ch-size { height: 170vh; }
+  .t-ch-hair { height: 190vh; }
+  .t-ch-price { height: 150vh; }
+  .t-size-grid, .t-hair-grid { grid-template-columns: 1fr; gap: 28px; padding: 0 20px; }
+  .t-size-stage { height: 34vh; gap: 28px; }
+  .t-size-dim { height: 34vh; }
+  .t-size-copy { text-align: center; }
+  .t-hair-media { height: 38vh; order: -1; }
+  .t-hair-rail { margin-left: auto; margin-right: auto; }
+  .t-hair-copy { text-align: center; }
+  .t-hair-steps { text-align: left; }
+  .t-buy-pill { right: 16px; bottom: 16px; padding: 12px 18px; }
 }
 
 /* =========================================================================

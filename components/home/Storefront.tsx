@@ -7,7 +7,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { SKUS, SKU_ORDER, type SkuId } from "@/lib/skus";
 import { AddToCartButton } from "@/components/cart/AddToCartButton";
-import { HeroIntro } from "@/components/home/HeroIntro";
+import { StoryScroll } from "@/components/home/StoryScroll";
 import { siteConfig } from "@/lib/site";
 import type { CatalogItemId } from "@/lib/commerce";
 
@@ -220,7 +220,7 @@ export function Storefront({ initialSku = "love" }: { initialSku?: SkuId }) {
   const [skuId, setSkuId] = useState<SkuId>(initialSku);
   return (
     <div className="t-page">
-      <HeroIntro />
+      <StoryScroll />
       <Hero skuId={skuId} setSkuId={setSkuId} />
       <StoryArc skuId={skuId} />
       <FragrancePyramid skuId={skuId} />
