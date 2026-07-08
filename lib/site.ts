@@ -14,15 +14,15 @@ export const siteConfig = {
   contactEmail: "work@giantkorea.kr",
   customerSupportEmail: "work@giantkorea.kr",
   companyLegalName: "Giant Korea Co., Ltd.",
-  operatorName: "TODO: 運営責任者名を入力",
-  address: "TODO: 正式な会社住所を入力",
-  phone: "TODO: 正式な電話番号を入力",
-  businessHours: "TODO: お問い合わせ対応時間を入力（例：平日 10:00〜17:00）",
+  operatorName: "Lee Jaeho",
+  address:
+    "31 Ttukseom-ro 1-gil #402（Seoul Forest M Tower）, Seongdong-gu, Seoul 04778, Republic of Korea",
+  phone: "+82-70-8648-3795",
+  businessHours: "メールにて受付（ご返信には2〜3営業日いただく場合があります）",
   currency: "JPY" as const,
-  shippingPolicy:
-    "TODO: 配送ポリシーを入力（例：ご入金確認後、3〜5営業日以内に発送いたします）",
+  shippingPolicy: "ご注文後、1〜2日以内に発送いたします。",
   returnPolicy:
-    "TODO: 返品ポリシーを確定（例：未開封・未使用品に限り、商品到着後7日以内にメールにてご連絡ください）",
+    "発送前であれば、お客様都合によるキャンセルを承ります。発送後のお客様都合によるキャンセル・返品・交換は承っておりません。初期不良の場合、ご購入から7日以内にご連絡いただけますと対応させていただきます。",
   instagram: "https://www.instagram.com/tibyjapan/",
   x: "https://x.com/tiby_japan",
   masterCopy: "香水は決めすぎるけど、これはズルい。",
