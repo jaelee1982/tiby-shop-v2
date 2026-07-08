@@ -1,7 +1,7 @@
 # tiby.shop — TIBY Hair Perfume 公式オンラインストア
 
 Next.js (App Router) + Tailwind 4 のD2Cストア。Netlifyにデプロイ。
-ブランド定本は [`tiby-content-os/00-canon/`](https://github.com/jaelee1982/tiby-content-os)（¥999税込 / タイビー / ヘアパフューム / マスターカピー）。
+ブランド定本は [`tiby-content-os/00-canon/`](https://github.com/jaelee1982/tiby-content-os)（¥999税抜・税込¥1,099 / タイビー / ヘアパフューム / マスターカピー）。
 
 ## 開発
 

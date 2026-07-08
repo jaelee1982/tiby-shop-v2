@@ -1,8 +1,17 @@
 // tiby.shop — purchasable catalog & cart types.
-// Prices are tax-included JPY (canon: ¥999 per SKU, all channels).
+// Prices are TAX-EXCLUDED JPY (¥999 税抜 per SKU — owner decision 2026-07-08);
+// the charged amount is always the tax-included gross via taxIncluded().
 // The checkout API validates every cart line against this catalog server-side,
 // so client-side tampering can never change what is charged.
 import { products } from "@/lib/products";
+
+/** Japanese consumption tax. */
+export const TAX_RATE = 0.1;
+
+/** Tax-included price in JPY (¥999 → ¥1,099, ¥2,700 → ¥2,970). */
+export function taxIncluded(priceExclTax: number): number {
+  return Math.round(priceExclTax * (1 + TAX_RATE));
+}
 
 export type CatalogItemId = "love-me-me" | "hug-me-me" | "kiss-me-me" | "trio-set";
 
@@ -14,7 +23,7 @@ export type CatalogItem = {
   scentName: string;
   volume: string;
   weight: string;
-  /** Tax-included price in JPY. */
+  /** Tax-EXCLUDED price in JPY (display 税抜; charge taxIncluded(price)). */
   price: number;
   currency: "JPY";
   image: string;
@@ -85,7 +94,7 @@ export const CATALOG: Record<CatalogItemId, CatalogItem> = {
     price: 2700,
     image: img("hug-me-me"),
     description:
-      "ときめき・温もり・情熱。3つの香りを、その日の気分で使い分け。単品より¥297おトクなセットです。",
+      "ときめき・温もり・情熱。3つの香りを、その日の気分で使い分け。単品合計より税込¥327おトクなセットです。",
     ...SHARED,
   },
 };
@@ -96,10 +105,11 @@ export function getCatalogItem(id: string): CatalogItem | undefined {
   return (CATALOG as Record<string, CatalogItem>)[id];
 }
 
+/** Charged total — tax-included JPY (what KOMOJU bills). */
 export function cartTotal(lines: CartLine[]): number {
   return lines.reduce((sum, l) => {
     const item = getCatalogItem(l.id);
-    return item ? sum + item.price * l.qty : sum;
+    return item ? sum + taxIncluded(item.price) * l.qty : sum;
   }, 0);
 }
 

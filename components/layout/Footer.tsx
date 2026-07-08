@@ -9,7 +9,7 @@ export function Footer() {
         <div className="t-foot-brand">
           <div className="t-foot-logo">Tiby</div>
           <p>{siteConfig.masterCopy}</p>
-          <p className="t-foot-cat">Hair Perfume / ヘアパフューム · 30ml · ¥999（税込）</p>
+          <p className="t-foot-cat">Hair Perfume / ヘアパフューム · 30ml · ¥999（税抜）／税込 ¥1,099</p>
         </div>
         <div className="t-foot-col">
           <h4>Products</h4>

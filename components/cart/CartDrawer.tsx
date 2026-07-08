@@ -5,7 +5,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useCart } from "@/components/cart/CartContext";
-import { formatJpy, getCatalogItem } from "@/lib/commerce";
+import { formatJpy, getCatalogItem, taxIncluded } from "@/lib/commerce";
 
 export function CartDrawer() {
   const { lines, total, isOpen, close, setQty, remove } = useCart();
@@ -89,8 +89,8 @@ export function CartDrawer() {
                         {item.nameJa} · {item.volume}
                       </div>
                       <div className="t-cart-line-price">
-                        {formatJpy(item.price)}
-                        <span>税込</span>
+                        {formatJpy(taxIncluded(item.price))}
+                        <span>税込（税抜 {formatJpy(item.price)}）</span>
                       </div>
                       <div className="t-cart-line-actions">
                         <div className="t-qty">
