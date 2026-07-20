@@ -365,7 +365,7 @@ html, body {
 .t-legal-table { width: 100%; border-collapse: collapse; background: var(--tiby-surface); border: 1px solid var(--tiby-line); border-radius: var(--r-md); overflow: hidden; box-shadow: var(--shadow-1); }
 .t-legal-table tr + tr th, .t-legal-table tr + tr td { border-top: 1px solid var(--tiby-line-soft); }
 .t-legal-table th { width: 32%; text-align: left; vertical-align: top; font-family: var(--font-body-jp); font-weight: 700; font-size: 13px; line-height: 1.7; color: var(--tiby-ink); background: var(--tiby-bg-warm); padding: 18px 20px; }
-.t-legal-table td { font-family: var(--font-body-jp); font-weight: 400; font-size: 13px; line-height: 1.9; color: var(--fg-2); padding: 18px 20px; }
+.t-legal-table td { font-family: var(--font-body-jp); font-weight: 400; font-size: 13px; line-height: 1.9; color: var(--fg-2); padding: 18px 20px; white-space: pre-line; }
 .t-legal-table td a { color: var(--fg-1); text-decoration: underline; text-underline-offset: 3px; }
 .t-legal-note { margin: 8px 0 0; font-size: 12px; color: var(--fg-3); }
 .t-todo { background: #FFF3C4; color: #6B5900; border-radius: 3px; padding: 1px 5px; font-weight: 600; }

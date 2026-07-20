@@ -15,8 +15,7 @@ export const siteConfig = {
   customerSupportEmail: "work@giantkorea.kr",
   companyLegalName: "Giant Korea Co., Ltd.",
   operatorName: "Lee Jaeho",
-  address:
-    "31 Ttukseom-ro 1-gil #402（Seoul Forest M Tower）, Seongdong-gu, Seoul 04778, Republic of Korea",
+  address: "49-19 Maesangol-gil, Chuncheon-si, Gangwon-do, Republic of Korea",
   phone: "+82-70-8648-3795",
   businessHours: "メールにて受付（ご返信には2〜3営業日いただく場合があります）",
   currency: "JPY" as const,
