@@ -508,3 +508,78 @@ html, body {
   .t-result-notes { grid-template-columns: 1fr; }
   .t-lay-second { flex-direction: column; align-items: flex-start; }
 }
+
+/* =========================================================================
+   CINEMATIC HOME (2026-07-31 전면 리뉴얼) — opening / sku reel / tools / grain
+   ========================================================================= */
+/* --- Act 0: opening --- */
+.t-cine { position: relative; height: 260vh; }
+.t-cine--static { height: auto; }
+.t-cine-sticky { position: sticky; top: 0; height: 100dvh; overflow: hidden; display: grid; place-items: center; background: var(--tiby-bg); }
+.t-cine--static .t-cine-sticky { position: relative; height: 92dvh; }
+.t-cine-sticky > * { grid-area: 1 / 1; }
+.t-cine-glow { width: 100%; height: 100%; background:
+  radial-gradient(ellipse 60% 46% at 50% 58%, rgba(251,191,208,0.55) 0%, transparent 70%),
+  radial-gradient(ellipse 40% 30% at 72% 30%, rgba(232,180,190,0.28) 0%, transparent 70%); }
+.t-cine-mark { display: flex; z-index: 1; font-family: var(--font-display-latin); font-weight: 800; font-size: clamp(110px, 26vw, 320px); letter-spacing: -0.04em; line-height: 1; color: var(--tiby-ink); user-select: none; }
+.t-cine-mark span { display: inline-block; }
+.t-cine-bottle { z-index: 2; height: 54vh; max-height: 560px; width: auto; object-fit: contain; filter: drop-shadow(0 30px 60px rgba(180, 90, 110, 0.28)); }
+.t-cine-cat { z-index: 2; align-self: end; margin: 0 0 12vh; font-family: var(--font-body-latin); font-weight: 700; font-size: 11px; letter-spacing: 0.34em; color: var(--fg-2); }
+.t-cine-copy { z-index: 3; margin: 0; padding: 0 24px; max-width: 22em; text-align: center; font-family: var(--font-display-jp); font-weight: 700; font-size: clamp(26px, 5vw, 46px); line-height: 1.7; letter-spacing: -0.01em; color: var(--tiby-ink); word-break: keep-all; line-break: strict; text-wrap: balance; }
+.t-cine-cue { z-index: 4; align-self: end; justify-self: center; margin-bottom: 26px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.t-cine-cue i { width: 1.5px; height: 34px; background: var(--tiby-ink); transform-origin: top; animation: t-cue 1.8s var(--ease-out) infinite; }
+.t-cine-cue span { font-family: var(--font-body-latin); font-weight: 600; font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--fg-3); }
+@keyframes t-cue { 0% { transform: scaleY(0); } 45% { transform: scaleY(1); } 100% { transform: scaleY(0); transform-origin: bottom; } }
+
+/* --- SKU film reel --- */
+.t-reel { position: relative; height: 320vh; }
+.t-reel-sticky { position: sticky; top: 0; height: 100dvh; overflow: hidden; background: var(--tiby-bg); }
+.t-reel-tint { position: absolute; inset: 0; }
+.t-reel-bottle { position: absolute; top: 50%; left: 62%; transform: translate(-50%, -50%); height: 58vh; max-height: 600px; width: auto; object-fit: contain; filter: drop-shadow(0 30px 60px rgba(26,26,26,0.16)); }
+.t-reel-copy { position: absolute; top: 50%; left: clamp(24px, 8vw, 120px); transform: translateY(-50%); max-width: 460px; }
+.t-reel-count { font-family: var(--font-body-latin); font-weight: 700; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--fg-3); font-variant-numeric: tabular-nums; margin-bottom: 18px; }
+.t-reel-count em { font-style: normal; opacity: 0.55; }
+.t-reel-name { font-family: var(--font-display-latin); font-weight: 800; font-size: clamp(40px, 7vw, 92px); letter-spacing: -0.02em; line-height: 0.98; margin-bottom: 10px; }
+.t-reel-jp { font-family: var(--font-body-jp); font-weight: 700; font-size: 16px; color: var(--tiby-ink); margin-bottom: 6px; }
+.t-reel-family { font-family: var(--font-body-jp); font-size: 13.5px; line-height: 1.8; color: var(--fg-2); margin: 0; }
+.t-reel-rail { position: absolute; right: clamp(16px, 3vw, 40px); top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 10px; }
+.t-reel-rail i { width: 7px; height: 7px; border-radius: 999px; background: var(--tiby-line); transition: all var(--dur-base) var(--ease-out); }
+.t-reel-rail i.on { height: 22px; }
+.t-reel-cta { position: absolute; left: 50%; bottom: 34px; transform: translateX(-50%); }
+.t-reel-static { display: flex; flex-direction: column; gap: 24px; padding: 72px 24px; max-width: 880px; margin: 0 auto; }
+.t-reel-static-row { display: flex; align-items: center; gap: 24px; text-decoration: none; }
+.t-reel-static-row img { height: 140px; width: auto; }
+
+/* --- tools cross-links (비대칭 1+2) --- */
+.t-tools { padding: 96px 32px 104px; max-width: 1120px; margin: 0 auto; }
+.t-tools-grid { display: grid; grid-template-columns: 1.35fr 1fr; gap: 16px; align-items: stretch; }
+.t-tools-main { display: flex; flex-direction: column; justify-content: flex-end; gap: 10px; min-height: 340px; padding: 40px 36px; border-radius: var(--r-lg); background: linear-gradient(160deg, rgba(251,191,208,0.5) 0%, var(--tiby-bg-warm) 70%); border: 1px solid var(--tiby-line); text-decoration: none; transition: transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out); }
+.t-tools-main:hover { transform: translateY(-3px); box-shadow: 0 18px 48px rgba(180, 90, 110, 0.16); }
+.t-tools-side { display: grid; grid-template-rows: 1fr 1fr; gap: 16px; }
+.t-tools-card { display: flex; flex-direction: column; justify-content: flex-end; gap: 8px; padding: 28px; border-radius: var(--r-lg); background: var(--tiby-surface); border: 1px solid var(--tiby-line); text-decoration: none; transition: transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out); }
+.t-tools-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-1), 0 14px 36px rgba(26,26,26,0.08); }
+.t-tools-kicker { font-family: var(--font-body-latin); font-weight: 700; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--tiby-love-accent); }
+.t-tools-main h3, .t-tools-card h3 { font-family: var(--font-display-jp); font-weight: 700; font-size: 22px; color: var(--tiby-ink); margin: 0; }
+.t-tools-main p, .t-tools-card p { font-family: var(--font-body-jp); font-size: 13.5px; line-height: 1.8; color: var(--fg-2); margin: 0; }
+.t-tools-go { font-family: var(--font-body-jp); font-weight: 700; font-size: 14px; color: var(--tiby-ink); margin-top: 8px; }
+
+/* --- film grain --- */
+.t-grain { position: relative; }
+.t-grain::after { content: ""; position: fixed; inset: -50%; z-index: 55; pointer-events: none; opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: t-grain-shift 0.9s steps(3) infinite; }
+@keyframes t-grain-shift { 0% { transform: translate(0, 0); } 33% { transform: translate(-2%, 1%); } 66% { transform: translate(1%, -2%); } 100% { transform: translate(0, 0); } }
+@media (prefers-reduced-motion: reduce) { .t-grain::after { animation: none; } }
+
+@media (max-width: 760px) {
+  .t-cine { height: 220vh; }
+  .t-cine-bottle { height: 40vh; }
+  .t-cine-cat { letter-spacing: 0.2em; font-size: 10px; }
+  .t-reel { height: 280vh; }
+  .t-reel-bottle { left: 50%; top: 38%; height: 38vh; }
+  .t-reel-copy { top: auto; bottom: 96px; transform: none; left: 20px; right: 20px; max-width: none; }
+  .t-reel-cta { bottom: 24px; }
+  .t-tools { padding: 64px 20px 72px; }
+  .t-tools-grid { grid-template-columns: 1fr; }
+  .t-tools-main { min-height: 220px; }
+}

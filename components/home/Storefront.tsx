@@ -1,13 +1,16 @@
 "use client";
 
-// TIBY tiby.shop — Product/Storefront page, ported from the TIBY Design System
-// (ui_kits/pdp/app.jsx). Single-SKU hero with a live switcher that recolors the
-// page, a 3-act cross-sell, fragrance timeline, how-to and a bundle peak.
+// TIBY tiby.shop — 시네마틱 스토어프론트 (2026-07-31 전면 리뉴얼).
+// 구성: 시네마틱 오프닝(핀 스크럽) → 씬 스토리 → SKU 필름 릴 → 사이즈/타임라인/
+// 가격 챕터 → 쇼핑 섹션(SKU 스위처+카트) → 향 타임라인 → 사용법 → 진단 도구 → 세트.
 import { useState } from "react";
 import Link from "next/link";
 import { SKUS, SKU_ORDER, type SkuId } from "@/lib/skus";
 import { AddToCartButton } from "@/components/cart/AddToCartButton";
 import { StoryScroll } from "@/components/home/StoryScroll";
+import { CinematicHero } from "@/components/home/CinematicHero";
+import { SkuReel } from "@/components/home/SkuReel";
+import { SmoothScroll } from "@/components/home/SmoothScroll";
 import { siteConfig } from "@/lib/site";
 import type { CatalogItemId } from "@/lib/commerce";
 
@@ -107,30 +110,33 @@ function Hero({ skuId, setSkuId }: { skuId: SkuId; setSkuId: (id: SkuId) => void
   );
 }
 
-function StoryArc({ skuId }: { skuId: SkuId }) {
+function ToolsRow() {
+  // 진단 도구 크로스링크 — 비대칭 1+2 구성 (균등 3분할 카드 회피)
   return (
-    <section className="t-story" id="story">
+    <section className="t-tools" id="tools">
       <div className="t-section-head">
-        <div className="t-eyebrow">The three-act story</div>
-        <h2 className="t-h2-jp">ときめき · 温もり · 情熱。<br />3つの香りで、毎日が変わる。</h2>
+        <div className="t-eyebrow">Find your scent</div>
+        <h2 className="t-h2-jp">迷ったら、診断から。</h2>
       </div>
-      <div className="t-arc-row">
-        {SKU_ORDER.map((id, i) => {
-          const s = SKUS[id];
-          return (
-            <Link key={id} href={`/products/${s.slug}`} className={`t-arc-card ${id === skuId ? "on" : ""}`}>
-              <div className="t-arc-swatch" style={{ background: `color-mix(in oklab, ${s.accent} 55%, ${s.body})` }}>
-                <span className="t-arc-act">Act {i + 1}</span>
-                <BottleImg sku={s} />
-              </div>
-              <div className="t-arc-meta">
-                <div className="t-arc-name">{s.name}</div>
-                <div className="t-arc-jp">{s.jp}</div>
-                <div className="t-arc-family">{s.family}</div>
-              </div>
-            </Link>
-          );
-        })}
+      <div className="t-tools-grid">
+        <Link href="/quiz" className="t-tools-main">
+          <div className="t-tools-kicker">Scent quiz</div>
+          <h3>香り診断</h3>
+          <p>5つの質問で、あなたにぴったりの1本がわかります。</p>
+          <span className="t-tools-go">診断をはじめる →</span>
+        </Link>
+        <div className="t-tools-side">
+          <Link href="/layering" className="t-tools-card">
+            <div className="t-tools-kicker">Layering lab</div>
+            <h3>レイヤリング診断</h3>
+            <p>お手持ちの香水との相性をチェック。</p>
+          </Link>
+          <Link href="/stores" className="t-tools-card">
+            <div className="t-tools-kicker">Store locator</div>
+            <h3>店舗マップ</h3>
+            <p>全国のドン・キホーテで販売中。</p>
+          </Link>
+        </div>
       </div>
     </section>
   );
@@ -219,12 +225,15 @@ function Bundle() {
 export function Storefront({ initialSku = "love" }: { initialSku?: SkuId }) {
   const [skuId, setSkuId] = useState<SkuId>(initialSku);
   return (
-    <div className="t-page">
+    <div className="t-page t-grain">
+      <SmoothScroll />
+      <CinematicHero />
       <StoryScroll />
+      <SkuReel />
       <Hero skuId={skuId} setSkuId={setSkuId} />
-      <StoryArc skuId={skuId} />
       <FragrancePyramid skuId={skuId} />
       <HowToUse />
+      <ToolsRow />
       <Bundle />
     </div>
   );
