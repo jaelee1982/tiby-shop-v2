@@ -2,6 +2,7 @@
 
 // 店舗マップ — 구 tiby.me/stores(볼트 SPA) 이식판. 데이터=lib/storesData.ts,
 // 지도=Leaflet+OSM (react-leaflet 미사용 — React 19 호환 이슈 회피, SSR 없음).
+// 스타일은 디자인 시스템 t-tool-* / t-stores-* 클래스 (globals.css).
 import { useEffect, useRef, useState } from "react";
 import type { Map as LeafletMap, LayerGroup } from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -36,6 +37,7 @@ export function StoreLocator() {
   const [mapReady, setMapReady] = useState(false);
   const [query, setQuery] = useState("");
   const [nearby, setNearby] = useState<StoreWithDistance[]>([]);
+  const [locating, setLocating] = useState(false);
 
   // 지도 초기화 (클라이언트 전용)
   useEffect(() => {
@@ -92,6 +94,7 @@ export function StoreLocator() {
       alert("お使いのブラウザは位置情報に対応していません。");
       return;
     }
+    setLocating(true);
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         const loc = { lat: pos.coords.latitude, lng: pos.coords.longitude };
@@ -100,107 +103,59 @@ export function StoreLocator() {
           .sort((a, b) => a.distance - b.distance)
           .slice(0, 3);
         setNearby(near);
+        setLocating(false);
         mapRef.current?.setView([loc.lat, loc.lng], 12);
       },
-      () => alert("位置情報の取得に失敗しました。ブラウザの設定を確認してください。")
+      () => {
+        setLocating(false);
+        alert("位置情報の取得に失敗しました。ブラウザの設定を確認してください。");
+      }
     );
   };
 
   return (
-    <div className="t-page" style={{ background: "var(--tiby-bg)" }}>
-      <div style={{ maxWidth: 1080, margin: "0 auto", padding: "56px 24px 80px" }}>
-        <div style={{ textAlign: "center", marginBottom: 40 }}>
-          <div className="t-eyebrow">Store Locator</div>
-          <h1 className="t-h2-jp" style={{ marginBottom: 10 }}>
-            TIBYが買える店舗
-          </h1>
-          <p style={{ color: "var(--fg-2)", fontSize: "1.05rem" }}>
-            全国のドン・キホーテ {stores.length}店舗で販売中
-          </p>
-        </div>
-
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 12, marginBottom: 28 }}>
-          <input
-            type="text"
-            placeholder="店舗名で検索..."
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            style={{
-              flex: "1 1 260px",
-              padding: "14px 22px",
-              border: "1px solid var(--tiby-line)",
-              borderRadius: 999,
-              background: "#fff",
-              color: "var(--fg-1)",
-              outline: "none",
-              fontSize: 15,
-            }}
-          />
-          <button type="button" className="t-cta" onClick={handleGetLocation}>
-            現在地から探す
-          </button>
-        </div>
-
-        {nearby.length > 0 && (
-          <div
-            style={{
-              marginBottom: 28,
-              padding: 24,
-              background: "#fff",
-              borderRadius: 16,
-              border: "1px solid var(--tiby-line)",
-            }}
-          >
-            <h2 style={{ marginBottom: 14, color: "var(--fg-1)", fontSize: "1.05rem", fontWeight: 700 }}>
-              お近くの店舗（{nearby.length}件）
-            </h2>
-            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              {nearby.map((s) => (
-                <div
-                  key={s.id}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    gap: 12,
-                    padding: "12px 14px",
-                    background: "var(--tiby-bg)",
-                    borderRadius: 12,
-                  }}
-                >
-                  <div>
-                    <p style={{ color: "var(--fg-1)", margin: 0 }}>{s.full_name}</p>
-                    <p style={{ color: "var(--fg-3)", fontSize: "0.9rem", margin: 0 }}>
-                      約 {s.distance.toFixed(1)} km
-                    </p>
-                  </div>
-                  <a
-                    href={gmapHref(s)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="t-cta-ghost"
-                    style={{ padding: "8px 18px", fontSize: 13, whiteSpace: "nowrap" }}
-                  >
-                    地図を開く
-                  </a>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        <div
-          ref={mapEl}
-          style={{
-            height: "65vh",
-            minHeight: 420,
-            borderRadius: 16,
-            overflow: "hidden",
-            border: "1px solid var(--tiby-line)",
-            boxShadow: "0 4px 24px rgba(0,0,0,0.06)",
-          }}
+    <div>
+      <div className="t-stores-bar">
+        <input
+          type="text"
+          className="t-tool-input"
+          placeholder="店舗名で検索..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
         />
+        <button type="button" className="t-cta" onClick={handleGetLocation} disabled={locating}>
+          {locating ? "取得中..." : "現在地から探す"}
+        </button>
       </div>
+
+      {nearby.length > 0 && (
+        <div className="t-tool-card t-stores-near">
+          <h2 style={{ fontFamily: "var(--font-display-jp)", fontSize: 15, fontWeight: 700, color: "var(--tiby-ink)", margin: "0 0 14px" }}>
+            お近くの店舗（{nearby.length}件）
+          </h2>
+          {nearby.map((s) => (
+            <div key={s.id} className="t-stores-near-row">
+              <div>
+                <p style={{ color: "var(--fg-1)", fontSize: 14, margin: 0 }}>{s.full_name}</p>
+                <p style={{ color: "var(--fg-3)", fontSize: 12.5, margin: 0, fontVariantNumeric: "tabular-nums" }}>
+                  約 {s.distance.toFixed(1)} km
+                </p>
+              </div>
+              <a
+                href={gmapHref(s)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="t-cta-ghost"
+                style={{ padding: "8px 18px", fontSize: 13, whiteSpace: "nowrap" }}
+              >
+                地図を開く
+              </a>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div ref={mapEl} className="t-stores-map" />
     </div>
   );
 }

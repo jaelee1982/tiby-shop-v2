@@ -15,7 +15,8 @@ export function Navbar() {
         <div className="t-nav-links">
           <Link href="/#story">Story</Link>
           <Link href="/products/love-me-me">Products</Link>
-          <a href="https://tiby.me/layering" target="_blank" rel="noopener noreferrer">Layering</a>
+          <Link href="/quiz">Quiz</Link>
+          <Link href="/layering">Layering</Link>
           <Link href="/stores">Store</Link>
           <Link href="/contact">Contact</Link>
         </div>

@@ -426,3 +426,85 @@ html, body {
   .t-foot-inner { grid-template-columns: 1fr; }
   .t-hero-jp { font-size: 38px; }
 }
+
+/* =========================================================================
+   TOOL PAGES — quiz / layering / stores (구 tiby.me 이식, 2026-07-31)
+   ========================================================================= */
+.t-tool-inner { max-width: 880px; margin: 0 auto; padding: 64px 24px 112px; }
+.t-tool-inner--wide { max-width: 1080px; }
+.t-tool-head { margin-bottom: 44px; }
+.t-tool-head .t-h2-jp { font-size: clamp(28px, 5vw, 38px); margin: 0; }
+.t-tool-lead { font-family: var(--font-body-jp); font-size: 14px; line-height: 1.9; color: var(--fg-2); margin: 14px 0 0; max-width: 34em; }
+.t-tool-input { width: 100%; padding: 16px 22px; border: 1.5px solid var(--tiby-line); border-radius: 999px; background: var(--tiby-surface); color: var(--fg-1); font-family: var(--font-body-jp); font-size: 15px; outline: none; transition: border-color var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out); }
+.t-tool-input::placeholder { color: var(--fg-3); }
+.t-tool-input:focus { border-color: var(--tiby-ink); box-shadow: 0 6px 24px rgba(26,26,26,0.06); }
+.t-tool-card { background: var(--tiby-surface); border: 1px solid var(--tiby-line); border-radius: var(--r-lg); box-shadow: var(--shadow-1); padding: 36px 32px; }
+
+/* --- quiz --- */
+.t-quiz-progress { display: flex; gap: 6px; margin: 0 0 12px; }
+.t-quiz-progress i { height: 4px; flex: 1; border-radius: 999px; background: var(--tiby-line); transition: background var(--dur-base) var(--ease-out); }
+.t-quiz-progress i.on { background: var(--tiby-ink); }
+.t-quiz-count { font-family: var(--font-body-latin); font-weight: 600; font-size: 11px; letter-spacing: 0.14em; color: var(--fg-3); margin-bottom: 36px; font-variant-numeric: tabular-nums; }
+.t-quiz-q { font-family: var(--font-display-jp); font-weight: 700; font-size: clamp(22px, 4vw, 28px); line-height: 1.5; color: var(--tiby-ink); margin: 0 0 28px; text-wrap: balance; }
+.t-quiz-opts { display: flex; flex-direction: column; gap: 12px; margin-bottom: 36px; }
+.t-quiz-opt { display: flex; align-items: center; gap: 14px; width: 100%; text-align: left; background: var(--tiby-surface); border: 1.5px solid var(--tiby-line); border-radius: var(--r-md); padding: 18px 20px; cursor: pointer; font-family: var(--font-body-jp); font-size: 15px; color: var(--fg-1); transition: border-color var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out); }
+.t-quiz-opt:hover { border-color: var(--tiby-ink-mute); transform: translateY(-1px); }
+.t-quiz-opt:active { transform: scale(0.99); }
+.t-quiz-opt:focus-visible { outline: 2px solid var(--tiby-ink); outline-offset: 2px; }
+.t-quiz-opt.on { border-color: var(--tiby-ink); background: var(--tiby-bg-warm); box-shadow: var(--shadow-1); }
+.t-quiz-dot { flex-shrink: 0; width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--tiby-line); display: flex; align-items: center; justify-content: center; transition: border-color var(--dur-fast); }
+.t-quiz-opt.on .t-quiz-dot { border-color: var(--tiby-ink); }
+.t-quiz-dot i { width: 10px; height: 10px; border-radius: 50%; background: var(--tiby-ink); transform: scale(0); transition: transform var(--dur-fast) var(--ease-out); }
+.t-quiz-opt.on .t-quiz-dot i { transform: scale(1); }
+.t-quiz-nav { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.t-quiz-backlink { background: none; border: 0; cursor: pointer; font-family: var(--font-body-jp); font-size: 13px; color: var(--fg-3); padding: 8px 4px; transition: color var(--dur-fast); }
+.t-quiz-backlink:hover { color: var(--fg-1); }
+
+/* --- result --- */
+.t-result-hero { border-radius: var(--r-lg); padding: 48px 36px; text-align: center; border: 1px solid var(--tiby-line); }
+.t-result-eyebrow { font-family: var(--font-body-latin); font-weight: 700; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 18px; }
+.t-result-name { font-family: var(--font-display-latin); font-weight: 800; font-size: clamp(34px, 7vw, 52px); letter-spacing: 0.01em; line-height: 1.05; color: var(--tiby-ink); margin: 0 0 6px; }
+.t-result-namejp { font-family: var(--font-body-jp); font-size: 15px; color: var(--fg-2); margin: 0 0 4px; }
+.t-result-cat { font-family: var(--font-body-jp); font-size: 12px; color: var(--fg-3); margin: 0 0 24px; }
+.t-result-reason { font-family: var(--font-body-jp); font-size: 14px; line-height: 2; color: var(--fg-2); max-width: 34em; margin: 0 auto 28px; text-align: left; }
+.t-result-price { font-family: var(--font-body-jp); font-size: 13px; color: var(--fg-2); margin: 18px 0 0; }
+.t-result-notes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 32px 0; text-align: left; }
+.t-result-note h4 { font-family: var(--font-body-latin); font-weight: 700; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-3); margin: 0 0 8px; }
+.t-result-note p { font-family: var(--font-body-jp); font-size: 13px; line-height: 1.7; color: var(--fg-1); margin: 0; }
+.t-result-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 14px; margin-top: 8px; }
+.t-result-share { display: flex; align-items: center; justify-content: center; gap: 18px; margin-top: 28px; }
+.t-result-share a, .t-result-share button { font-family: var(--font-body-jp); font-size: 12px; color: var(--fg-3); background: none; border: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; transition: color var(--dur-fast); }
+.t-result-share a:hover, .t-result-share button:hover { color: var(--fg-1); }
+
+/* --- layering --- */
+.t-lay-searchwrap { position: relative; margin-bottom: 40px; }
+.t-lay-sugg { position: absolute; left: 0; right: 0; top: calc(100% + 8px); z-index: 30; background: var(--tiby-surface); border: 1px solid var(--tiby-line); border-radius: var(--r-md); box-shadow: 0 16px 48px rgba(26,26,26,0.10); max-height: 380px; overflow-y: auto; }
+.t-lay-sugg button { display: block; width: 100%; text-align: left; padding: 14px 20px; background: none; border: 0; cursor: pointer; transition: background var(--dur-fast); }
+.t-lay-sugg button + button { border-top: 1px solid var(--tiby-line-soft); }
+.t-lay-sugg button:hover { background: var(--tiby-bg-warm); }
+.t-lay-sugg .b { font-family: var(--font-body-jp); font-size: 14px; color: var(--fg-1); margin: 0 0 2px; }
+.t-lay-sugg .f { font-family: var(--font-body-jp); font-size: 12px; color: var(--fg-3); margin: 0; }
+.t-lay-score { display: inline-flex; align-items: center; gap: 8px; border-radius: 999px; padding: 8px 18px; font-family: var(--font-body-jp); font-size: 13px; margin-bottom: 20px; }
+.t-lay-steps { counter-reset: step; display: flex; flex-direction: column; gap: 14px; }
+.t-lay-step { display: flex; gap: 14px; align-items: flex-start; }
+.t-lay-step i { counter-increment: step; flex-shrink: 0; width: 30px; height: 30px; border-radius: 50%; color: #fff; font-family: var(--font-body-latin); font-weight: 700; font-size: 13px; display: flex; align-items: center; justify-content: center; font-style: normal; }
+.t-lay-step i::before { content: counter(step); }
+.t-lay-step p { font-family: var(--font-body-jp); font-size: 14px; line-height: 1.9; color: var(--fg-1); margin: 2px 0 0; }
+.t-lay-tip { font-family: var(--font-body-jp); font-size: 13px; line-height: 1.9; color: var(--fg-2); background: var(--tiby-bg-warm); border-radius: var(--r-sm); padding: 14px 18px; margin: 0; }
+.t-lay-second { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+
+/* --- stores --- */
+.t-stores-bar { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; }
+.t-stores-bar .t-tool-input { flex: 1 1 260px; }
+.t-stores-near { margin-bottom: 24px; }
+.t-stores-near-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px; background: var(--tiby-bg); border-radius: var(--r-sm); }
+.t-stores-near-row + .t-stores-near-row { margin-top: 10px; }
+.t-stores-map { height: 65vh; min-height: 420px; border-radius: var(--r-lg); overflow: hidden; border: 1px solid var(--tiby-line); box-shadow: var(--shadow-1); }
+
+@media (max-width: 640px) {
+  .t-tool-inner { padding: 44px 20px 88px; }
+  .t-tool-card { padding: 26px 20px; }
+  .t-result-hero { padding: 36px 22px; }
+  .t-result-notes { grid-template-columns: 1fr; }
+  .t-lay-second { flex-direction: column; align-items: flex-start; }
+}

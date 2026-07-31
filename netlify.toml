@@ -5,34 +5,4 @@
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
-# tiby.me proxy — quiz/layering 만 유지 (/stores 는 2026-07-31 자체 페이지로 이관)
-[[redirects]]
-  from = "/quiz"
-  to = "https://tiby.me/quiz"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/quiz/*"
-  to = "https://tiby.me/quiz/:splat"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/layering"
-  to = "https://tiby.me/layering"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/layering/*"
-  to = "https://tiby.me/layering/:splat"
-  status = 200
-  force = true
-
-# Proxy tiby.me's SPA build assets (JS/CSS bundles)
-[[redirects]]
-  from = "/assets/*"
-  to = "https://tiby.me/assets/:splat"
-  status = 200
-  force = true
+# (2026-07-31) 구 tiby.me 프록시 전부 제거 — stores/quiz/layering 은 자체 페이지로 이관 완료
