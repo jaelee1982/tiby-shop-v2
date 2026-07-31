@@ -22,7 +22,7 @@ export function Footer() {
           <h4>Brand</h4>
           <Link href="/#story">Story</Link>
           <a href="https://tiby.me/layering" target="_blank" rel="noopener noreferrer">Layering Guide</a>
-          <a href="https://tiby.me/stores" target="_blank" rel="noopener noreferrer">Store Locator</a>
+          <Link href="/stores">Store Locator</Link>
           <a href={siteConfig.instagram} target="_blank" rel="noopener noreferrer">Instagram</a>
           <a href={siteConfig.x} target="_blank" rel="noopener noreferrer">X (Twitter)</a>
         </div>

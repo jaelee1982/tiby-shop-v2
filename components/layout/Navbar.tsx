@@ -16,7 +16,7 @@ export function Navbar() {
           <Link href="/#story">Story</Link>
           <Link href="/products/love-me-me">Products</Link>
           <a href="https://tiby.me/layering" target="_blank" rel="noopener noreferrer">Layering</a>
-          <a href="https://tiby.me/stores" target="_blank" rel="noopener noreferrer">Store</a>
+          <Link href="/stores">Store</Link>
           <Link href="/contact">Contact</Link>
         </div>
         <div className="t-nav-right">
