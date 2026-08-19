@@ -184,6 +184,21 @@ html, body {
 .t-foot-col a:hover { color: var(--tiby-love-accent); }
 .t-foot-legal { max-width: 1200px; margin: 24px auto 0; font-family: var(--font-body-latin); font-size: 11px; letter-spacing: 0.06em; color: var(--fg-3); }
 
+/* 事業者情報 — 折りたたみ（特定商取引法5項目、決済審査要件） */
+.t-foot-biz { max-width: 1200px; margin: 20px auto 0; }
+.t-foot-biz summary { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-body-jp); font-size: 11px; letter-spacing: 0.08em; color: var(--fg-3); cursor: pointer; list-style: none; user-select: none; padding: 4px 0; }
+.t-foot-biz summary::-webkit-details-marker { display: none; }
+.t-foot-biz summary::after { content: "＋"; font-size: 11px; line-height: 1; }
+.t-foot-biz[open] summary::after { content: "−"; }
+.t-foot-biz summary:hover { color: var(--fg-1); }
+.t-foot-biz dl { margin: 10px 0 0; padding: 14px 16px; border: 1px solid var(--tiby-line-soft); border-radius: 10px; background: rgba(255, 255, 255, 0.5); display: grid; gap: 6px; }
+.t-foot-biz dl div { display: grid; grid-template-columns: 150px 1fr; gap: 12px; }
+.t-foot-biz dt { font-family: var(--font-body-jp); font-size: 11px; color: var(--fg-3); }
+.t-foot-biz dd { margin: 0; font-family: var(--font-body-jp); font-size: 11px; color: var(--fg-2); overflow-wrap: anywhere; }
+@media (max-width: 640px) {
+  .t-foot-biz dl div { grid-template-columns: 1fr; gap: 2px; }
+}
+
 /* =========================================================================
    PRODUCT DETAIL — rich PDP, design-system tone (uses lib/products.ts data)
    ========================================================================= */
