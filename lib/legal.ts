@@ -11,11 +11,7 @@ export const tokushoho: TokushohoRow[] = [
   { label: "代表者名", value: siteConfig.representativeName },
   { label: "運営統括責任者", value: siteConfig.operatorName },
   { label: "所在地", value: siteConfig.address },
-  {
-    label: "電話番号",
-    value: siteConfig.phone,
-    note: "お電話でのお問い合わせは受け付けておりません。お問い合わせはメールにてお願いいたします。",
-  },
+  { label: "電話番号", value: siteConfig.phone },
   { label: "メールアドレス", value: siteConfig.contactEmail },
   {
     label: "販売価格",
