@@ -18,7 +18,7 @@ export const siteConfig = {
   representativeName: "Jaeho Lee",
   operatorName: "Jaeho Lee",
   address: "49-19 Maesangol-gil, Sabuk-myeon, Chuncheon-si, Gangwon-do, Republic of Korea",
-  phone: "+82-70-8648-3795",
+  phone: "03-6273-3694", // 日本の電話番号（特定商取引法表記・フッター共通）
   businessHours: "メールにて受付（ご返信には2〜3営業日いただく場合があります）",
   currency: "JPY" as const,
   shippingPolicy: "ご注文後、1〜2日以内に発送いたします。",
