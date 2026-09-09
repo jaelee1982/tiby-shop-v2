@@ -46,6 +46,10 @@ export function Footer() {
             <dd>{siteConfig.companyLegalName}</dd>
           </div>
           <div>
+            <dt>商号（韓国語表記）</dt>
+            <dd>{siteConfig.companyLegalNameKo}</dd>
+          </div>
+          <div>
             <dt>事業者登録番号</dt>
             <dd>{siteConfig.businessRegistrationNumber}</dd>
           </div>

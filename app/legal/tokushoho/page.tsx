@@ -48,7 +48,7 @@ export default function TokushohoPage() {
           </tbody>
         </table>
 
-        <p className="t-static-updated">最終更新日：2026年9月8日</p>
+        <p className="t-static-updated">最終更新日：2026年9月9日</p>
       </div>
     </div>
   );
