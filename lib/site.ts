@@ -14,6 +14,7 @@ export const siteConfig = {
   contactEmail: "work@giantkorea.kr",
   customerSupportEmail: "work@giantkorea.kr",
   companyLegalName: "Giant Korea Co., Ltd.",
+  companyLegalNameKo: "주식회사 자이언트코리아", // 国文商号（韓国の法人登記名 — 決済審査(Eximbay)要件）
   businessRegistrationNumber: "329-88-01102",
   representativeName: "Jaeho Lee",
   operatorName: "Jaeho Lee",

@@ -7,6 +7,7 @@ export type TokushohoRow = { label: string; value: string; note?: string };
 
 export const tokushoho: TokushohoRow[] = [
   { label: "販売業者", value: siteConfig.companyLegalName },
+  { label: "販売業者（韓国語表記）", value: siteConfig.companyLegalNameKo },
   { label: "事業者登録番号", value: siteConfig.businessRegistrationNumber },
   { label: "代表者名", value: siteConfig.representativeName },
   { label: "運営統括責任者", value: siteConfig.operatorName },
