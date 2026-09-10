@@ -608,10 +608,13 @@ html, body {
 .t-globe-note { position: absolute; left: 16px; bottom: 12px; font-size: 11px; color: rgba(255,255,255,0.55); }
 .t-stores-hero-copy { position: relative; z-index: 2; max-width: 1080px; margin: 0 auto; padding: min(14vh, 140px) 24px 40px; pointer-events: none; }
 .t-stores-hero-copy > * { pointer-events: auto; }
+.t-stores-hero-copy .t-h2-jp { font-size: clamp(26px, 6vw, 38px); }
+.t-stores-hero-copy .t-tool-lead { max-width: 100%; }
 .t-stores-hero::after { content: ""; position: absolute; inset: auto 0 0 0; height: 120px; background: linear-gradient(to bottom, rgba(16,22,38,0), var(--tiby-bg)); pointer-events: none; }
 .t-globe-popup .maplibregl-popup-content { border-radius: 12px; padding: 10px 14px; box-shadow: 0 8px 24px rgba(0,0,0,0.18); }
 .t-stores-hero .maplibregl-ctrl-attrib { font-size: 10px; }
 @media (max-width: 767px) {
-  .t-stores-hero { min-height: 52vh; }
+  .t-stores-hero { min-height: 58vh; }
+  .t-globe-static { object-fit: contain; }
   .t-stores-hero-copy { padding: 56px 20px 32px; }
 }

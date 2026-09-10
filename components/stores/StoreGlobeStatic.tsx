@@ -18,7 +18,7 @@ export function StoreGlobeStatic({ className }: { className?: string }) {
   const polys = geom.type === "MultiPolygon" ? geom.coordinates : geom.type === "Polygon" ? [geom.coordinates] : [];
   const path = polys.map((p) => ringsToPath(p as number[][][])).join(" ");
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} className={className} role="img" aria-label={`全国のドン・キホーテ ${stores.length}店舗`} preserveAspectRatio="xMidYMid slice">
+    <svg viewBox={`0 0 ${W} ${H}`} className={className} role="img" aria-label={`全国のドン・キホーテ ${stores.length}店舗`} preserveAspectRatio="xMidYMid meet">
       <defs>
         <radialGradient id="sg-glow" r="0.5"><stop offset="0" stopColor="#ED8CA5" stopOpacity="0.9" /><stop offset="1" stopColor="#ED8CA5" stopOpacity="0" /></radialGradient>
       </defs>
