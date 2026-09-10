@@ -714,3 +714,27 @@ html, body {
   .t-quest-building { width: 96px; height: 96px; }
   .t-quest-station { width: 72px; height: 60px; }
 }
+/* Quest 에셋 스프라이트 — 이미지가 로드되면 부모에 has-<key> 가 붙어 CSS 임시 그림을 숨긴다 */
+.t-quest-sp { position: absolute; pointer-events: none; user-select: none; filter: drop-shadow(0 4px 4px rgba(0,0,0,0.18)); }
+.t-quest-plate { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 60%; }
+.t-quest-scene.has-plate .t-quest-sky, .t-quest-scene.has-plate .t-quest-ground, .t-quest-scene.has-plate .t-quest-path { display: none; }
+.t-quest-scene.has-station .t-quest-station { display: none; }
+.t-quest-scene.has-building .t-quest-building { display: none; }
+.t-quest-scene.has-walker .t-quest-walker, .t-quest-scene.has-taxi .t-quest-walker, .t-quest-scene.has-hero .t-quest-walker { display: none; }
+.t-quest-scene.has-stamp .t-quest-scene-stamp { display: none; }
+.t-quest-sp-station { left: 4%; bottom: 24%; height: 44%; width: auto; }
+.t-quest-sp-building { right: 4%; bottom: 22%; height: 62%; width: auto; }
+.t-quest-sp-walker { left: 22%; bottom: 20%; height: 30%; width: auto; animation: t-quest-walk 5.5s linear infinite; }
+.t-quest-scene.is-drive .t-quest-sp-walker { height: 24%; animation-duration: 3s; }
+.t-quest-sp-walker.is-hero { animation: none; left: 58%; height: 34%; }
+.t-quest-sp-stamp { right: 14px; top: 10px; height: 46%; width: auto; transform: rotate(-12deg); animation: t-quest-pop 0.5s var(--ease-out); filter: drop-shadow(0 2px 6px rgba(0,0,0,0.15)); }
+.t-quest-sp-label { position: absolute; display: none; white-space: nowrap; background: rgba(255,255,255,0.94); color: #1A1A1A; font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px; border: 1px solid rgba(0,0,0,0.08); box-shadow: 0 2px 6px rgba(0,0,0,0.12); pointer-events: none; }
+.t-quest-sp-label-station { left: 5%; bottom: 70%; }
+.t-quest-sp-label-building { right: 5%; bottom: 14%; max-width: 46%; overflow: hidden; text-overflow: ellipsis; }
+.t-quest-scene.has-station .t-quest-sp-label-station, .t-quest-scene.has-building .t-quest-sp-label-building { display: block; }
+.t-quest-stamp { position: relative; overflow: hidden; }
+.t-quest-stamp-img { position: absolute; inset: 6%; width: 88%; height: 88%; object-fit: contain; opacity: 0.28; pointer-events: none; }
+.t-quest-stamp-name, .t-quest-stamp-meta { position: relative; }
+.t-quest-pref { display: inline-flex; align-items: center; gap: 5px; }
+.t-quest-pref-img { width: 16px; height: 16px; object-fit: contain; }
+@media (prefers-reduced-motion: reduce) { .t-quest-sp-walker { animation: none; left: 46%; } .t-quest-sp-stamp { animation: none; } }

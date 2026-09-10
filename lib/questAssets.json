@@ -1,0 +1,15 @@
+{
+  "_note": "TIBY Quest 에셋 원본(Higgsfield gpt_image_2, 대표 승인 스타일 2026-09-10). public/quest/<key>.png 는 quest-assets.yml 이 이 URL 에서 반입. 새 에셋 = 여기 한 줄 + 워크플로우 실행.",
+  "style_refs": { "master": "08ee8b94-1dd1-430d-abdc-9b090b5475e6", "building_src": "311857f9-0161-4e2b-9394-c905a6c57481", "character_sheet": "a00131cc-ab59-41e3-a567-66ab5ef9ebe3" },
+  "assets": {
+    "plate":    { "job": "c758c557-9f59-442e-8a59-b5d8487e2a74", "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_214642_c758c557-9f59-442e-8a59-b5d8487e2a74.png", "what": "배경 플레이트 16:9 — 가운데 빈 보도" },
+    "station":  { "job": "63b16c54-43dc-4e1e-ba96-150e0b58e763", "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_214745_63b16c54-43dc-4e1e-ba96-150e0b58e763.png", "what": "지하철 출입구 (누끼)" },
+    "building": { "job": "a1bb0b99-831f-4150-afed-fe0289b354ea", "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_214743_a1bb0b99-831f-4150-afed-fe0289b354ea.png", "what": "돈키 건물 템플릿 (누끼)" },
+    "walker":   { "job": "503dd62b-6ef8-408f-b188-2080a166e759", "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_214750_503dd62b-6ef8-408f-b188-2080a166e759.png", "what": "캐릭터 걷기 측면 (누끼)" },
+    "hero":     { "job": "03bde0c6-1077-4a8d-8763-df985f8909f7", "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_214752_03bde0c6-1077-4a8d-8763-df985f8909f7.png", "what": "캐릭터 도착 포즈 — 향수 들어올림 (누끼)" },
+    "taxi":     { "job": "6c6f6b56-536c-4c8b-b471-21d0d6f037f4", "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_214747_6c6f6b56-536c-4c8b-b471-21d0d6f037f4.png", "what": "도쿄 택시 — 2km 초과 매장용 (누끼)" },
+    "pin":      { "job": "d83e08ef-9d9b-42a9-ae85-7a111711593a", "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_214754_d83e08ef-9d9b-42a9-ae85-7a111711593a.png", "what": "핑크 맵핀 (누끼)" },
+    "stamp":    { "job": "32131882-7bf1-4d8c-81cb-591a728810d2", "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_214757_32131882-7bf1-4d8c-81cb-591a728810d2.png", "what": "TIBY 스탬프 (누끼)" },
+    "badge":    { "job": "95e47fc4-1679-4e57-bec7-70832d6a7798", "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_214759_95e47fc4-1679-4e57-bec7-70832d6a7798.png", "what": "都道府県 배지 (누끼, 중앙 빈칸)" }
+  }
+}
