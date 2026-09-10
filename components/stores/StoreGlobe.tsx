@@ -1,15 +1,16 @@
 "use client";
 
-// 3D 지구본 — 회전하는 지구에서 일본으로 날아 들어와 227개 매장이 북→남으로 점등한다 (God's Eye Phase 2).
+// 3D 지도 — 일본 시점(JAPAN_VIEW)에서 바로 시작해 227개 매장이 북→남으로 점등한다 (God's Eye Phase 2).
+// ⚠️ 지구본 회전→비행 인트로는 제거됨(2026-09-10 대표 지시 "지구본 없이 일본 지도부터") — 처음부터 일본이 보여야 한다.
 // 원칙: 판매·재고·상태 데이터 없음 — 핑크 1색. 핀 클릭 = 매장명 + Google Maps 링크.
-// 엔진 MapLibre GL(무키). 타일 실패 시 내장 일본 윤곽. prefers-reduced-motion 이면 회전·비행 생략.
+// 엔진 MapLibre GL(무키). 타일 실패 시 내장 일본 윤곽. prefers-reduced-motion 이면 점등 애니메이션도 생략.
 // 이 지구본이 페이지의 유일한 지도다(2026-09-10 대표 지시 — 옛 Leaflet 지도 제거). 검색·현재지 결과는
 // onApi 로 받은 핸들(focus/highlight)로 이 지도 위에서 보여준다.
 import { useEffect, useRef, useState } from "react";
 import "maplibre-gl/dist/maplibre-gl.css";
 import type { Map as MLMap, Popup as MLPopup } from "maplibre-gl";
 import { stores, type Store } from "@/lib/storesData";
-import { pickStyle, PINK, GLOBE_START, JAPAN_VIEW } from "@/lib/mapStyle";
+import { pickStyle, PINK, JAPAN_VIEW } from "@/lib/mapStyle";
 import { STORE_STATIONS } from "@/lib/storeStations";
 
 const SRC = "stores";
@@ -43,9 +44,9 @@ export function StoreGlobe({ onReady, onApi }: { onReady?: () => void; onApi?: (
       if (cancelled || !el.current) return;
       setFallback(fb);
       const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
+      // 첫 프레임부터 일본 시점 — 지구본 시작점(GLOBE_START)은 더 이상 쓰지 않는다.
       const map = new gl.Map({
-        container: el.current, style, center: reduced ? JAPAN_VIEW.center : GLOBE_START.center,
-        zoom: reduced ? JAPAN_VIEW.zoom : GLOBE_START.zoom, pitch: reduced ? JAPAN_VIEW.pitch : 0,
+        container: el.current, style, ...JAPAN_VIEW,
         attributionControl: false, maxPitch: 60, scrollZoom: false, dragRotate: false,
       });
       mapRef.current = map;
@@ -109,10 +110,8 @@ export function StoreGlobe({ onReady, onApi }: { onReady?: () => void; onApi?: (
           raf = requestAnimationFrame(step);
         };
 
-        // 사용자가 검색·현재지 등으로 지도를 쓰기 시작하면 인트로를 즉시 끝낸다(전체 점등).
-        let flown = reduced;
+        // 사용자가 검색·현재지 등으로 지도를 쓰기 시작하면 점등 인트로를 즉시 끝낸다(전체 점등).
         const skipIntro = () => {
-          flown = true;
           if (introDone) return;
           introDone = true; cancelAnimationFrame(raf); map.stop(); setData(stores); onReadyRef.current?.();
         };
@@ -140,14 +139,9 @@ export function StoreGlobe({ onReady, onApi }: { onReady?: () => void; onApi?: (
         };
         onApiRef.current?.(api);
 
-        if (reduced) { light(); return; }
-        // 천천히 도는 지구 → 1.4초 뒤 일본으로 비행 → 도착 후 점등. 사용자가 만지면 즉시 비행.
-        const fly = () => { if (flown) return; flown = true; map.stop(); map.flyTo({ ...JAPAN_VIEW, duration: 2600, essential: true }); map.once("moveend", () => { if (!introDone) light(); }); };
-        const spin = () => { if (flown) return; map.easeTo({ center: [((map.getCenter().lng + 8) % 360), GLOBE_START.center[1]], duration: 1200, easing: (t) => t }); };
-        map.on("moveend", () => { if (!flown) spin(); });
-        spin();
-        setTimeout(fly, 1400);
-        map.once("mousedown", fly); map.once("touchstart", fly); map.once("wheel", fly);
+        // 일본 시점에서 바로 점등(0.9초). 회전·비행 없음. reduced-motion 이면 한 번에 전체 표시.
+        if (reduced) { skipIntro(); return; }
+        light();
       });
     })();
     return () => { cancelled = true; cancelAnimationFrame(raf); popupRef.current?.remove(); mapRef.current?.remove(); mapRef.current = null; };
