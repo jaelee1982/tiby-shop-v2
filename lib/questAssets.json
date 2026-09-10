@@ -176,25 +176,25 @@
       "what": "온보딩 3 — 스탬프·칭호"
     },
     "sheet_walk": {
-      "job": "4a476a48-eab5-4c56-867f-ca28c7d72a0d",
-      "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/4a476a48-eab5-4c56-867f-ca28c7d72a0d.png",
-      "what": "걷기 루프 12프레임 (wan2_7 54aa631a → 누끼 7520a897)",
+      "job": "cc217e32-8f54-4ae9-b7ea-81206674e28c",
+      "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/cc217e32-8f54-4ae9-b7ea-81206674e28c.png",
+      "what": "걷기 루프 12프레임 (wan2_7 54aa631a → 누끼 7520a897) — v3: 검은 머리 알파 보정(닫힘+구멍 메움+가장자리 동색)",
       "frames": 12,
       "ar": 0.5666666666666667,
       "src": "54aa631a-1345-4969-9b85-1cca37086f34"
     },
     "sheet_idle": {
-      "job": "096bd0ad-43e7-4fd4-9bd5-c0958a66d47e",
-      "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/096bd0ad-43e7-4fd4-9bd5-c0958a66d47e.png",
-      "what": "대기 숨쉬기 8프레임 (wan2_7 e6abe58d → 누끼 2f7d4bde)",
+      "job": "b47595bc-33e0-4df9-b9d3-7836007569d8",
+      "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/b47595bc-33e0-4df9-b9d3-7836007569d8.png",
+      "what": "대기 숨쉬기 8프레임 (wan2_7 e6abe58d → 누끼 2f7d4bde) — v3: 검은 머리 알파 보정(닫힘+구멍 메움+가장자리 동색)",
       "frames": 8,
       "ar": 0.5638888888888889,
       "src": "e6abe58d-9411-4b16-8500-5a64be3ac2b8"
     },
     "sheet_celebrate": {
-      "job": "159a4e73-4a75-4982-b40d-a5020582bde3",
-      "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/159a4e73-4a75-4982-b40d-a5020582bde3.png",
-      "what": "축하 1회 재생 12프레임 (wan2_7 8dd97492 → 누끼 e32900a6)",
+      "job": "1f9f818b-45ab-4338-9012-a2ab32a2d7c5",
+      "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/1f9f818b-45ab-4338-9012-a2ab32a2d7c5.png",
+      "what": "축하 1회 재생 12프레임 (wan2_7 8dd97492 → 누끼 e32900a6) — v3: 검은 머리 알파 보정(닫힘+구멍 메움+가장자리 동색)",
       "frames": 12,
       "ar": 0.55,
       "src": "8dd97492-215b-4581-b7f5-534069b0918c"

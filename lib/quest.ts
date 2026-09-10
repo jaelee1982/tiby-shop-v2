@@ -92,3 +92,54 @@ export function routeLine(code: string): { station: string; text: string; drive:
   const drive = st.dist_m > 2000;
   return { station: st.station, drive, text: drive ? `車で（最寄り ${st.station}駅 ${(st.dist_m / 1000).toFixed(1)}km）` : `${st.station}駅から徒歩${st.walk_min}分` };
 }
+
+// ── 에셋 팩 v2 (2026-09-10) — 지역 플레이트·스프라이트 시트·칭호 배지. 키 = lib/questAssets.json.
+/** 都道府県 JIS 코드 → 배경 플레이트 키. 関東(+山梨)=기본 'plate'(도쿄), 밤(18~05시)엔 関東만 야경 플레이트(1종만 제작). */
+export function plateFor(pref: string | null, hour?: number): string {
+  const p = Number(pref ?? 0);
+  if (!p) return "plate";
+  if (p === 1) return "plate_hokkaido";
+  if (p <= 7) return "plate_tohoku";
+  if (p <= 14 || p === 19) return hour != null && isNight(hour) ? "plate_tokyo_night" : "plate";
+  if (p <= 23) return "plate_nagoya";
+  if (p === 26) return "plate_kyoto";
+  if (p <= 30) return "plate_osaka";
+  if (p <= 39) return "plate_hiroshima";
+  if (p <= 46) return "plate_fukuoka";
+  return "plate_okinawa";
+}
+export const isNight = (hour: number) => hour >= 18 || hour < 5;
+
+/** 스프라이트 시트 규격 — 값은 questAssets.json 의 frames/ar 와 동일해야 한다(tsx 검증). dur=1루프 초, once=1회 재생 후 마지막 프레임 유지 */
+export const SHEETS = {
+  sheet_walk:      { frames: 12, ar: 204 / 360, dur: 0.55, once: false },
+  sheet_idle:      { frames: 8,  ar: 203 / 360, dur: 1.4,  once: false },
+  sheet_celebrate: { frames: 12, ar: 198 / 360, dur: 1.6,  once: true },
+  sheet_taxi:      { frames: 8,  ar: 674 / 360, dur: 0.9,  once: false },
+} as const;
+export type SheetKey = keyof typeof SHEETS;
+
+/** 현재 위치→매장 거리로 씬 안 캐릭터 진행도(0=역, 1=매장 앞). 역보다 멀면 0. */
+export function walkProgress(distToStore_m: number, stationDist_m: number): number {
+  if (!(stationDist_m > 0)) return 0;
+  return Math.max(0, Math.min(1, 1 - distToStore_m / stationDist_m));
+}
+
+/** 근처 매장 중 아직 스탬프 없는 곳 (스탬프帳 탭 "近くの未収集") */
+export function uncollectedNearby<T extends { code: string }>(nearby: T[], book: StampBook, n = 3): T[] {
+  return nearby.filter((s) => !book.stamps[s.code]).slice(0, n);
+}
+
+export const ONBOARD_KEY = "tiby_quest_onboarded_v1";
+export const HOME_HINT_KEY = "tiby_quest_home_hint_v1";
+export const ONBOARDING = [
+  { k: "onboarding_1", title: "最寄り駅から歩こう", text: "全国のドン・キホーテ227店舗にTIBYがあります。駅から店舗までの道のりがクエストです。" },
+  { k: "onboarding_2", title: "店舗の前でチェックイン", text: "店舗から150m以内に着いたら「チェックイン」。位置情報は判定にだけ使います。" },
+  { k: "onboarding_3", title: "スタンプを集めて称号ゲット", text: "1店舗1スタンプ。3・5・10・20店舗で称号が変わります。都道府県バッジも集まります。" },
+] as const;
+
+/** 공유 문구 (Web Share API text) */
+export function shareText(stats: BookStats, storeShort?: string): string {
+  const title = stats.reached.length ? stats.reached[stats.reached.length - 1].label : null;
+  return `${storeShort ? `ドン・キホーテ${storeShort}でTIBYをGET！` : "TIBY Quest"} スタンプ${stats.count}個${title ? `・称号「${title}」` : ""} #TIBYQuest`;
+}
