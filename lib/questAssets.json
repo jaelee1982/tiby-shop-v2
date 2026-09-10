@@ -1,15 +1,211 @@
 {
-  "_note": "TIBY Quest 에셋 원본(Higgsfield gpt_image_2, 대표 승인 스타일 2026-09-10). public/quest/<key>.png 는 quest-assets.yml 이 이 URL 에서 반입. 새 에셋 = 여기 한 줄 + 워크플로우 실행.",
-  "style_refs": { "master": "08ee8b94-1dd1-430d-abdc-9b090b5475e6", "building_src": "311857f9-0161-4e2b-9394-c905a6c57481", "character_sheet": "a00131cc-ab59-41e3-a567-66ab5ef9ebe3" },
+  "_note": "TIBY Quest 에셋 원본(Higgsfield gpt_image_2, 대표 승인 스타일 2026-09-10). public/quest/<key>.png 는 quest-assets.yml 이 이 URL 에서 반입. 새 에셋 = 여기 한 줄 + 워크플로우 실행. 크기 규칙(fetch 스크립트): plate*/shelf/share_bg ≤1200, onboarding_* ≤960, sheet_* 높이 240(칸 폭 정수 보정), 그 외 ≤640. sheet_* 는 frames/ar 필수.",
+  "style_refs": {
+    "master": "08ee8b94-1dd1-430d-abdc-9b090b5475e6",
+    "building_src": "311857f9-0161-4e2b-9394-c905a6c57481",
+    "character_sheet": "a00131cc-ab59-41e3-a567-66ab5ef9ebe3"
+  },
   "assets": {
-    "plate":    { "job": "c758c557-9f59-442e-8a59-b5d8487e2a74", "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_214642_c758c557-9f59-442e-8a59-b5d8487e2a74.png", "what": "배경 플레이트 16:9 — 가운데 빈 보도" },
-    "station":  { "job": "63b16c54-43dc-4e1e-ba96-150e0b58e763", "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_214745_63b16c54-43dc-4e1e-ba96-150e0b58e763.png", "what": "지하철 출입구 (누끼)" },
-    "building": { "job": "a1bb0b99-831f-4150-afed-fe0289b354ea", "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_214743_a1bb0b99-831f-4150-afed-fe0289b354ea.png", "what": "돈키 건물 템플릿 (누끼)" },
-    "walker":   { "job": "503dd62b-6ef8-408f-b188-2080a166e759", "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_214750_503dd62b-6ef8-408f-b188-2080a166e759.png", "what": "캐릭터 걷기 측면 (누끼)" },
-    "hero":     { "job": "03bde0c6-1077-4a8d-8763-df985f8909f7", "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_214752_03bde0c6-1077-4a8d-8763-df985f8909f7.png", "what": "캐릭터 도착 포즈 — 향수 들어올림 (누끼)" },
-    "taxi":     { "job": "6c6f6b56-536c-4c8b-b471-21d0d6f037f4", "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_214747_6c6f6b56-536c-4c8b-b471-21d0d6f037f4.png", "what": "도쿄 택시 — 2km 초과 매장용 (누끼)" },
-    "pin":      { "job": "d83e08ef-9d9b-42a9-ae85-7a111711593a", "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_214754_d83e08ef-9d9b-42a9-ae85-7a111711593a.png", "what": "핑크 맵핀 (누끼)" },
-    "stamp":    { "job": "32131882-7bf1-4d8c-81cb-591a728810d2", "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_214757_32131882-7bf1-4d8c-81cb-591a728810d2.png", "what": "TIBY 스탬프 (누끼)" },
-    "badge":    { "job": "95e47fc4-1679-4e57-bec7-70832d6a7798", "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_214759_95e47fc4-1679-4e57-bec7-70832d6a7798.png", "what": "都道府県 배지 (누끼, 중앙 빈칸)" }
+    "plate": {
+      "job": "c758c557-9f59-442e-8a59-b5d8487e2a74",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_214642_c758c557-9f59-442e-8a59-b5d8487e2a74.png",
+      "what": "배경 플레이트 16:9 — 가운데 빈 보도"
+    },
+    "station": {
+      "job": "63b16c54-43dc-4e1e-ba96-150e0b58e763",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_214745_63b16c54-43dc-4e1e-ba96-150e0b58e763.png",
+      "what": "지하철 출입구 (누끼)"
+    },
+    "building": {
+      "job": "a1bb0b99-831f-4150-afed-fe0289b354ea",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_214743_a1bb0b99-831f-4150-afed-fe0289b354ea.png",
+      "what": "돈키 건물 템플릿 (누끼)"
+    },
+    "walker": {
+      "job": "503dd62b-6ef8-408f-b188-2080a166e759",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_214750_503dd62b-6ef8-408f-b188-2080a166e759.png",
+      "what": "캐릭터 걷기 측면 (누끼)"
+    },
+    "hero": {
+      "job": "03bde0c6-1077-4a8d-8763-df985f8909f7",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_214752_03bde0c6-1077-4a8d-8763-df985f8909f7.png",
+      "what": "캐릭터 도착 포즈 — 향수 들어올림 (누끼)"
+    },
+    "taxi": {
+      "job": "6c6f6b56-536c-4c8b-b471-21d0d6f037f4",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_214747_6c6f6b56-536c-4c8b-b471-21d0d6f037f4.png",
+      "what": "도쿄 택시 — 2km 초과 매장용 (누끼)"
+    },
+    "pin": {
+      "job": "d83e08ef-9d9b-42a9-ae85-7a111711593a",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_214754_d83e08ef-9d9b-42a9-ae85-7a111711593a.png",
+      "what": "핑크 맵핀 (누끼)"
+    },
+    "stamp": {
+      "job": "32131882-7bf1-4d8c-81cb-591a728810d2",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_214757_32131882-7bf1-4d8c-81cb-591a728810d2.png",
+      "what": "TIBY 스탬프 (누끼)"
+    },
+    "badge": {
+      "job": "95e47fc4-1679-4e57-bec7-70832d6a7798",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_214759_95e47fc4-1679-4e57-bec7-70832d6a7798.png",
+      "what": "都道府県 배지 (누끼, 중앙 빈칸)"
+    },
+    "plate_hokkaido": {
+      "job": "98834c3b-bb87-4004-9648-7dc6be643647",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_222939_98834c3b-bb87-4004-9648-7dc6be643647.png",
+      "what": "삿포로 — 눈·시계탑 (北海道)"
+    },
+    "plate_tohoku": {
+      "job": "98429c3e-0cdc-4e1a-b6bf-7a6a627b1c0f",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_222939_98429c3e-0cdc-4e1a-b6bf-7a6a627b1c0f.png",
+      "what": "센다이 — 느티나무 거리 (東北)"
+    },
+    "plate_nagoya": {
+      "job": "d8c111d5-1766-456e-804c-d9d96a64c82d",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_222939_d8c111d5-1766-456e-804c-d9d96a64c82d.png",
+      "what": "나고야 — 성·샤치호코 (中部)"
+    },
+    "plate_osaka": {
+      "job": "4676c09a-f7e6-4834-bb91-8e4a94278797",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_222939_4676c09a-f7e6-4834-bb91-8e4a94278797.png",
+      "what": "오사카 도톤보리 (関西)"
+    },
+    "plate_kyoto": {
+      "job": "b4ceb2f3-8862-4659-aa5e-cc88627057e2",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_222939_b4ceb2f3-8862-4659-aa5e-cc88627057e2.png",
+      "what": "교토 — 토리이·마치야 (京都)"
+    },
+    "plate_hiroshima": {
+      "job": "004eac9d-01b9-45a4-81c8-b75ad00ed1d8",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_222939_004eac9d-01b9-45a4-81c8-b75ad00ed1d8.png",
+      "what": "히로시마 — 노면전차 (中国·四国)"
+    },
+    "plate_fukuoka": {
+      "job": "b7ba500b-604b-446d-ba5b-1ed32dc6acce",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_222939_b7ba500b-604b-446d-ba5b-1ed32dc6acce.png",
+      "what": "후쿠오카 — 야타이 (九州)"
+    },
+    "plate_okinawa": {
+      "job": "235e198c-0a71-401a-a1e8-22eecb720b66",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_222939_235e198c-0a71-401a-a1e8-22eecb720b66.png",
+      "what": "오키나와 — 시사·바다 (沖縄)"
+    },
+    "plate_tokyo_night": {
+      "job": "4799f024-f30e-4518-b986-8cb0a437d5c8",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_222939_4799f024-f30e-4518-b986-8cb0a437d5c8.png",
+      "what": "도쿄 밤 — 네온 (18~05시, 関東)"
+    },
+    "shelf": {
+      "job": "04690210-fa1c-445f-a190-c4e1db2ef7ab",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_222939_04690210-fa1c-445f-a190-c4e1db2ef7ab.png",
+      "what": "매장 안 코스메 선반 컷 — 체크인 후"
+    },
+    "share_bg": {
+      "job": "0c540941-cebe-4ad2-8fa4-0f7d04ff65c7",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_222939_0c540941-cebe-4ad2-8fa4-0f7d04ff65c7.png",
+      "what": "공유 카드 배경 (텍스트는 canvas 로 합성)"
+    },
+    "badge_1": {
+      "job": "1fa07256-5207-44b9-b6c2-ead1e63cdf02",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_223219_d14f24ae-56b9-4b40-ab0a-a5c64d65d4aa.png",
+      "what": "칭호 1 はじめの一歩 — 발자국 (누끼 d14f24ae)",
+      "cutout": "d14f24ae-56b9-4b40-ab0a-a5c64d65d4aa"
+    },
+    "badge_3": {
+      "job": "3ab53302-b7ba-4d61-9bb1-5d6f89a9af8e",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_223221_5e927ad2-f8df-42e7-aea1-aa6a34ecf45a.png",
+      "what": "칭호 3 ドンキ探検家 — 나침반",
+      "cutout": "5e927ad2-f8df-42e7-aea1-aa6a34ecf45a"
+    },
+    "badge_5": {
+      "job": "a8c6a930-c1db-4fe9-99a5-6409a77481f5",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_223223_16ae2073-d332-45a2-8ee4-d80f42f17982.png",
+      "what": "칭호 5 TIBYハンター — 향수병+돋보기",
+      "cutout": "16ae2073-d332-45a2-8ee4-d80f42f17982"
+    },
+    "badge_10": {
+      "job": "6486ec86-5256-4546-928c-f47a55bc11e8",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_223225_a02b2a4e-71c5-49b8-97bf-578df35558a1.png",
+      "what": "칭호 10 パフュームマスター — 금관",
+      "cutout": "a02b2a4e-71c5-49b8-97bf-578df35558a1"
+    },
+    "badge_20": {
+      "job": "70659fe5-bd5f-4c36-b4b9-3841199825af",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_223458_7e1279a7-b75d-4f5b-acc6-a081f549072d.png",
+      "what": "칭호 20 全国行脚 — 일본 지도",
+      "cutout": "7e1279a7-b75d-4f5b-acc6-a081f549072d"
+    },
+    "icon_compass": {
+      "job": "2f0bf8f5-ada4-4e26-b6be-b337e807195f",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_223500_f048ea58-bb21-43f9-b2cc-46ae01f99ae7.png",
+      "what": "아이콘 — 나침반(現在地から探す)",
+      "cutout": "f048ea58-bb21-43f9-b2cc-46ae01f99ae7"
+    },
+    "icon_book": {
+      "job": "942f3289-9586-4ee7-947f-3404dec7985f",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_223503_df1754a4-d1b3-4423-9a71-b1c21222e95d.png",
+      "what": "아이콘 — 스탬프帳",
+      "cutout": "df1754a4-d1b3-4423-9a71-b1c21222e95d"
+    },
+    "icon_target": {
+      "job": "0d51301b-b628-4349-823f-dfe0267c5185",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_223505_eee77a46-ee7b-4224-90d7-1b745d04604f.png",
+      "what": "아이콘 — 위치 링(체크인)",
+      "cutout": "eee77a46-ee7b-4224-90d7-1b745d04604f"
+    },
+    "icon_coupon": {
+      "job": "d4119ecd-ca0a-4b06-9dc7-497ab7a10be1",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_223507_58b5318a-38ff-4d67-9c0b-3c1e6934ca10.png",
+      "what": "아이콘 — 쿠폰 (Phase 3 보상)",
+      "cutout": "58b5318a-38ff-4d67-9c0b-3c1e6934ca10"
+    },
+    "onboarding_1": {
+      "job": "4aa7a66a-cf01-4203-85c1-766df9edd6f3",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_223101_4aa7a66a-cf01-4203-85c1-766df9edd6f3.png",
+      "what": "온보딩 1 — 역에서 출발"
+    },
+    "onboarding_2": {
+      "job": "dd56296f-a5e1-4089-8119-5473febaf24b",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_223101_dd56296f-a5e1-4089-8119-5473febaf24b.png",
+      "what": "온보딩 2 — 매장 앞 체크인"
+    },
+    "onboarding_3": {
+      "job": "ebd06ff4-ac66-460e-a484-b6649b0ca911",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/hf_20260910_223101_ebd06ff4-ac66-460e-a484-b6649b0ca911.png",
+      "what": "온보딩 3 — 스탬프·칭호"
+    },
+    "sheet_walk": {
+      "job": "4a476a48-eab5-4c56-867f-ca28c7d72a0d",
+      "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/4a476a48-eab5-4c56-867f-ca28c7d72a0d.png",
+      "what": "걷기 루프 12프레임 (wan2_7 54aa631a → 누끼 7520a897)",
+      "frames": 12,
+      "ar": 0.5666666666666667,
+      "src": "54aa631a-1345-4969-9b85-1cca37086f34"
+    },
+    "sheet_idle": {
+      "job": "096bd0ad-43e7-4fd4-9bd5-c0958a66d47e",
+      "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/096bd0ad-43e7-4fd4-9bd5-c0958a66d47e.png",
+      "what": "대기 숨쉬기 8프레임 (wan2_7 e6abe58d → 누끼 2f7d4bde)",
+      "frames": 8,
+      "ar": 0.5638888888888889,
+      "src": "e6abe58d-9411-4b16-8500-5a64be3ac2b8"
+    },
+    "sheet_celebrate": {
+      "job": "159a4e73-4a75-4982-b40d-a5020582bde3",
+      "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/159a4e73-4a75-4982-b40d-a5020582bde3.png",
+      "what": "축하 1회 재생 12프레임 (wan2_7 8dd97492 → 누끼 e32900a6)",
+      "frames": 12,
+      "ar": 0.55,
+      "src": "8dd97492-215b-4581-b7f5-534069b0918c"
+    },
+    "sheet_taxi": {
+      "job": "d63cb7b8-3a6e-45fb-a2a4-0f59d94ac074",
+      "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_398jJSiVRHhRfxb6MVgPnVKANSP/d63cb7b8-3a6e-45fb-a2a4-0f59d94ac074.png",
+      "what": "택시 흔들림 8프레임 (veo3_1_lite 42a23c44 → 누끼 3ef2158b)",
+      "frames": 8,
+      "ar": 1.8722222222222222,
+      "src": "42a23c44-128b-47a9-9e0f-8d67eb812ec5"
+    }
   }
 }
