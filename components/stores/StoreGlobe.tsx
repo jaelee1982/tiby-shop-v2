@@ -10,6 +10,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import type { Map as MLMap, Popup as MLPopup } from "maplibre-gl";
 import { stores, type Store } from "@/lib/storesData";
 import { pickStyle, PINK, GLOBE_START, JAPAN_VIEW } from "@/lib/mapStyle";
+import { STORE_STATIONS } from "@/lib/storeStations";
 
 const SRC = "stores";
 const gmapHref = (name: string) => `https://maps.google.com/?q=${encodeURIComponent(name)}`;
@@ -67,18 +68,23 @@ export function StoreGlobe({ onReady, onApi }: { onReady?: () => void; onApi?: (
         map.addLayer({ id: "user-glow", type: "circle", source: "user", paint: { "circle-color": "#fff", "circle-opacity": 0.3, "circle-blur": 1, "circle-radius": 18 } });
         map.addLayer({ id: "user", type: "circle", source: "user", paint: { "circle-color": "#fff", "circle-stroke-color": "#1A1A1A", "circle-stroke-width": 2, "circle-radius": 6 } });
 
-        const openPopup = (name: string, lngLat: [number, number]) => {
+        const stationHtml = (code: string) => {
+          const st = STORE_STATIONS[code]; if (!st) return "";
+          const line = st.dist_m > 2000 ? `車で（最寄り ${st.station}駅 ${(st.dist_m / 1000).toFixed(1)}km）` : `${st.station}駅 徒歩${st.walk_min}分`;
+          return `<span style="display:block;margin-bottom:6px;color:#555;font-size:12px">🚉 ${line}</span>`;
+        };
+        const openPopup = (name: string, lngLat: [number, number], code = "") => {
           popupRef.current?.remove();
           popupRef.current = new gl.Popup({ offset: 10, closeButton: false, className: "t-globe-popup" })
             .setLngLat(lngLat)
-            .setHTML(`<strong style="display:block;margin-bottom:6px;color:#1A1A1A;font-size:13px">${name}</strong><a href="${gmapHref(name)}" target="_blank" rel="noopener noreferrer" style="color:${PINK};text-decoration:none;font-size:12.5px">Google Mapsで開く →</a>`)
+            .setHTML(`<strong style="display:block;margin-bottom:4px;color:#1A1A1A;font-size:13px">${name}</strong>${stationHtml(code)}<a href="${gmapHref(name)}" target="_blank" rel="noopener noreferrer" style="color:${PINK};text-decoration:none;font-size:12.5px">Google Mapsで開く →</a>`)
             .addTo(map);
         };
         map.on("mouseenter", "pt", () => { map.getCanvas().style.cursor = "pointer"; });
         map.on("mouseleave", "pt", () => { map.getCanvas().style.cursor = ""; });
         map.on("click", "pt", (e) => {
           const f = e.features?.[0]; if (!f) return;
-          openPopup(String(f.properties?.name || ""), (f.geometry as GeoJSON.Point).coordinates as [number, number]);
+          openPopup(String(f.properties?.name || ""), (f.geometry as GeoJSON.Point).coordinates as [number, number], String(f.properties?.code || ""));
         });
         map.on("click", (e) => {   // 빈 곳 클릭 = 팝업 닫기
           if (!map.queryRenderedFeatures(e.point, { layers: ["pt"] }).length) popupRef.current?.remove();
@@ -86,7 +92,7 @@ export function StoreGlobe({ onReady, onApi }: { onReady?: () => void; onApi?: (
 
         // 데이터 렌더 — 강조 집합(dim 플래그)을 반영해 전체를 다시 그린다.
         let highlightIds: Set<number> | null = null;
-        const feature = (s: Store) => ({ type: "Feature" as const, id: s.id, geometry: { type: "Point" as const, coordinates: [s.lng, s.lat] }, properties: { id: s.id, name: s.full_name, dim: highlightIds ? !highlightIds.has(s.id) : false } });
+        const feature = (s: Store) => ({ type: "Feature" as const, id: s.id, geometry: { type: "Point" as const, coordinates: [s.lng, s.lat] }, properties: { id: s.id, code: s.code, name: s.full_name, dim: highlightIds ? !highlightIds.has(s.id) : false } });
         const setData = (list: Store[]) => (map.getSource(SRC) as { setData: (d: unknown) => void } | undefined)?.setData({ type: "FeatureCollection", features: list.map(feature) });
         let introDone = false;
 
@@ -115,7 +121,7 @@ export function StoreGlobe({ onReady, onApi }: { onReady?: () => void; onApi?: (
           focus: (s) => {
             skipIntro();
             map.flyTo({ center: [s.lng, s.lat], zoom: 10.5, pitch: 30, duration: 1300, essential: true });
-            map.once("moveend", () => openPopup(s.full_name, [s.lng, s.lat]));
+            map.once("moveend", () => openPopup(s.full_name, [s.lng, s.lat], s.code));
           },
           highlight: (ids, opts) => {
             skipIntro(); popupRef.current?.remove();

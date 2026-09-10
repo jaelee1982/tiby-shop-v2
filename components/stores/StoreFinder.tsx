@@ -10,6 +10,13 @@ import { StoreGlobeStatic } from "./StoreGlobeStatic";
 import type { GlobeApi } from "./StoreGlobe";
 import { stores, type Store } from "@/lib/storesData";
 import { STORE_SEARCH_EN } from "@/lib/storeSearchEn";
+import { STORE_STATIONS } from "@/lib/storeStations";
+
+// 최근접역 한 줄 — "神泉駅 徒歩4分" / 2km 초과는 "車で（最寄り 佐賀駅 2.1km）"
+export const stationLine = (code: string): string | null => {
+  const st = STORE_STATIONS[code]; if (!st) return null;
+  return st.dist_m > 2000 ? `車で（最寄り ${st.station}駅 ${(st.dist_m / 1000).toFixed(1)}km）` : `${st.station}駅 徒歩${st.walk_min}分`;
+};
 
 const StoreGlobe = dynamic(() => import("./StoreGlobe").then((m) => m.StoreGlobe), { ssr: false });
 
@@ -123,7 +130,10 @@ export function StoreFinder() {
               {rows.map((s) => (
                 <div key={s.id} role="listitem" className={`t-stores-row${activeId === s.id ? " is-active" : ""}`}>
                   <button type="button" className="t-stores-row-main" onClick={() => pick(s)}>
-                    <span className="t-stores-row-name">{s.full_name}</span>
+                    <span className="t-stores-row-text">
+                      <span className="t-stores-row-name">{s.full_name}</span>
+                      {stationLine(s.code) && <span className="t-stores-row-station">{stationLine(s.code)}</span>}
+                    </span>
                     {s.distance != null && <span className="t-stores-row-dist">約 {s.distance.toFixed(1)} km</span>}
                   </button>
                   <a href={gmapHref(s)} target="_blank" rel="noopener noreferrer" className="t-stores-row-link">Google Maps →</a>
