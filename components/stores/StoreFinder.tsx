@@ -9,6 +9,7 @@ import { useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { StoreGlobeStatic } from "./StoreGlobeStatic";
 import type { GlobeApi } from "./StoreGlobe";
 import { stores, type Store } from "@/lib/storesData";
+import { STORE_SEARCH_EN } from "@/lib/storeSearchEn";
 
 const StoreGlobe = dynamic(() => import("./StoreGlobe").then((m) => m.StoreGlobe), { ssr: false });
 
@@ -37,7 +38,14 @@ const distanceKm = (lat1: number, lng1: number, lat2: number, lng2: number) => {
 };
 const gmapHref = (s: Store) => `https://maps.google.com/?q=${encodeURIComponent(s.full_name)}`;
 // 검색 정규화 — 전각/반각·공백·「ドン・キホーテ」접두 유무에 흔들리지 않게
-const norm = (s: string) => s.normalize("NFKC").toLowerCase().replace(/[\s・･]/g, "");
+const norm = (s: string) => s.normalize("NFKC").toLowerCase().replace(/[\s・･'\-]/g, "");
+// 일본어(매장명) 또는 영어/로마자(별칭: shibuya, shinjuku …) 어느 쪽이든 부분일치 (대표 지시 2026-09-10)
+const matchesQuery = (s: Store, q: string) => {
+  if (!q) return false;
+  if (norm(s.full_name).includes(q)) return true;
+  const en = STORE_SEARCH_EN[s.code];
+  return !!en && norm(en).includes(q);
+};
 
 type Row = Store & { distance?: number };
 
@@ -55,7 +63,7 @@ export function StoreFinder() {
   const matches = useMemo<Row[]>(() => {
     const q = norm(query.trim());
     if (!q) return [];
-    return stores.filter((s) => norm(s.full_name).includes(q)).slice(0, 8);
+    return stores.filter((s) => matchesQuery(s, q)).slice(0, 8);
   }, [query]);
   const rows: Row[] = query.trim() ? matches : nearby;
   const heading = query.trim()
@@ -65,7 +73,7 @@ export function StoreFinder() {
   const onQuery = (v: string) => {
     setQuery(v); setNearby([]); setActiveId(null); setNotice(null);
     const q = norm(v.trim());
-    const ids = q ? stores.filter((s) => norm(s.full_name).includes(q)).map((s) => s.id) : null;
+    const ids = q ? stores.filter((s) => matchesQuery(s, q)).map((s) => s.id) : null;
     apiRef.current?.highlight(ids && ids.length ? ids : null, { fit: !!ids && ids.length <= 40 });
   };
 
@@ -101,11 +109,11 @@ export function StoreFinder() {
         <div className="t-eyebrow" style={{ color: "#F7B7C9" }}>Store locator</div>
         <h1 className="t-h2-jp" style={{ color: "#fff" }}>TIBYが買える店舗</h1>
         <p className="t-tool-lead" style={{ color: "rgba(255,255,255,0.78)" }}>
-          全国のドン・キホーテ <strong style={{ color: "#fff" }}>{stores.length}店舗</strong>で販売中。店舗名で検索するか、現在地から近い店舗を探せます。
+          全国のドン・キホーテ <strong style={{ color: "#fff" }}>{stores.length}店舗</strong>で販売中。店舗名（日本語・英語）で検索するか、現在地から近い店舗を探せます。
         </p>
         <div className="t-stores-finder">
           <div className="t-stores-bar">
-            <input type="search" className="t-tool-input" placeholder="店舗名で検索（例：渋谷）" value={query} onChange={(e) => onQuery(e.target.value)} aria-label="店舗名で検索" />
+            <input type="search" className="t-tool-input" placeholder="店舗名で検索（例：渋谷 / shibuya）" value={query} onChange={(e) => onQuery(e.target.value)} aria-label="店舗名で検索" />
             <button type="button" className="t-cta" onClick={locate} disabled={locating}>{locating ? "取得中..." : "現在地から探す"}</button>
           </div>
           {notice && <p className="t-stores-notice" role="status">{notice}</p>}
