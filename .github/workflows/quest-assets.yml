@@ -1,0 +1,28 @@
+# TIBY Quest 에셋 반입 — lib/questAssets.json 의 Higgsfield CDN URL 을 public/quest/*.png 로 내려받아 커밋.
+# 세션 프록시가 CDN 을 차단해 GitHub 러너에서 대신 받는다. 수동 실행(workflow_dispatch)만.
+name: quest-assets
+on:
+  workflow_dispatch:
+    inputs:
+      force:
+        description: '이미 있는 파일도 다시 받기'
+        type: boolean
+        default: false
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: node scripts/fetch-quest-assets.mjs ${{ inputs.force && '--force' || '' }}
+      - name: commit
+        run: |
+          git config user.name "tiby-quest-assets[bot]"
+          git config user.email "ops@giantkorea.kr"
+          git add public/quest
+          if git diff --cached --quiet; then echo "변경 없음"; exit 0; fi
+          git commit -m "quest: 에셋 반입 (Higgsfield → public/quest)"
+          git push
