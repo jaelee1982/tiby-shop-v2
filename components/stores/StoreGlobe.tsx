@@ -88,7 +88,7 @@ export function StoreGlobe({ onReady }: { onReady?: () => void }) {
 
   return (
     <div className="t-globe">
-      <div ref={el} className="t-globe-canvas" />
+      <div ref={el} className="t-globe-canvas" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} />
       {fallback && <span className="t-globe-note">地図タイルを読み込めないため、輪郭のみ表示しています</span>}
     </div>
   );
