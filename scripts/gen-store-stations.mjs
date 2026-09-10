@@ -23,7 +23,6 @@ const out = stores.map(s => {
   const walk = Math.max(1, Math.round(best.d*1.3/80));   // 직선거리×1.3(도로 우회) ÷ 80m/분
   return { code:s.code, name:s.name, station:best.name, station_romaji:best.romaji, dist_m:Math.round(best.d), walk_min:walk, lines:best.lines.slice(0,3) };
 });
-fs.writeFileSync('store_scripts/data/stations.json', JSON.stringify(out,null,1));
 console.log('stations', stations.length, 'stores', stores.length);
 const far = out.filter(o=>o.dist_m>2000); console.log('2km 초과(차량권)', far.length, far.slice(0,8).map(o=>`${o.name}:${o.station} ${o.dist_m}m`).join(' | '));
 console.log(out.filter(o=>/渋谷本店|新宿店|道頓堀店$|中洲店|環七梅島/.test(o.name)).map(o=>`${o.name} → ${o.station}(${o.station_romaji}) ${o.dist_m}m 도보${o.walk_min}분 ${o.lines.join(',')}`).join('\n'));
