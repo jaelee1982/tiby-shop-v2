@@ -9,7 +9,7 @@ import { useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { StoreGlobeStatic } from "./StoreGlobeStatic";
 import type { GlobeApi } from "./StoreGlobe";
 import { stores, type Store } from "@/lib/storesData";
-import { STORE_SEARCH_EN } from "@/lib/storeSearchEn";
+import { matchesQuery, norm } from "@/lib/storeSearch";
 import { STORE_STATIONS } from "@/lib/storeStations";
 
 // 최근접역 한 줄 — "神泉駅 徒歩4分" / 2km 초과는 "車で（最寄り 佐賀駅 2.1km）"
@@ -44,16 +44,6 @@ const distanceKm = (lat1: number, lng1: number, lat2: number, lng2: number) => {
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 };
 const gmapHref = (s: Store) => `https://maps.google.com/?q=${encodeURIComponent(s.full_name)}`;
-// 검색 정규화 — 전각/반각·공백·「ドン・キホーテ」접두 유무에 흔들리지 않게
-const norm = (s: string) => s.normalize("NFKC").toLowerCase().replace(/[\s・･'\-]/g, "");
-// 일본어(매장명) 또는 영어/로마자(별칭: shibuya, shinjuku …) 어느 쪽이든 부분일치 (대표 지시 2026-09-10)
-const matchesQuery = (s: Store, q: string) => {
-  if (!q) return false;
-  if (norm(s.full_name).includes(q)) return true;
-  const en = STORE_SEARCH_EN[s.code];
-  return !!en && norm(en).includes(q);
-};
-
 type Row = Store & { distance?: number };
 
 export function StoreFinder() {

@@ -635,3 +635,82 @@ html, body {
   .t-globe-static { object-fit: contain; }
   .t-stores-hero-copy { padding: 56px 20px 32px; }
 }
+
+/* ── TIBY Quest — 돈키 매장 찾아가기 (app/quest). 씬은 템플릿 1종: 역 → 길 → 돈키 건물. data-slot 자리에 승인 에셋을 얹는다. */
+.t-quest-head .t-h2-jp { font-size: clamp(26px, 6vw, 38px); }
+.t-quest-stats { display: grid; grid-template-columns: repeat(3, auto); gap: 8px 22px; margin: 22px 0 0; padding: 14px 18px; background: var(--tiby-surface); border: 1px solid var(--tiby-line); border-radius: 16px; width: fit-content; max-width: 100%; }
+.t-quest-stats dt { font-size: 11px; letter-spacing: 0.08em; color: var(--fg-3); font-weight: 600; }
+.t-quest-stats dd { margin: 2px 0 0; font-family: var(--font-price); font-weight: 800; font-size: 24px; line-height: 1; color: var(--tiby-ink); }
+.t-quest-stats dd.is-text { font-family: var(--font-body-jp); font-size: 14px; font-weight: 700; line-height: 1.5; }
+.t-quest-tabs { display: flex; gap: 6px; margin: 26px 0 14px; border-bottom: 1px solid var(--tiby-line); }
+.t-quest-tabs button { background: none; border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px; padding: 10px 14px; font: inherit; font-weight: 700; font-size: 14px; color: var(--fg-3); cursor: pointer; }
+.t-quest-tabs button.is-on { color: var(--tiby-ink); border-bottom-color: var(--tiby-ink); }
+.t-quest-bar { display: flex; gap: 10px; align-items: center; }
+.t-quest-bar .t-tool-input { flex: 1; min-width: 0; }
+.t-quest-bar .t-cta { flex: none; white-space: nowrap; }
+.t-quest-notice { margin: 10px 4px 0; font-size: 13px; color: #B5485F; }
+.t-quest-hint { margin: 16px 4px 0; font-size: 13.5px; color: var(--fg-2); line-height: 1.8; }
+.t-quest-list { margin-top: 14px; background: var(--tiby-surface); border: 1px solid var(--tiby-line); border-radius: 16px; overflow: hidden; }
+.t-quest-list-head { padding: 12px 16px 6px; font-family: var(--font-display-jp); font-size: 13px; font-weight: 700; color: var(--fg-2); }
+.t-quest-item { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 14px 12px 15px; background: none; border: 0; border-left: 3px solid transparent; border-top: 1px solid var(--tiby-line-soft); color: var(--tiby-ink); text-align: left; font: inherit; cursor: pointer; transition: background var(--dur-base) var(--ease-out); }
+.t-quest-item:hover { background: var(--tiby-bg-warm); }
+.t-quest-item.is-active { border-left-color: var(--tiby-love-accent); background: rgba(237,140,165,0.08); }
+.t-quest-item-text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.t-quest-item-name { font-weight: 700; font-size: 14.5px; }
+.t-quest-item-route { font-size: 12.5px; color: var(--fg-2); }
+.t-quest-item-side { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex: none; }
+.t-quest-item-dist { font-family: var(--font-price); font-weight: 700; font-size: 13px; color: var(--fg-2); }
+.t-quest-item-done { font-size: 11px; font-weight: 700; color: #2E7D5B; background: rgba(46,125,91,0.1); padding: 2px 8px; border-radius: 999px; }
+.t-quest-card { margin-top: 20px; background: var(--tiby-surface); border: 1px solid var(--tiby-line); border-radius: 20px; overflow: hidden; scroll-margin-top: 80px; }
+.t-quest-card-body { padding: 18px 20px 20px; }
+.t-quest-card-title { font-family: var(--font-display-jp); font-size: 19px; font-weight: 700; margin: 0; }
+.t-quest-card-route { margin: 6px 0 0; font-size: 13.5px; color: var(--fg-2); }
+.t-quest-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+.t-quest-actions .t-cta, .t-quest-actions .t-cta-ghost { padding: 13px 22px; font-size: 14px; }
+.t-quest-status { min-height: 1.6em; margin: 12px 0 0; font-size: 13.5px; line-height: 1.7; color: var(--fg-2); }
+.t-quest-status.is-ok { color: #2E7D5B; font-weight: 700; }
+.t-quest-status.is-ng { color: #B5485F; }
+/* 씬 (템플릿) */
+.t-quest-scene { position: relative; height: 220px; overflow: hidden; background: linear-gradient(#DCEBF7, #F3E6EC 70%); }
+.t-quest-sky { position: absolute; inset: 0 0 34% 0; }
+.t-quest-ground { position: absolute; left: 0; right: 0; bottom: 0; height: 34%; background: linear-gradient(#CFC6C2, #B9AEAA); }
+.t-quest-ground::before { content: ""; position: absolute; left: 0; right: 0; top: 46%; height: 2px; background: repeating-linear-gradient(90deg, #fff 0 18px, transparent 18px 34px); opacity: 0.8; }
+.t-quest-station { position: absolute; left: 6%; bottom: 34%; width: 92px; height: 74px; background: #6B7C93; border-radius: 6px 6px 0 0; }
+.t-quest-station::after { content: ""; position: absolute; left: 12px; right: 12px; bottom: 0; height: 40px; background: #2E3A4B; border-radius: 4px 4px 0 0; }
+.t-quest-station-sign { position: absolute; left: 50%; top: -22px; transform: translateX(-50%); white-space: nowrap; background: #fff; color: #1A1A1A; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 999px; border: 1px solid #C9D2DE; }
+.t-quest-path { position: absolute; left: 22%; right: 30%; bottom: 20%; display: flex; justify-content: space-between; }
+.t-quest-path i { width: 6px; height: 6px; border-radius: 50%; background: #fff; opacity: 0.9; }
+.t-quest-walker { position: absolute; left: 20%; bottom: 22%; font-size: 26px; line-height: 1; animation: t-quest-walk 5.5s linear infinite; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.2)); }
+@keyframes t-quest-walk { 0% { left: 20%; } 100% { left: 66%; } }
+.t-quest-scene.is-drive .t-quest-walker { animation-duration: 3s; }
+.t-quest-building { position: absolute; right: 6%; bottom: 34%; width: 118px; height: 118px; background: repeating-linear-gradient(135deg, #F5C400 0 12px, #1A1A1A 12px 18px); border-radius: 8px 8px 0 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding-bottom: 10px; box-shadow: 0 6px 0 #8C7A20; }
+.t-quest-building-sign { position: absolute; top: 10px; left: 8px; right: 8px; background: #1A1A1A; color: #F5C400; font-size: 10px; font-weight: 800; letter-spacing: 0.06em; text-align: center; padding: 5px 2px; border-radius: 4px; }
+.t-quest-building-name { background: #fff; color: #1A1A1A; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 4px; max-width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.t-quest-building-tiby { margin-top: 6px; background: var(--tiby-love-accent); color: #fff; font-family: var(--font-display-latin); font-weight: 800; font-size: 10px; letter-spacing: 0.14em; padding: 2px 8px; border-radius: 999px; }
+.t-quest-scene-stamp { position: absolute; right: 36px; top: 22px; transform: rotate(-12deg); border: 3px solid var(--tiby-love-accent); color: var(--tiby-love-accent); font-family: var(--font-display-latin); font-weight: 800; font-size: 20px; letter-spacing: 0.08em; padding: 4px 12px; border-radius: 8px; animation: t-quest-pop 0.5s var(--ease-out); }
+@keyframes t-quest-pop { 0% { transform: rotate(-12deg) scale(1.6); opacity: 0; } 100% { transform: rotate(-12deg) scale(1); opacity: 1; } }
+.t-quest-scene.is-done .t-quest-walker { animation-play-state: paused; left: 66%; }
+@media (prefers-reduced-motion: reduce) { .t-quest-walker { animation: none; left: 50%; } .t-quest-scene-stamp { animation: none; } }
+/* 스탬프帳 */
+.t-quest-milestones { display: flex; flex-wrap: wrap; gap: 8px; }
+.t-quest-ms { display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px 8px 8px; border-radius: 999px; border: 1.5px solid var(--tiby-line); background: var(--tiby-surface); font-size: 12.5px; font-weight: 700; color: var(--fg-3); }
+.t-quest-ms-n { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background: var(--tiby-line-soft); font-family: var(--font-price); font-size: 12px; color: var(--fg-2); }
+.t-quest-ms.is-on { border-color: var(--tiby-love-accent); color: var(--tiby-ink); }
+.t-quest-ms.is-on .t-quest-ms-n { background: var(--tiby-love-accent); color: #fff; }
+.t-quest-progress { margin-top: 12px; height: 8px; border-radius: 999px; background: var(--tiby-line-soft); overflow: hidden; }
+.t-quest-progress-bar { height: 100%; background: var(--tiby-love-accent); border-radius: 999px; transition: width 0.6s var(--ease-out); }
+.t-quest-prefs { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+.t-quest-pref { font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px; background: rgba(237,140,165,0.12); color: #B5485F; }
+.t-quest-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 132px)); gap: 12px; margin-top: 18px; }
+.t-quest-stamp { aspect-ratio: 1; border-radius: 50%; border: 3px double var(--tiby-love-accent); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 10px; transform: rotate(-6deg); background: var(--tiby-surface); }
+.t-quest-stamp-name { font-weight: 800; font-size: 13px; color: var(--tiby-love-accent); line-height: 1.3; word-break: keep-all; }
+.t-quest-stamp-meta { margin-top: 4px; font-size: 10.5px; line-height: 1.4; color: var(--fg-3); }
+.t-quest-stamp.is-new { animation: t-quest-pop 0.5s var(--ease-out); }
+.t-quest-note { margin: 28px 4px 0; font-size: 12px; color: var(--fg-3); line-height: 1.8; }
+@media (max-width: 640px) {
+  .t-quest-bar { flex-direction: column; align-items: stretch; }
+  .t-quest-stats { grid-template-columns: 1fr 1fr; width: 100%; }
+  .t-quest-scene { height: 190px; }
+  .t-quest-building { width: 96px; height: 96px; }
+  .t-quest-station { width: 72px; height: 60px; }
+}
