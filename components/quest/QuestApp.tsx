@@ -45,12 +45,13 @@ const getPosition = () => new Promise<GeoFix>((resolve, reject) => {
 const dirHref = (s: Store, drive: boolean) => `https://www.google.com/maps/dir/?api=1&destination=${s.lat},${s.lng}&travelmode=${drive ? "transit" : "walking"}`;
 const fmtDate = (iso: string) => { const d = new Date(iso); return isNaN(d.getTime()) ? "" : `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}`; };
 const fmtDist = (m: number) => (m >= 1000 ? `${(m / 1000).toFixed(1)}km` : `${m}m`);
-// 에셋 스프라이트 — public/quest/<key>.png (lib/questAssets.json 원본 → quest-assets.yml 이 반입). 없으면 스스로 숨는다(CSS 임시 그림 노출).
+// 에셋 스프라이트 — public/quest/<key>.webp (lib/questAssets.json 원본 → quest-assets.yml 이 반입·축소). 로드 성공은 상태로
+// 부모에 알린다(has-<key> 클래스 → CSS 임시 그림 숨김). ⚠️ classList 직접 조작은 React 가 className 을 다시 쓰면 지워진다(2026-09-10 사고).
 type AssetKey = "plate" | "station" | "building" | "walker" | "hero" | "taxi" | "pin" | "stamp" | "badge";   // = lib/questAssets.json 키
-function Sprite({ k, className }: { k: AssetKey; className: string }) {
-  // 장식용 소형 스프라이트(치수 미정·투명 PNG) — next/image 최적화 대상 아님
+function Sprite({ k, className, onLoaded }: { k: AssetKey; className: string; onLoaded?: (k: AssetKey) => void }) {
+  // 장식용 소형 스프라이트(투명 WebP) — next/image 최적화 대상 아님. 없으면 스스로 숨는다(fail-soft).
   // eslint-disable-next-line @next/next/no-img-element
-  return <img src={`/quest/${k}.png`} alt="" className={className} draggable={false} data-asset={k} onLoad={(e) => e.currentTarget.parentElement?.classList.add(`has-${k}`)} onError={(e) => { e.currentTarget.style.display = "none"; }} />;
+  return <img src={`/quest/${k}.webp`} alt="" className={className} draggable={false} data-asset={k} onLoad={() => onLoaded?.(k)} onError={(e) => { e.currentTarget.style.display = "none"; }} />;
 }
 
 export function QuestApp() {
@@ -65,6 +66,9 @@ export function QuestApp() {
   const [check, setCheck] = useState<Check>({ kind: "idle" });
   const [justStamped, setJustStamped] = useState<string | null>(null);
   const cardRef = useRef<HTMLElement>(null);
+  const [loadedAssets, setLoadedAssets] = useState<Set<AssetKey>>(() => new Set());
+  const markLoaded = (k: AssetKey) => setLoadedAssets((prev) => (prev.has(k) ? prev : new Set(prev).add(k)));
+  const hasCls = Array.from(loadedAssets).map((k) => ` has-${k}`).join("");
 
   const matches = useMemo<Row[]>(() => { const q = norm(query.trim()); return q ? stores.filter((s) => matchesQuery(s, q)).slice(0, 8) : []; }, [query]);
   const rows = query.trim() ? matches : nearby;
@@ -158,25 +162,25 @@ export function QuestApp() {
               <section className="t-quest-card" ref={cardRef} aria-label={`${selected.full_name} のクエスト`}>
                 {/* 템플릿 씬 — 매장별 데이터 없음. 역명·매장명만 바뀐다. 에셋 = public/quest/*.png(Higgsfield, 대표 승인 스타일 2026-09-10).
                     이미지가 아직 없으면(반입 전) onError 로 숨겨져 아래 CSS 임시 그림이 그대로 보인다 — fail-soft. */}
-                <div className={`t-quest-scene${drive ? " is-drive" : ""}${stamped ? " is-done" : ""}`} data-scene="template" aria-hidden="true">
+                <div className={`t-quest-scene${drive ? " is-drive" : ""}${stamped ? " is-done" : ""}${hasCls}`} data-scene="template" aria-hidden="true">
                   <div className="t-quest-sky" data-slot="backdrop" />
                   <div className="t-quest-ground" data-slot="street" />
-                  <Sprite k="plate" className="t-quest-plate" />
+                  <Sprite k="plate" className="t-quest-plate" onLoaded={markLoaded} />
                   <div className="t-quest-station" data-slot="station"><span className="t-quest-station-sign">{r?.station ?? "駅"}駅</span></div>
-                  <Sprite k="station" className="t-quest-sp t-quest-sp-station" />
+                  <Sprite k="station" className="t-quest-sp t-quest-sp-station" onLoaded={markLoaded} />
                   <span className="t-quest-sp-label t-quest-sp-label-station">{r?.station ?? "駅"}駅</span>
                   <div className="t-quest-path"><i /><i /><i /><i /><i /><i /></div>
                   <div className="t-quest-walker" data-slot="character">{drive ? "🚕" : "🚶‍♀️"}</div>
-                  <Sprite k={stamped ? "hero" : drive ? "taxi" : "walker"} className={`t-quest-sp t-quest-sp-walker${stamped ? " is-hero" : ""}`} />
+                  <Sprite k={stamped ? "hero" : drive ? "taxi" : "walker"} className={`t-quest-sp t-quest-sp-walker${stamped ? " is-hero" : ""}`} onLoaded={markLoaded} />
                   <div className="t-quest-building" data-slot="building">
                     <span className="t-quest-building-sign">ドン・キホーテ</span>
                     <span className="t-quest-building-name">{shortName(selected.full_name)}</span>
                     <span className="t-quest-building-tiby">TIBY</span>
                   </div>
-                  <Sprite k="building" className="t-quest-sp t-quest-sp-building" />
+                  <Sprite k="building" className="t-quest-sp t-quest-sp-building" onLoaded={markLoaded} />
                   <span className="t-quest-sp-label t-quest-sp-label-building">{shortName(selected.full_name)}</span>
                   {stamped && <div className="t-quest-scene-stamp">GOT IT!</div>}
-                  {stamped && <Sprite k="stamp" className="t-quest-sp t-quest-sp-stamp" />}
+                  {stamped && <Sprite k="stamp" className="t-quest-sp t-quest-sp-stamp" onLoaded={markLoaded} />}
                 </div>
                 <div className="t-quest-card-body">
                   <h2 className="t-quest-card-title">{selected.full_name}</h2>
