@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useCart } from "@/components/cart/CartContext";
 
-// After returning from KOMOJU hosted checkout, empty the local cart.
+// After returning from Eximbay checkout, empty the local cart.
 export function ClearCartOnMount() {
   const { clear } = useCart();
   useEffect(() => {

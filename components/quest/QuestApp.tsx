@@ -12,6 +12,10 @@ import {
   type GeoFix, type SheetKey, type StampBook,
 } from "@/lib/quest";
 import { STORE_STATIONS } from "@/lib/storeStations";
+import { COUPON_TABLE, SERVER_REASON_TEXT, deviceId, type ServerCheckinReason } from "@/lib/quest";
+import { claimCoupon, myStatus, serverCheckin, serverStamps, type CouponRow } from "@/lib/questApi";
+import { AuthPanel, useSession } from "@/components/account/AuthPanel";
+import { CouponList } from "@/components/quest/CouponList";
 
 // ── 스탬프帳 외부 스토어 (useSyncExternalStore — 서버 스냅샷=빈 帳, 클라=localStorage. set-state-in-effect 없이 hydration 안전)
 const listeners = new Set<() => void>();
@@ -40,10 +44,12 @@ const readFlag = (k: string) => { try { return window.localStorage.getItem(k) ==
 const subscribeFlags = (cb: () => void) => { flagListeners.add(cb); return () => { flagListeners.delete(cb); }; };
 function setFlag(k: string) { try { window.localStorage.setItem(k, "1"); } catch { /* 저장 불가 */ } flagListeners.forEach((l) => l()); }
 const subscribeNoop = () => () => {};
+let deviceCache: string | null = null;
+const getDevice = () => { if (!deviceCache) deviceCache = deviceId(typeof window === "undefined" ? null : window.localStorage); return deviceCache; };
 const getHour = () => new Date().getHours();
 
 type Row = Store & { distance_m?: number };
-type Check = { kind: "idle" | "checking" | "ok" | "far" | "inaccurate" | "denied" | "unsupported"; distance_m?: number };
+type Check = { kind: "idle" | "checking" | "ok" | "far" | "inaccurate" | "denied" | "unsupported" | "server"; distance_m?: number; reason?: ServerCheckinReason };
 
 const getPosition = () => new Promise<GeoFix>((resolve, reject) => {
   if (!("geolocation" in navigator)) { reject(new Error("unsupported")); return; }
@@ -114,6 +120,11 @@ export function QuestApp() {
   const [justStamped, setJustStamped] = useState<string | null>(null);
   const [slide, setSlide] = useState(0);
   const [share, setShare] = useState<{ url: string; busy: boolean } | null>(null);
+  const { session } = useSession();
+  const [member, setMember] = useState<{ count: number; coupons: CouponRow[] } | null>(null);
+  const [claimBusy, setClaimBusy] = useState<number | null>(null);
+  const [claimMsg, setClaimMsg] = useState<string | null>(null);
+  const [serverNote, setServerNote] = useState<string | null>(null);
   const cardRef = useRef<HTMLElement>(null);
   const [loadedAssets, setLoadedAssets] = useState<Set<AssetKey>>(() => new Set());
   const markLoaded = useCallback((k: AssetKey) => setLoadedAssets((prev) => (prev.has(k) ? prev : new Set(prev).add(k))), []);
@@ -128,6 +139,23 @@ export function QuestApp() {
 
   useEffect(() => { if (selected && cardRef.current) cardRef.current.scrollIntoView({ behavior: "smooth", block: "start" }); }, [selected]);
   useEffect(() => () => { if (share?.url) URL.revokeObjectURL(share.url); }, [share]);
+  // 서버 스탬프 동기화(端末 id 기준, 회원이면 다른 端末 분 포함) — 端末 저장분과 합집합. 실패해도 로컬은 그대로(fail-soft).
+  useEffect(() => {
+    let alive = true;
+    serverStamps(getDevice()).then((rows) => {
+      if (!alive || !rows.length) return;
+      let next = getBook(); let changed = false;
+      for (const r of rows) { const a = addStamp(next, r.store_code, r.at); if (a.added) { next = a.book; changed = true; } }
+      if (changed) commitBook(next);
+    }).catch(() => { /* 오프라인·미설정 — 로컬만 */ });
+    return () => { alive = false; };
+  }, []);
+  useEffect(() => {
+    if (!session) { setMember(null); return; }
+    let alive = true;
+    myStatus().then((s) => { if (alive && s.ok) setMember({ count: s.count, coupons: s.coupons }); }).catch(() => {});
+    return () => { alive = false; };
+  }, [session]);
 
   const select = (s: Row) => { setSelected(s); setCheck({ kind: "idle" }); setJustStamped(null); setTab("quest"); };
 
@@ -144,19 +172,36 @@ export function QuestApp() {
   const checkin = async () => {
     if (!selected) return;
     if (book.stamps[selected.code]) { setCheck({ kind: "ok", distance_m: 0 }); return; }
-    setCheck({ kind: "checking" });
+    setCheck({ kind: "checking" }); setServerNote(null);
     try {
       const fix = await getPosition();
       const r = evaluateCheckin(selected, fix);
-      if (r.ok) {
-        const { book: next, added } = addStamp(book, selected.code);
-        if (added) { commitBook(next); setJustStamped(selected.code); }
-        setCheck({ kind: "ok", distance_m: r.distance_m });
-      } else setCheck({ kind: r.reason, distance_m: r.distance_m });
+      if (!r.ok) { setCheck({ kind: r.reason, distance_m: r.distance_m }); return; }
+      // 서버 판정(쿠폰의 근거) — 반경 150m·端末당 1회·1일 5회·이동속도. 서버 불통이면 로컬 스탬프만(쿠폰 계산엔 미반영, 안내).
+      let serverOk = true;
+      try {
+        const sr = await serverCheckin(getDevice(), selected.code, fix);
+        if (!sr.ok) { setCheck({ kind: "server", reason: sr.reason as ServerCheckinReason, distance_m: sr.distance_m }); return; }
+      } catch { serverOk = false; }
+      const { book: next, added } = addStamp(book, selected.code);
+      if (added) { commitBook(next); setJustStamped(selected.code); }
+      setCheck({ kind: "ok", distance_m: r.distance_m });
+      if (!serverOk) setServerNote("通信できなかったため、このスタンプはまだクーポンの集計に反映されていません。電波のある場所でページを再読み込みしてください。");
+      else if (session) myStatus().then((s) => { if (s.ok) setMember({ count: s.count, coupons: s.coupons }); }).catch(() => {});
     } catch (e) {
       const err = e as { code?: number; message?: string };
       setCheck({ kind: err?.message === "unsupported" ? "unsupported" : err?.code === 1 ? "denied" : "inaccurate" });
     }
+  };
+
+  const claim = async (n: number) => {
+    setClaimBusy(n); setClaimMsg(null);
+    try {
+      const r = await claimCoupon(getDevice(), n);
+      if (r.ok) { setClaimMsg(r.existing ? "このクーポンは受け取り済みです。" : `¥${r.coupon.amount_jpy}クーポンを発行しました！コードはお会計で入力してください。`); const s = await myStatus(); if (s.ok) setMember({ count: s.count, coupons: s.coupons }); }
+      else setClaimMsg(r.reason === "not_enough" ? `会員のスタンプが${n}個に達していません（現在${r.count ?? 0}個）。この端末のスタンプが反映されていない場合は、店舗でもう一度チェックインしてください。` : r.reason === "device_bound_elsewhere" ? "この端末は別の会員に紐づいています。" : r.reason === "login_required" ? "ログインが必要です。" : "クーポンを発行できませんでした。");
+    } catch { setClaimMsg("通信エラーが発生しました。時間をおいて再度お試しください。"); }
+    finally { setClaimBusy(null); }
   };
 
   /** 공유 — Web Share(파일) 가능하면 시트, 아니면 카드 이미지를 화면에 띄워 長押し保存 */
@@ -297,7 +342,9 @@ export function QuestApp() {
                     {check.kind === "inaccurate" && "位置情報の精度が低いようです。屋外や入口付近でもう一度お試しください。"}
                     {check.kind === "denied" && "位置情報の利用が許可されていません。ブラウザの設定で許可してください。"}
                     {check.kind === "unsupported" && "お使いのブラウザは位置情報に対応していません。"}
+                    {check.kind === "server" && check.reason && SERVER_REASON_TEXT[check.reason]}
                   </p>
+                  {serverNote && <p className="t-quest-notice" role="status">{serverNote}</p>}
                   {stamped && (
                     <div className="t-quest-shelf" data-testid="shelf">
                       <Sprite k="shelf" className="t-quest-shelf-img" />
@@ -326,6 +373,21 @@ export function QuestApp() {
               <div className="t-quest-progress-bar" style={{ width: `${Math.min(100, Math.round((stats.count / stats.next.n) * 100))}%` }} />
             </div>
           )}
+          <section className="t-quest-coupon-sec" aria-label="クーポン" data-testid="coupon-section">
+            <div className="t-quest-list-head">クーポン（オンラインストアで使えます）</div>
+            {session ? (
+              <>
+                <CouponList coupons={member?.coupons ?? []} count={member?.count ?? 0} onClaim={claim} busy={claimBusy} />
+                {member && member.count < stats.count && <p className="t-quest-hint">会員として集計されたスタンプは{member.count}個です（この端末のスタンプ{stats.count}個のうち、通信できなかった分は未反映）。</p>}
+                {claimMsg && <p className="t-quest-status is-ok" role="status">{claimMsg}</p>}
+              </>
+            ) : (
+              <>
+                <ul className="t-coupon-table">{COUPON_TABLE.map((c) => <li key={c.n}><b>¥{c.jpy}</b><span>スタンプ{c.n}個</span></li>)}</ul>
+                <AuthPanel compact reason="クーポンの受け取りにはtiby.shopの会員登録（無料・メールだけ）が必要です。" />
+              </>
+            )}
+          </section>
           {stats.prefs.length > 0 && (
             <div className="t-quest-prefs">{stats.prefs.map((p) => <span key={p} className="t-quest-pref"><Sprite k="badge" className="t-quest-pref-img" />{prefName(p)}</span>)}</div>
           )}
@@ -386,7 +448,7 @@ export function QuestApp() {
         </div>
       )}
 
-      <p className="t-quest-note">位置情報はチェックイン判定にのみ使用し、スタンプはこの端末内にだけ保存されます（サーバーには送信しません）。</p>
+      <p className="t-quest-note">位置情報はチェックイン判定にのみ使用し、座標は保存しません（店舗コード・判定結果のみを端末IDに紐づけて記録）。クーポンの受け取りにはメールアドレスによる会員登録が必要です。</p>
     </div>
   );
 }

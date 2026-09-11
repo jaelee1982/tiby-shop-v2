@@ -781,3 +781,50 @@ html, body {
 .t-quest-onboard-actions .t-cta, .t-quest-onboard-actions .t-cta-ghost { padding: 12px 22px; font-size: 14px; }
 .t-quest-onboard-card.is-share .t-quest-share-img { display: block; width: 100%; max-height: 62vh; object-fit: contain; background: #111; }
 @media (prefers-reduced-motion: reduce) { .t-quest-anim { animation: none; left: 46%; } }
+/* 회원(이메일 OTP)·쿠폰·마이페이지·카트 쿠폰 */
+.t-auth { display: flex; flex-direction: column; gap: 12px; max-width: 460px; }
+.t-auth.is-compact { padding: 14px 16px; background: var(--tiby-surface); border: 1px solid var(--tiby-line); border-radius: 16px; }
+.t-auth-reason { margin: 0; font-size: 13.5px; line-height: 1.7; color: var(--fg-2); }
+.t-auth-label { font-size: 12px; font-weight: 700; color: var(--fg-3); letter-spacing: 0.04em; }
+.t-auth .t-tool-input { padding: 13px 18px; font-size: 15px; }
+.t-auth-code { letter-spacing: 0.3em; font-family: var(--font-price); font-weight: 700; font-size: 20px; }
+.t-auth-agree { display: flex; gap: 8px; align-items: flex-start; font-size: 12.5px; line-height: 1.6; color: var(--fg-2); }
+.t-auth-agree a { color: var(--tiby-ink); text-decoration: underline; text-underline-offset: 2px; }
+.t-auth .t-cta { padding: 13px 22px; font-size: 14px; }
+.t-auth-hint, .t-auth-sent { margin: 0; font-size: 12.5px; line-height: 1.7; color: var(--fg-3); }
+.t-auth-sent { color: var(--fg-2); }
+.t-auth-back { background: none; border: 0; cursor: pointer; align-self: flex-start; padding: 0; }
+.t-auth-error { margin: 0; font-size: 13px; color: #B5485F; }
+.t-account-who { font-size: 13.5px; color: var(--fg-2); margin: 0 0 22px; }
+.t-account-who .t-link-quiet { background: none; border: 0; cursor: pointer; padding: 0; }
+.t-account-sec { margin-top: 26px; }
+.t-account-sec h2 { font-family: var(--font-display-jp); font-size: 18px; font-weight: 700; margin: 0 0 10px; }
+.t-account-sec .t-cta-ghost { padding: 11px 20px; font-size: 14px; margin-top: 4px; }
+.t-coupons { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.t-coupon { display: flex; align-items: stretch; gap: 0; border: 1.5px dashed var(--tiby-love-accent); border-radius: 14px; overflow: hidden; background: var(--tiby-surface); }
+.t-coupon.is-locked { border-color: var(--tiby-line); opacity: 0.7; }
+.t-coupon.is-used { opacity: 0.55; }
+.t-coupon-amt { flex: none; width: 96px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(237,140,165,0.14); color: #B5485F; font-family: var(--font-price); font-weight: 800; font-size: 22px; line-height: 1; }
+.t-coupon-amt span { font-size: 10px; letter-spacing: 0.14em; margin-top: 4px; }
+.t-coupon.is-locked .t-coupon-amt { background: var(--tiby-line-soft); color: var(--fg-3); }
+.t-coupon-body { flex: 1; min-width: 0; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; justify-content: center; }
+.t-coupon-title { font-weight: 700; font-size: 14px; }
+.t-coupon-code { align-self: flex-start; font-family: var(--font-price); font-weight: 800; font-size: 16px; letter-spacing: 0.08em; background: var(--tiby-ink); color: #fff; border: 0; border-radius: 8px; padding: 6px 12px; cursor: pointer; }
+.t-coupon-meta { font-size: 12px; color: var(--fg-3); }
+.t-coupon-body .t-cta-sm { align-self: flex-start; padding: 9px 16px; font-size: 13px; }
+.t-coupon-table { list-style: none; margin: 0 0 12px; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.t-coupon-table li { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 10px 6px; border-radius: 12px; background: rgba(237,140,165,0.1); }
+.t-coupon-table b { font-family: var(--font-price); font-size: 18px; color: #B5485F; }
+.t-coupon-table span { font-size: 11px; color: var(--fg-2); }
+.t-quest-coupon-sec { margin-top: 18px; padding: 0 0 14px; background: var(--tiby-surface); border: 1px solid var(--tiby-line); border-radius: 16px; }
+.t-quest-coupon-sec > * { margin-left: 16px; margin-right: 16px; }
+.t-quest-coupon-sec > .t-quest-list-head { margin: 0; }
+.t-quest-coupon-sec .t-auth.is-compact { border: 0; padding: 4px 0 0; background: none; }
+.t-cart-coupon { display: flex; gap: 8px; margin: 0 0 12px; }
+.t-cart-coupon input { flex: 1; min-width: 0; padding: 11px 14px; border: 1.5px solid var(--tiby-line); border-radius: 10px; font-family: var(--font-price); font-weight: 700; letter-spacing: 0.06em; font-size: 14px; text-transform: uppercase; }
+.t-cart-coupon input:focus { outline: none; border-color: var(--tiby-ink); }
+.t-cart-coupon button { flex: none; padding: 0 14px; border-radius: 10px; border: 1.5px solid var(--tiby-line); background: var(--tiby-surface); font-family: var(--font-body-jp); font-weight: 700; font-size: 13px; cursor: pointer; }
+.t-cart-discount { display: flex; justify-content: space-between; font-size: 13px; color: #2E7D5B; font-weight: 700; margin: -6px 0 8px; }
+.t-cart-coupon-hint { font-family: var(--font-body-jp); font-size: 11.5px; color: var(--fg-3); margin: -6px 0 12px; line-height: 1.6; }
+.t-cart-coupon-hint a { color: var(--tiby-ink); text-decoration: underline; }
+@media (max-width: 640px) { .t-coupon-table { grid-template-columns: repeat(2, 1fr); } }
