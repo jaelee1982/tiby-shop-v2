@@ -105,7 +105,7 @@ export function getCatalogItem(id: string): CatalogItem | undefined {
   return (CATALOG as Record<string, CatalogItem>)[id];
 }
 
-/** Charged total — tax-included JPY (what KOMOJU bills). */
+/** Charged total — tax-included JPY (what Eximbay bills). */
 export function cartTotal(lines: CartLine[]): number {
   return lines.reduce((sum, l) => {
     const item = getCatalogItem(l.id);

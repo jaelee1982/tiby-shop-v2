@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   robots: { index: false },
 };
 
-// KOMOJU redirects here after hosted checkout (with ?session_id=...).
+// Eximbay return → /api/payments/eximbay/return 이 검증 후 여기로 (?order=). mock 모드는 바로 이동.
 export default function CheckoutCompletePage() {
   return (
     <div className="t-page t-static-page">

@@ -143,3 +143,45 @@ export function shareText(stats: BookStats, storeShort?: string): string {
   const title = stats.reached.length ? stats.reached[stats.reached.length - 1].label : null;
   return `${storeShort ? `ドン・キホーテ${storeShort}でTIBYをGET！` : "TIBY Quest"} スタンプ${stats.count}個${title ? `・称号「${title}」` : ""} #TIBYQuest`;
 }
+
+// ── 3단계: 서버 스탬프·쿠폰 (Supabase tiby-shop 프로젝트, RPC = lib/questApi.ts)
+/** 쿠폰 표 (2026-09-10 대표 확정): 온라인(tiby.shop 결제) 전용, 회원×단계 1장, 60일. 원본 = DB 함수 quest_claim_coupon 와 동일해야 한다. */
+export const COUPON_TABLE: { n: number; jpy: number }[] = [
+  { n: 1, jpy: 100 },
+  { n: 3, jpy: 200 },
+  { n: 5, jpy: 300 },
+  { n: 10, jpy: 500 },
+];
+export const COUPON_VALID_DAYS = 60;
+export const DEVICE_KEY = "tiby_quest_device_v1";
+/** 端末 id(uuid) — 없으면 생성해 저장. 저장 불가 환경이면 세션 한정 값. */
+export function deviceId(storage: Pick<Storage, "getItem" | "setItem"> | null | undefined, gen: () => string = () => crypto.randomUUID()): string {
+  try {
+    const v = storage?.getItem(DEVICE_KEY);
+    if (v && /^[0-9a-f-]{36}$/i.test(v)) return v;
+    const id = gen(); storage?.setItem(DEVICE_KEY, id); return id;
+  } catch { return gen(); }
+}
+/** 서버 체크인 결과 → 화면 문구 키 */
+export type ServerCheckinReason = "already" | "far" | "inaccurate" | "daily_limit" | "too_fast" | "unknown_store" | "bad_request";
+export const SERVER_REASON_TEXT: Record<ServerCheckinReason, string> = {
+  already: "この店舗はスタンプ済みです。",
+  far: "店舗から150m以内でチェックインしてください。",
+  inaccurate: "位置情報の精度が低いようです。屋外や入口付近でもう一度お試しください。",
+  daily_limit: "1日にチェックインできるのは5店舗までです。また明日どうぞ。",
+  too_fast: "前のチェックインから移動が速すぎます。少し時間をおいてお試しください。",
+  unknown_store: "この店舗は現在クエスト対象外です。",
+  bad_request: "チェックインに失敗しました。",
+};
+/** 회원 스탬프 수 기준으로 받을 수 있는/받은 단계 */
+export function couponSlots(count: number, coupons: { milestone: number; status: string }[]): { n: number; jpy: number; state: "locked" | "claimable" | "claimed"; status?: string }[] {
+  return COUPON_TABLE.map((c) => {
+    const have = coupons.find((x) => x.milestone === c.n);
+    return have ? { ...c, state: "claimed", status: have.status } : count >= c.n ? { ...c, state: "claimable" } : { ...c, state: "locked" };
+  });
+}
+/** 쿠폰 적용 후 결제액 (할인은 소계까지, 결제액 최소 ¥1 — 게이트웨이 0엔 결제 불가) */
+export function applyCoupon(subtotal: number, couponJpy: number): { discount: number; total: number } {
+  const discount = Math.max(0, Math.min(couponJpy, subtotal - 1));
+  return { discount, total: subtotal - discount };
+}
