@@ -63,7 +63,9 @@ export function Footer() {
           </div>
           <div>
             <dt>代表電話番号</dt>
-            <dd>{siteConfig.phone}</dd>
+            <dd>
+              {siteConfig.phone}（日本）／ {siteConfig.phoneKr}（韓国）
+            </dd>
           </div>
         </dl>
       </details>

@@ -12,7 +12,7 @@ export const tokushoho: TokushohoRow[] = [
   { label: "代表者名", value: siteConfig.representativeName },
   { label: "運営統括責任者", value: siteConfig.operatorName },
   { label: "所在地", value: siteConfig.address },
-  { label: "電話番号", value: siteConfig.phone },
+  { label: "電話番号", value: `${siteConfig.phone}（日本）／ ${siteConfig.phoneKr}（韓国）` },
   { label: "メールアドレス", value: siteConfig.contactEmail },
   {
     label: "販売価格",
