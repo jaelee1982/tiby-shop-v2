@@ -1,0 +1,28 @@
+# 매장 최근접역 재생성 — lib/storesData.ts 가 바뀌면(ops 화요일 자동 발행 커밋 포함) lib/storeStations.ts 를 다시 만든다.
+# 배경(2026-09-11): 좌표만 갱신되고 역 데이터는 손으로 재생성해야 해서 지도 팝업의 "○○駅 徒歩n分"이 옛 좌표 기준으로 남았다.
+# 역 데이터 스냅샷(piuccio/open-data-jp-railway-stations, 5.8MB)은 러너가 내려받는다 — git 에 넣지 않는다.
+name: store-stations
+on:
+  push:
+    branches: [master]
+    paths: [lib/storesData.ts, scripts/gen-store-stations.mjs]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  regen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: node scripts/gen-store-stations.mjs
+      - name: commit
+        run: |
+          git config user.name "tiby-store-stations[bot]"
+          git config user.email "ops@giantkorea.kr"
+          git add lib/storeStations.ts
+          if git diff --cached --quiet; then echo "변경 없음"; exit 0; fi
+          git commit -m "stores: 최근접역 재생성 (storesData 갱신 반영)"
+          git push
