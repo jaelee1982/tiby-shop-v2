@@ -3,7 +3,8 @@ import { cartTotal, getCatalogItem, taxIncluded, type CartLine } from "@/lib/com
 import { applyCoupon } from "@/lib/quest";
 import { siteConfig } from "@/lib/site";
 import { supabaseService, userIdFromRequest } from "@/lib/supabase/server";
-import { eximbayReady, newOrderId } from "@/lib/payments/eximbay";
+import { eximbayMode, eximbayReady, newOrderId } from "@/lib/payments/eximbay";
+import { komojuAvailable, komojuSession } from "@/lib/payments/komoju";
 
 // 결제 시작 (Eximbay). 클라이언트는 { lines:[{id,qty}], email?, coupon? } + (쿠폰 시) Authorization: Bearer <supabase access_token>.
 // 금액은 lib/commerce.ts 로 서버 재계산, 쿠폰은 DB(coupon_reserve — 본인 소유·active·미만료)로 예약 후 할인 반영.
@@ -35,11 +36,22 @@ export async function POST(request: Request) {
   const email = typeof body.email === "string" && /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(body.email) ? body.email.trim().toLowerCase() : undefined;
   const couponCode = typeof body.coupon === "string" ? body.coupon.trim().toUpperCase() : "";
 
+  const origin = process.env.NEXT_PUBLIC_SITE_URL || new URL(request.url).origin || siteConfig.siteUrl;
+  const orderId = newOrderId();
+  const eximbayConfigured = eximbayMode() === "mock" || (!!process.env.EXIMBAY_MID && !!process.env.EXIMBAY_API_KEY);
+
+  // 브리지: Eximbay 미설정 + KOMOJU 키 有 → 기존 KOMOJU(쿠폰 불가). Eximbay env 등록 시 자동으로 아래 본경로.
+  if (!eximbayConfigured && komojuAvailable()) {
+    if (couponCode) return NextResponse.json({ error: "クーポンのご利用は現在準備中です。コードを外してお進みください。" }, { status: 400 });
+    try {
+      const items = lines.map((l) => { const item = getCatalogItem(l.id)!; return { sku: item.sku, name: item.name, qty: l.qty, unit_price_tax_in: taxIncluded(item.price) }; });
+      return NextResponse.json({ orderId, mode: "komoju", redirectUrl: await komojuSession(orderId, subtotal, items, origin) });
+    } catch { return NextResponse.json({ error: "決済セッションを作成できませんでした。時間をおいて再度お試しください。" }, { status: 502 }); }
+  }
+
   const sb = supabaseService();
   if (!sb) return NextResponse.json({ error: "オンライン決済は現在準備中です。恐れ入りますが、しばらくお待ちください。" }, { status: 503 });
 
-  const origin = process.env.NEXT_PUBLIC_SITE_URL || new URL(request.url).origin || siteConfig.siteUrl;
-  const orderId = newOrderId();
   const userId = await userIdFromRequest(request);
 
   // 쿠폰 예약 (로그인 회원 본인 것만)
