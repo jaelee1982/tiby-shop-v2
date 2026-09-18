@@ -68,9 +68,14 @@ export async function POST(request: Request) {
   }
 
   // 게이트웨이 미설정은 주문을 만들기 전에 판정 — 결제 못 하는 주문 행을 남기지 않는다.
-  if (!eximbayConfigured) { console.error("checkout: eximbay not configured (EXIMBAY_MID/EXIMBAY_API_KEY)"); return NextResponse.json({ error: NOT_READY, reason: "eximbay_not_configured" }, { status: 503 }); }
+  // detail = 어떤 설정이 비었는지(변수 이름만, 값 없음) — 화면 작은 글씨로 노출해 배포·env 문제를 즉시 구분.
+  if (!eximbayConfigured) {
+    const missing = [!process.env.EXIMBAY_MID && "EXIMBAY_MID", !process.env.EXIMBAY_API_KEY && "EXIMBAY_API_KEY"].filter(Boolean).join(", ");
+    console.error("checkout: eximbay not configured", missing);
+    return NextResponse.json({ error: NOT_READY, reason: "eximbay_not_configured", detail: `config: ${missing || "EXIMBAY_*"} 未設定 (mode=${eximbayMode()})` }, { status: 503 });
+  }
   const sb = supabaseService();
-  if (!sb) { console.error("checkout: SUPABASE_SERVICE_ROLE_KEY missing"); return NextResponse.json({ error: NOT_READY, reason: "db_not_configured" }, { status: 503 }); }
+  if (!sb) { console.error("checkout: SUPABASE_SERVICE_ROLE_KEY missing"); return NextResponse.json({ error: NOT_READY, reason: "db_not_configured", detail: "config: SUPABASE_SERVICE_ROLE_KEY 未設定" }, { status: 503 }); }
 
   const userId = await userIdFromRequest(request);
 
