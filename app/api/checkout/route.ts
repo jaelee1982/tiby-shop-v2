@@ -13,7 +13,7 @@ import { komojuAvailable, komojuSession } from "@/lib/payments/komoju";
 // 필요 env: SUPABASE_SERVICE_ROLE_KEY(주문·쿠폰 기록), EXIMBAY_MID/EXIMBAY_API_KEY(mock 외), NEXT_PUBLIC_SITE_URL.
 
 type CheckoutBody = { lines?: unknown; email?: unknown; coupon?: unknown; shipping?: unknown; paymentMethod?: unknown };
-const NOT_READY = "オンライン決済は現在準備中です。恐れ入りますが、しばらくお待ちください。";
+const NOT_READY = "オンライン決済は、決済代行会社（Eximbay）の加盟店審査完了後にご利用いただけます。現在は審査中のため、お支払い画面を開くことができません。恐れ入りますが、しばらくお待ちください。";
 
 function sanitizeLines(input: unknown): CartLine[] | null {
   if (!Array.isArray(input) || input.length === 0 || input.length > 20) return null;
