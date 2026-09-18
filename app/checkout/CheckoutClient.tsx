@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useCart } from "@/components/cart/CartContext";
 import { formatJpy, getCatalogItem, taxIncluded } from "@/lib/commerce";
 import { applyCoupon, COUPON_TABLE } from "@/lib/quest";
-import { PAYMENT_METHODS, PREFECTURES, shippingFee, validateShipping, type PaymentMethod, type ShippingAddress } from "@/lib/shipping";
+import { PAYMENT_METHODS, PREFECTURES, convenienceEnabled, shippingFee, validateShipping, type PaymentMethod, type ShippingAddress } from "@/lib/shipping";
 import { useSession } from "@/components/account/AuthPanel";
 import { PAY_KEY } from "@/app/checkout/pay/PayClient";
 
@@ -26,7 +26,9 @@ export function CheckoutClient() {
   const [agree, setAgree] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [errorDetail, setErrorDetail] = useState<string | null>(null);
   const [hydrated, setHydrated] = useState(false);
+  const conveniOn = convenienceEnabled(); // NEXT_PUBLIC_* 는 빌드 시 인라인 — 서버/클라 동일값
 
   useEffect(() => {
     let saved: Partial<Form> | null = null;
@@ -57,6 +59,7 @@ export function CheckoutClient() {
 
   async function submit() {
     setError(null);
+    setErrorDetail(null);
     const v = validateShipping({ ...form, email: emailValue });
     if (!v.ok) { setErrors(v.errors); setError("入力内容をご確認ください。"); document.querySelector<HTMLElement>(".t-co-field.is-error input, .t-co-field.is-error select")?.focus(); return; }
     if (!agree) { setError("利用規約・返品ポリシーへの同意が必要です。"); return; }
@@ -71,6 +74,7 @@ export function CheckoutClient() {
       const data = await res.json().catch(() => ({}));
       if (!res.ok || !data.redirectUrl) {
         setError(data.error ?? "決済ページへ進めませんでした。時間をおいて再度お試しください。");
+        setErrorDetail(typeof data.detail === "string" ? data.detail : null);
         setBusy(false);
         return;
       }
@@ -123,12 +127,15 @@ export function CheckoutClient() {
         <section className="t-co-section" aria-labelledby="co-pay">
           <h2 id="co-pay" className="t-co-title"><span>2</span>お支払い方法</h2>
           <div className="t-co-methods" role="radiogroup" aria-labelledby="co-pay">
-            {PAYMENT_METHODS.map((m) => (
-              <label key={m.id} className={`t-co-method ${method === m.id ? "is-on" : ""}`}>
-                <input type="radio" name="pay" value={m.id} checked={method === m.id} onChange={() => setMethod(m.id)} />
-                <span className="t-co-method-body"><b>{m.label}</b><small>{m.note}</small></span>
-              </label>
-            ))}
+            {PAYMENT_METHODS.map((m) => {
+              const disabled = m.id === "convenience" && !conveniOn;
+              return (
+                <label key={m.id} className={`t-co-method ${method === m.id ? "is-on" : ""} ${disabled ? "is-disabled" : ""}`} aria-disabled={disabled}>
+                  <input type="radio" name="pay" value={m.id} checked={method === m.id} disabled={disabled} onChange={() => setMethod(m.id)} />
+                  <span className="t-co-method-body"><b>{m.label}{disabled && <em className="t-co-soon">近日対応予定</em>}</b><small>{disabled ? "現在お手続き中です。ご利用開始までしばらくお待ちください。" : m.note}</small></span>
+                </label>
+              );
+            })}
           </div>
           <p className="t-co-hint">お支払いは決済代行サービス Eximbay の安全な決済画面で行います。カード番号等が当社に保存されることはありません。</p>
         </section>
@@ -173,7 +180,7 @@ export function CheckoutClient() {
           <input type="checkbox" checked={agree} onChange={(e) => setAgree(e.target.checked)} />
           <span><Link href="/legal/terms" target="_blank" rel="noopener noreferrer">利用規約</Link>・<Link href="/legal/policy" target="_blank" rel="noopener noreferrer">キャンセル・返品・交換・配送ポリシー</Link>・<Link href="/legal/privacy" target="_blank" rel="noopener noreferrer">プライバシーポリシー</Link>に同意する</span>
         </label>
-        {error && <p className="t-cart-error" role="alert">{error}</p>}
+        {error && <p className="t-cart-error" role="alert">{error}{errorDetail && <><br /><small className="t-co-error-detail">{errorDetail}</small></>}</p>}
         <button type="button" className="t-cta t-cta-block" onClick={submit} disabled={busy} data-testid="checkout-submit">
           {busy ? "決済画面へ移動中…" : `${formatJpy(grand)} を支払う`}
         </button>

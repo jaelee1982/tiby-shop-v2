@@ -43,6 +43,9 @@ export const PAYMENT_METHODS: { id: PaymentMethod; label: string; note: string }
 export function isPaymentMethod(v: unknown): v is PaymentMethod {
   return v === "card" || v === "convenience";
 }
+/** コンビニ決済 개통 여부 — Eximbay 가 가맹점에 편의점 결제를 열어준 뒤 Netlify env NEXT_PUBLIC_PAY_CONVENIENCE=on 으로 켠다.
+ *  꺼져 있으면 화면은 「近日対応予定」로 비활성 표시, 서버는 card 로 강제(게이트웨이에 없는 수단을 고르지 못하게). */
+export const convenienceEnabled = (): boolean => (process.env.NEXT_PUBLIC_PAY_CONVENIENCE || "").toLowerCase() === "on";
 
 const digits = (s: string) => s.replace(/[^\d]/g, "");
 const normalizeDigits = (s: string) => digits(s.replace(/[０-９]/g, (c) => String.fromCharCode(c.charCodeAt(0) - 0xfee0)));

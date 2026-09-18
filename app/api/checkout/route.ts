@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { cartTotal, getCatalogItem, taxIncluded, type CartLine } from "@/lib/commerce";
 import { applyCoupon } from "@/lib/quest";
-import { isPaymentMethod, shippingFee, validateShipping, type PaymentMethod, type ShippingAddress } from "@/lib/shipping";
+import { convenienceEnabled, isPaymentMethod, shippingFee, validateShipping, type PaymentMethod, type ShippingAddress } from "@/lib/shipping";
 import { siteConfig } from "@/lib/site";
 import { supabaseService, userIdFromRequest } from "@/lib/supabase/server";
 import { eximbayMode, eximbayReady, newOrderId } from "@/lib/payments/eximbay";
@@ -47,7 +47,8 @@ export async function POST(request: Request) {
   const shippingResult = validateShipping(typeof body.shipping === "object" && body.shipping !== null ? (body.shipping as Record<string, unknown>) : {});
   if (!shippingResult.ok) return NextResponse.json({ error: "配送先の入力内容をご確認ください。", fields: shippingResult.errors }, { status: 400 });
   const shipping: ShippingAddress = shippingResult.value;
-  const paymentMethod: PaymentMethod = isPaymentMethod(body.paymentMethod) ? body.paymentMethod : "card";
+  const requested: PaymentMethod = isPaymentMethod(body.paymentMethod) ? body.paymentMethod : "card";
+  const paymentMethod: PaymentMethod = requested === "convenience" && !convenienceEnabled() ? "card" : requested;
   const email = shipping.email;
   const couponCode = typeof body.coupon === "string" ? body.coupon.trim().toUpperCase() : "";
   const shippingJpy = shippingFee(shipping.prefecture);
@@ -110,7 +111,9 @@ export async function POST(request: Request) {
     const msg = (e as Error).message;
     console.error("Eximbay ready error:", msg);
     if (couponId) await sb.rpc("coupon_release", { p_order_id: orderId });
-    await sb.from("orders").update({ status: "failed", raw: { error: msg } }).eq("order_id", orderId);
-    return NextResponse.json({ error: msg === "eximbay_not_configured" ? NOT_READY : "決済セッションを作成できませんでした。時間をおいて再度お試しください。" }, { status: msg === "eximbay_not_configured" ? 503 : 502 });
+    await sb.from("orders").update({ status: "failed", raw: { error: msg, detail: (e as Error & { detail?: string }).detail ?? null } }).eq("order_id", orderId);
+    // 게이트웨이 응답 코드·메시지는 화면에 작은 글씨로 노출(개통 초기 필드명 확인용 — 비밀값 없음). 원문은 orders.raw 에 남아 있음.
+    const detail = (e as Error & { detail?: string }).detail;
+    return NextResponse.json({ error: msg === "eximbay_not_configured" ? NOT_READY : "決済セッションを作成できませんでした。時間をおいて再度お試しください。", detail }, { status: msg === "eximbay_not_configured" ? 503 : 502 });
   }
 }
