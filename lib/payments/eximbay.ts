@@ -16,22 +16,31 @@ export const eximbayMode = (): EximbayMode => {
 };
 export const EXIMBAY_BASE: Record<Exclude<EximbayMode, "mock">, string> = { test: "https://api-test.eximbay.com", live: "https://api.eximbay.com" };
 const READY_PATH = "/v1/payments/ready";
-const QUERY_PATH = "/v1/payments"; // + /{transaction_id}
+const VERIFY_PATH = "/v1/payments/verify"; // 문서(2026-09-18 실측): status_url/return_url 로 받은 쿼리스트링 원문을 {data} 로 POST → rescode 0000 = 위변조 없음
 
 export type ReadyInput = {
-  orderId: string; amountJpy: number; email?: string; buyerName?: string; lang?: "JP" | "EN" | "KR";
+  orderId: string; amountJpy: number; email?: string; buyerName?: string; buyerPhone?: string; lang?: "JP" | "EN" | "KR"; mobile?: boolean;
   products: { name: string; quantity: number; unitPrice: number }[]; origin: string;
 };
+
+/** Eximbay 문서(2026-09-18 실측): product 배열은 최대 3개. 넘치면 4번째부터 한 줄로 합산(수량 1·단가=합계). */
+export function capProducts(list: { name: string; quantity: number; unitPrice: number }[]): { name: string; quantity: number; unitPrice: number }[] {
+  if (list.length <= 3) return list;
+  const head = list.slice(0, 2);
+  const rest = list.slice(2);
+  const total = rest.reduce((s, p) => s + p.unitPrice * p.quantity, 0);
+  return [...head, { name: `${rest[0].name} ほか${rest.length}点`, quantity: 1, unitPrice: total }];
+}
 export type ReadyParams = Record<string, unknown>;
 
 export function buildReadyParams(i: ReadyInput): ReadyParams {
   return {
     payment: { transaction_type: "PAYMENT", order_id: i.orderId, currency: "JPY", amount: String(i.amountJpy), lang: i.lang ?? "JP" },
     merchant: { mid: process.env.EXIMBAY_MID ?? "", shop: "tiby.shop" },
-    buyer: { name: i.buyerName || "Guest", email: i.email || "" },
+    buyer: { name: i.buyerName || "Guest", email: i.email || "", ...(i.buyerPhone ? { phone_number: i.buyerPhone } : {}) },
     url: { return_url: `${i.origin}/api/payments/eximbay/return`, status_url: `${i.origin}/api/payments/eximbay/status` },
-    settings: { display_type: "P", autoclose: "Y", issuer_country: "JP", ostype: "P", call_from_app: "N" },
-    product: i.products.map((p) => ({ name: p.name.slice(0, 100), quantity: String(p.quantity), unit_price: String(p.unitPrice), link: `${i.origin}/` })),
+    settings: { display_type: "P", autoclose: "Y", issuer_country: "JP", ostype: i.mobile ? "M" : "P", call_from_app: "N" },
+    product: capProducts(i.products).map((p) => ({ name: p.name.slice(0, 100), quantity: String(p.quantity), unit_price: String(p.unitPrice), link: `${i.origin}/` })),
   };
 }
 
@@ -58,17 +67,17 @@ export async function eximbayReady(i: ReadyInput): Promise<{ mode: EximbayMode; 
   return { mode, fgkey, params, sdkUrl: `${EXIMBAY_BASE[mode]}/v1/javascriptSDK.js`, raw };
 }
 
-/** 결제 결과 재검증 — 통지 파라미터를 믿지 않고 조회 API 로 확인. 성공(rescode 0000 & 금액·주문 일치)만 true. */
-export async function eximbayVerify(transactionId: string, orderId: string, amountJpy: number): Promise<{ ok: boolean; raw?: unknown }> {
+/** 결제 결과 재검증 — 통지 파라미터를 믿지 않고 Eximbay 검증 API(/v1/payments/verify, data=쿼리스트링 원문)로 fgkey 무결성을 확인.
+ *  성공(검증 rescode 0000 & 콜백 rescode 0000 & 주문·금액 일치)만 true. */
+export async function eximbayVerify(callback: Record<string, unknown>, orderId: string, amountJpy: number): Promise<{ ok: boolean; raw?: unknown }> {
   const mode = eximbayMode();
   if (mode === "mock") return { ok: true };
-  const res = await fetch(`${EXIMBAY_BASE[mode]}${QUERY_PATH}/${encodeURIComponent(transactionId)}`, { headers: { Authorization: authHeader() }, cache: "no-store" });
+  const cb = parseCallback(callback);
+  const data = new URLSearchParams(Object.entries(callback).map(([k, v]) => [k, String(v ?? "")])).toString();
+  const res = await fetch(`${EXIMBAY_BASE[mode]}${VERIFY_PATH}`, { method: "POST", headers: { "Content-Type": "application/json", Authorization: authHeader() }, body: JSON.stringify({ data }), cache: "no-store" });
   const raw = (await res.json().catch(() => ({}))) as Record<string, unknown>;
-  const payment = (raw.payment ?? raw) as Record<string, unknown>;
-  const ok = res.ok && String(raw.rescode ?? payment.rescode ?? "") === "0000"
-    && String(payment.order_id ?? raw.order_id ?? "") === orderId
-    && Number(payment.amount ?? raw.amount ?? -1) === amountJpy;
-  if (!ok) console.error("Eximbay verify mismatch", res.status, JSON.stringify(raw).slice(0, 500));
+  const ok = res.ok && String(raw.rescode ?? "") === "0000" && cb.rescode === "0000" && cb.orderId === orderId && cb.amount === amountJpy;
+  if (!ok) console.error("Eximbay verify mismatch", res.status, JSON.stringify(raw).slice(0, 300), { cbRescode: cb.rescode, cbOrder: cb.orderId, cbAmount: cb.amount, orderId, amountJpy });
   return { ok, raw };
 }
 

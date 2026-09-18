@@ -21,7 +21,7 @@ export async function settle(params: Record<string, unknown>): Promise<{ ok: boo
     if (order.coupon_id) await sb.rpc("coupon_release", { p_order_id: cb.orderId });
     return { ok: false, orderId: cb.orderId, status: "failed" };
   }
-  const v = await eximbayVerify(cb.transactionId, cb.orderId, order.total_jpy);
+  const v = await eximbayVerify(params, cb.orderId, order.total_jpy);
   if (!v.ok) return { ok: false, orderId: cb.orderId, status: "unknown" };
   await sb.from("orders").update({ status: "paid", paid_at: new Date().toISOString(), provider_txn_id: cb.transactionId || null, raw: { callback: params, verify: v.raw ?? null } }).eq("order_id", cb.orderId);
   if (order.coupon_id) await sb.rpc("coupon_redeem", { p_order_id: cb.orderId });

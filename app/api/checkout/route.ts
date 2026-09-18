@@ -115,7 +115,8 @@ export async function POST(request: Request) {
   try {
     const products = items.map((i) => ({ name: i.name, quantity: i.qty, unitPrice: i.unit_price_tax_in }));
     products.push({ name: "送料", quantity: 1, unitPrice: shippingJpy });
-    const ready = await eximbayReady({ orderId, amountJpy: total, email, buyerName: shipping.name, products, origin });
+    const mobile = /Mobi|Android|iPhone|iPad/i.test(request.headers.get("user-agent") || "");
+    const ready = await eximbayReady({ orderId, amountJpy: total, email, buyerName: shipping.name, buyerPhone: shipping.phone, products, origin, mobile });
     if (ready.mode === "mock") return NextResponse.json({ orderId, mode: "mock", redirectUrl: `${origin}/checkout/complete?order=${orderId}&mock=1` });
     return NextResponse.json({ orderId, mode: ready.mode, fgkey: ready.fgkey, params: ready.params, sdkUrl: ready.sdkUrl, redirectUrl: `${origin}/checkout/pay?order=${orderId}` });
   } catch (e) {
