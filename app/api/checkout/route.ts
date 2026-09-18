@@ -53,7 +53,9 @@ export async function POST(request: Request) {
   const couponCode = typeof body.coupon === "string" ? body.coupon.trim().toUpperCase() : "";
   const shippingJpy = shippingFee(shipping.prefecture);
 
-  const origin = process.env.NEXT_PUBLIC_SITE_URL || new URL(request.url).origin || siteConfig.siteUrl;
+  // 2026-09-18 사고: Netlify 함수의 request.url origin 이 *.netlify.app 이라 /checkout/pay 리다이렉트가 다른 도메인으로 튀어
+  // sessionStorage(fgkey) 를 못 찾았음 → Eximbay 콜백 URL 은 사이트 정본(siteConfig.siteUrl) 고정, 브라우저 이동은 상대경로(같은 origin).
+  const origin = siteConfig.siteUrl;
   const orderId = newOrderId();
   const eximbayConfigured = eximbayMode() === "mock" || (!!process.env.EXIMBAY_MID && !!process.env.EXIMBAY_API_KEY);
 
@@ -117,8 +119,8 @@ export async function POST(request: Request) {
     products.push({ name: "送料", quantity: 1, unitPrice: shippingJpy });
     const mobile = /Mobi|Android|iPhone|iPad/i.test(request.headers.get("user-agent") || "");
     const ready = await eximbayReady({ orderId, amountJpy: total, email, buyerName: shipping.name, buyerPhone: shipping.phone, products, origin, mobile });
-    if (ready.mode === "mock") return NextResponse.json({ orderId, mode: "mock", redirectUrl: `${origin}/checkout/complete?order=${orderId}&mock=1` });
-    return NextResponse.json({ orderId, mode: ready.mode, fgkey: ready.fgkey, params: ready.params, sdkUrl: ready.sdkUrl, redirectUrl: `${origin}/checkout/pay?order=${orderId}` });
+    if (ready.mode === "mock") return NextResponse.json({ orderId, mode: "mock", redirectUrl: `/checkout/complete?order=${orderId}&mock=1` });
+    return NextResponse.json({ orderId, mode: ready.mode, fgkey: ready.fgkey, params: ready.params, sdkUrl: ready.sdkUrl, redirectUrl: `/checkout/pay?order=${orderId}` });
   } catch (e) {
     const msg = (e as Error).message;
     console.error("Eximbay ready error:", msg);
