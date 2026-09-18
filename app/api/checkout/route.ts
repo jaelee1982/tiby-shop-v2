@@ -120,6 +120,9 @@ export async function POST(request: Request) {
     const mobile = /Mobi|Android|iPhone|iPad/i.test(request.headers.get("user-agent") || "");
     const ready = await eximbayReady({ orderId, amountJpy: total, email, buyerName: shipping.name, buyerPhone: shipping.phone, products, origin, mobile });
     if (ready.mode === "mock") return NextResponse.json({ orderId, mode: "mock", redirectUrl: `/checkout/complete?order=${orderId}&mock=1` });
+    // ready 응답을 주문에 보관 → /checkout/pay 가 sessionStorage 없이도 /api/checkout/pay-info 로 되찾는다(도메인 전환·저장소 차단 대비).
+    const { data: cur } = await sb.from("orders").select("raw").eq("order_id", orderId).maybeSingle();
+    await sb.from("orders").update({ raw: { ...((cur?.raw as Record<string, unknown> | null) ?? {}), ready: { fgkey: ready.fgkey, params: ready.params, sdkUrl: ready.sdkUrl, mode: ready.mode } } }).eq("order_id", orderId);
     return NextResponse.json({ orderId, mode: ready.mode, fgkey: ready.fgkey, params: ready.params, sdkUrl: ready.sdkUrl, redirectUrl: `/checkout/pay?order=${orderId}` });
   } catch (e) {
     const msg = (e as Error).message;

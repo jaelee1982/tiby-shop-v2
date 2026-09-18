@@ -12,14 +12,27 @@ export function PayClient() {
     const q = new URLSearchParams(window.location.search);
     const later = (st: "missing" | "failed") => queueMicrotask(() => setState(st));   // 효과 본문 동기 setState 회피(lint)
     if (q.get("result")) { later("failed"); return; }
+    const order = q.get("order") || "";
+    let cancelled = false;
+    let script: HTMLScriptElement | null = null;
+    const open = (ready: Ready) => {
+      if (cancelled) return;
+      script = document.createElement("script"); script.src = ready.sdkUrl; script.async = true;
+      script.onload = () => { setState("opening"); try { window.EXIMBAY?.request_pay({ fgkey: ready.fgkey, ...ready.params }); } catch { setState("failed"); } };
+      script.onerror = () => setState("failed");
+      document.body.appendChild(script);
+    };
     let ready: Ready | null = null;
     try { ready = JSON.parse(sessionStorage.getItem(PAY_KEY) || "null"); } catch { ready = null; }
-    if (!ready || ready.orderId !== q.get("order")) { later("missing"); return; }
-    const s = document.createElement("script"); s.src = ready.sdkUrl; s.async = true;
-    s.onload = () => { setState("opening"); try { window.EXIMBAY?.request_pay({ fgkey: ready!.fgkey, ...ready!.params }); } catch { setState("failed"); } };
-    s.onerror = () => setState("failed");
-    document.body.appendChild(s);
-    return () => { s.remove(); };
+    if (ready && ready.orderId === order) { open(ready); }
+    else {
+      // 저장소에 없으면(다른 도메인으로 이동·저장소 차단·새 탭) 서버 보관본으로 되찾기
+      fetch(`/api/checkout/pay-info?order=${encodeURIComponent(order)}`, { cache: "no-store" })
+        .then((r) => (r.ok ? r.json() : null))
+        .then((d: Ready | null) => { if (d?.fgkey) open(d); else later("missing"); })
+        .catch(() => later("missing"));
+    }
+    return () => { cancelled = true; script?.remove(); };
   }, []);
   return (
     <div>
