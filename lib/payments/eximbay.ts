@@ -48,7 +48,13 @@ export async function eximbayReady(i: ReadyInput): Promise<{ mode: EximbayMode; 
   });
   const raw = await res.json().catch(() => ({}));
   const fgkey = (raw as { fgkey?: string }).fgkey;
-  if (!res.ok || !fgkey) { console.error("Eximbay ready failed", res.status, JSON.stringify(raw).slice(0, 500)); throw new Error("eximbay_ready_failed"); }
+  if (!res.ok || !fgkey) {
+    console.error("Eximbay ready failed", res.status, JSON.stringify(raw).slice(0, 500));
+    const r = raw as { rescode?: string; resmsg?: string; message?: string; error?: string };
+    const err = new Error("eximbay_ready_failed") as Error & { detail?: string };
+    err.detail = `HTTP ${res.status}${r.rescode ? ` · ${r.rescode}` : ""}${r.resmsg || r.message || r.error ? ` · ${r.resmsg || r.message || r.error}` : ""}`;
+    throw err;
+  }
   return { mode, fgkey, params, sdkUrl: `${EXIMBAY_BASE[mode]}/v1/javascriptSDK.js`, raw };
 }
 

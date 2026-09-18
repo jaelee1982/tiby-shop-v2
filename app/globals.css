@@ -850,6 +850,9 @@ html, body {
 .t-co-methods { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
 .t-co-method { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border: 1.5px solid var(--tiby-line); border-radius: 14px; cursor: pointer; transition: border-color var(--dur-base) var(--ease-out), background var(--dur-base) var(--ease-out); }
 .t-co-method.is-on { border-color: var(--tiby-ink); background: var(--tiby-bg-warm); }
+.t-co-method.is-disabled { cursor: default; opacity: 0.72; background: var(--tiby-bg); }
+.t-co-soon { font-style: normal; font-size: 10px; font-weight: 700; letter-spacing: 0.04em; color: var(--fg-3); border: 1px solid var(--tiby-line); border-radius: 999px; padding: 2px 7px; margin-left: 8px; vertical-align: middle; }
+.t-co-error-detail { font-size: 11px; opacity: 0.8; font-family: var(--font-body-latin); }
 .t-co-method input { width: 18px; height: 18px; accent-color: var(--tiby-ink); flex-shrink: 0; }
 .t-co-method-body { display: flex; flex-direction: column; gap: 2px; font-family: var(--font-body-jp); }
 .t-co-method-body b { font-size: 14.5px; color: var(--tiby-ink); }
