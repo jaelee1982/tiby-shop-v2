@@ -3,7 +3,7 @@ import { cartTotal, getCatalogItem, taxIncluded, type CartLine } from "@/lib/com
 import { applyCoupon } from "@/lib/quest";
 import { convenienceEnabled, isPaymentMethod, shippingFee, validateShipping, type PaymentMethod, type ShippingAddress } from "@/lib/shipping";
 import { siteConfig } from "@/lib/site";
-import { supabaseService, userIdFromRequest } from "@/lib/supabase/server";
+import { describeServiceKey, supabaseService, userIdFromRequest } from "@/lib/supabase/server";
 import { eximbayMode, eximbayReady, newOrderId } from "@/lib/payments/eximbay";
 import { komojuAvailable, komojuSession } from "@/lib/payments/komoju";
 
@@ -108,7 +108,8 @@ export async function POST(request: Request) {
     console.error("order insert failed", insErr.code, insErr.message);
     if (couponId) await sb.rpc("coupon_release", { p_order_id: orderId });
     // detail = PostgREST 오류 코드·메시지(비밀값 없음) — 키 오류(Invalid API key/permission denied)와 스키마 오류를 화면에서 구분.
-    return NextResponse.json({ error: "注文を作成できませんでした。時間をおいて再度お試しください。", detail: `db: ${insErr.code ?? ""} ${insErr.message ?? ""}`.trim().slice(0, 200) }, { status: 502 });
+    const keyHint = /invalid api key|jwt|permission denied|row-level security/i.test(insErr.message ?? "") ? ` · ${describeServiceKey()}` : "";
+    return NextResponse.json({ error: "注文を作成できませんでした。時間をおいて再度お試しください。", detail: `db: ${insErr.code ?? ""} ${insErr.message ?? ""}`.trim().slice(0, 200) + keyHint }, { status: 502 });
   }
 
   try {
