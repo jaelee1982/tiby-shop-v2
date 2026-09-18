@@ -1,17 +1,19 @@
 import { NextResponse } from "next/server";
 import { cartTotal, getCatalogItem, taxIncluded, type CartLine } from "@/lib/commerce";
 import { applyCoupon } from "@/lib/quest";
+import { isPaymentMethod, shippingFee, validateShipping, type PaymentMethod, type ShippingAddress } from "@/lib/shipping";
 import { siteConfig } from "@/lib/site";
 import { supabaseService, userIdFromRequest } from "@/lib/supabase/server";
 import { eximbayMode, eximbayReady, newOrderId } from "@/lib/payments/eximbay";
 import { komojuAvailable, komojuSession } from "@/lib/payments/komoju";
 
-// 결제 시작 (Eximbay). 클라이언트는 { lines:[{id,qty}], email?, coupon? } + (쿠폰 시) Authorization: Bearer <supabase access_token>.
-// 금액은 lib/commerce.ts 로 서버 재계산, 쿠폰은 DB(coupon_reserve — 본인 소유·active·미만료)로 예약 후 할인 반영.
+// 결제 시작 (Eximbay). 클라이언트(/checkout)는 { lines:[{id,qty}], shipping:{…}, paymentMethod, coupon? } + (쿠폰 시) Authorization: Bearer <supabase access_token>.
+// 금액은 lib/commerce.ts(상품) + lib/shipping.ts(송료) 로 서버 재계산, 쿠폰은 DB(coupon_reserve — 본인 소유·active·미만료)로 예약 후 할인 반영.
 // 응답: mock → { redirectUrl } / test·live → { fgkey, params, sdkUrl, orderId } (브라우저가 /checkout/pay 에서 SDK 호출).
 // 필요 env: SUPABASE_SERVICE_ROLE_KEY(주문·쿠폰 기록), EXIMBAY_MID/EXIMBAY_API_KEY(mock 외), NEXT_PUBLIC_SITE_URL.
 
-type CheckoutBody = { lines?: unknown; email?: unknown; coupon?: unknown };
+type CheckoutBody = { lines?: unknown; email?: unknown; coupon?: unknown; shipping?: unknown; paymentMethod?: unknown };
+const NOT_READY = "オンライン決済は現在準備中です。恐れ入りますが、しばらくお待ちください。";
 
 function sanitizeLines(input: unknown): CartLine[] | null {
   if (!Array.isArray(input) || input.length === 0 || input.length > 20) return null;
@@ -26,6 +28,13 @@ function sanitizeLines(input: unknown): CartLine[] | null {
   return lines;
 }
 
+/** 배송지·결제수단 컬럼이 아직 없는 DB(구 스키마)면 그 컬럼만 빼고 재시도 — 주문 기록은 반드시 남긴다(fail-soft). */
+const OPTIONAL_COLUMNS = ["shipping", "shipping_jpy", "payment_method"] as const;
+function isMissingColumn(err: { code?: string; message?: string } | null): boolean {
+  if (!err) return false;
+  return err.code === "42703" || err.code === "PGRST204" || /column|schema cache/i.test(err.message ?? "");
+}
+
 export async function POST(request: Request) {
   let body: CheckoutBody;
   try { body = await request.json(); } catch { return NextResponse.json({ error: "リクエストが不正です。" }, { status: 400 }); }
@@ -33,8 +42,15 @@ export async function POST(request: Request) {
   if (!lines) return NextResponse.json({ error: "カートの内容が不正です。" }, { status: 400 });
   const subtotal = cartTotal(lines);
   if (subtotal <= 0) return NextResponse.json({ error: "カートが空です。" }, { status: 400 });
-  const email = typeof body.email === "string" && /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(body.email) ? body.email.trim().toLowerCase() : undefined;
+
+  // 配送先 — /checkout 폼 필수. (구 카트 직결 호출은 shipping 없이 오므로 400 으로 명확히 거절)
+  const shippingResult = validateShipping(typeof body.shipping === "object" && body.shipping !== null ? (body.shipping as Record<string, unknown>) : {});
+  if (!shippingResult.ok) return NextResponse.json({ error: "配送先の入力内容をご確認ください。", fields: shippingResult.errors }, { status: 400 });
+  const shipping: ShippingAddress = shippingResult.value;
+  const paymentMethod: PaymentMethod = isPaymentMethod(body.paymentMethod) ? body.paymentMethod : "card";
+  const email = shipping.email;
   const couponCode = typeof body.coupon === "string" ? body.coupon.trim().toUpperCase() : "";
+  const shippingJpy = shippingFee(shipping.prefecture);
 
   const origin = process.env.NEXT_PUBLIC_SITE_URL || new URL(request.url).origin || siteConfig.siteUrl;
   const orderId = newOrderId();
@@ -45,12 +61,15 @@ export async function POST(request: Request) {
     if (couponCode) return NextResponse.json({ error: "クーポンのご利用は現在準備中です。コードを外してお進みください。" }, { status: 400 });
     try {
       const items = lines.map((l) => { const item = getCatalogItem(l.id)!; return { sku: item.sku, name: item.name, qty: l.qty, unit_price_tax_in: taxIncluded(item.price) }; });
-      return NextResponse.json({ orderId, mode: "komoju", redirectUrl: await komojuSession(orderId, subtotal, items, origin) });
+      items.push({ sku: "SHIPPING", name: "送料", qty: 1, unit_price_tax_in: shippingJpy });
+      return NextResponse.json({ orderId, mode: "komoju", redirectUrl: await komojuSession(orderId, subtotal + shippingJpy, items, origin) });
     } catch { return NextResponse.json({ error: "決済セッションを作成できませんでした。時間をおいて再度お試しください。" }, { status: 502 }); }
   }
 
+  // 게이트웨이 미설정은 주문을 만들기 전에 판정 — 결제 못 하는 주문 행을 남기지 않는다.
+  if (!eximbayConfigured) { console.error("checkout: eximbay not configured (EXIMBAY_MID/EXIMBAY_API_KEY)"); return NextResponse.json({ error: NOT_READY, reason: "eximbay_not_configured" }, { status: 503 }); }
   const sb = supabaseService();
-  if (!sb) return NextResponse.json({ error: "オンライン決済は現在準備中です。恐れ入りますが、しばらくお待ちください。" }, { status: 503 });
+  if (!sb) { console.error("checkout: SUPABASE_SERVICE_ROLE_KEY missing"); return NextResponse.json({ error: NOT_READY, reason: "db_not_configured" }, { status: 503 }); }
 
   const userId = await userIdFromRequest(request);
 
@@ -67,14 +86,24 @@ export async function POST(request: Request) {
     couponId = r.coupon_id ?? null;
     discount = applyCoupon(subtotal, r.amount_jpy ?? 0).discount;
   }
-  const total = subtotal - discount;
+  const total = subtotal - discount + shippingJpy; // 청구액 = 상품(税込) − クーポン + 送料
   const items = lines.map((l) => { const item = getCatalogItem(l.id)!; return { sku: item.sku, name: item.name, qty: l.qty, unit_price_tax_in: taxIncluded(item.price) }; });
 
-  const { error: insErr } = await sb.from("orders").insert({ order_id: orderId, user_id: userId, email: email ?? null, lines: items, subtotal_jpy: subtotal, discount_jpy: discount, total_jpy: total, coupon_id: couponId, status: "created" });
+  const baseRow = { order_id: orderId, user_id: userId, email, lines: items, subtotal_jpy: subtotal, discount_jpy: discount, total_jpy: total, coupon_id: couponId, status: "created" };
+  const fullRow: Record<string, unknown> = { ...baseRow, shipping, shipping_jpy: shippingJpy, payment_method: paymentMethod };
+  let { error: insErr } = await sb.from("orders").insert(fullRow);
+  if (insErr && isMissingColumn(insErr)) {
+    console.warn("orders: shipping columns missing — inserting legacy row (run migration 20260918_orders_shipping)", insErr.message);
+    for (const c of OPTIONAL_COLUMNS) delete fullRow[c];
+    // 배송지는 raw 에라도 남긴다 — 발송 정보를 잃지 않는다.
+    ({ error: insErr } = await sb.from("orders").insert({ ...fullRow, raw: { shipping, shipping_jpy: shippingJpy, payment_method: paymentMethod } }));
+  }
   if (insErr) { console.error("order insert failed", insErr.message); if (couponId) await sb.rpc("coupon_release", { p_order_id: orderId }); return NextResponse.json({ error: "注文を作成できませんでした。時間をおいて再度お試しください。" }, { status: 502 }); }
 
   try {
-    const ready = await eximbayReady({ orderId, amountJpy: total, email, products: items.map((i) => ({ name: i.name, quantity: i.qty, unitPrice: i.unit_price_tax_in })), origin });
+    const products = items.map((i) => ({ name: i.name, quantity: i.qty, unitPrice: i.unit_price_tax_in }));
+    products.push({ name: "送料", quantity: 1, unitPrice: shippingJpy });
+    const ready = await eximbayReady({ orderId, amountJpy: total, email, buyerName: shipping.name, products, origin });
     if (ready.mode === "mock") return NextResponse.json({ orderId, mode: "mock", redirectUrl: `${origin}/checkout/complete?order=${orderId}&mock=1` });
     return NextResponse.json({ orderId, mode: ready.mode, fgkey: ready.fgkey, params: ready.params, sdkUrl: ready.sdkUrl, redirectUrl: `${origin}/checkout/pay?order=${orderId}` });
   } catch (e) {
@@ -82,6 +111,6 @@ export async function POST(request: Request) {
     console.error("Eximbay ready error:", msg);
     if (couponId) await sb.rpc("coupon_release", { p_order_id: orderId });
     await sb.from("orders").update({ status: "failed", raw: { error: msg } }).eq("order_id", orderId);
-    return NextResponse.json({ error: msg === "eximbay_not_configured" ? "オンライン決済は現在準備中です。恐れ入りますが、しばらくお待ちください。" : "決済セッションを作成できませんでした。時間をおいて再度お試しください。" }, { status: msg === "eximbay_not_configured" ? 503 : 502 });
+    return NextResponse.json({ error: msg === "eximbay_not_configured" ? NOT_READY : "決済セッションを作成できませんでした。時間をおいて再度お試しください。" }, { status: msg === "eximbay_not_configured" ? 503 : 502 });
   }
 }
