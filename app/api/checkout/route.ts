@@ -104,7 +104,12 @@ export async function POST(request: Request) {
     // 배송지는 raw 에라도 남긴다 — 발송 정보를 잃지 않는다.
     ({ error: insErr } = await sb.from("orders").insert({ ...fullRow, raw: { shipping, shipping_jpy: shippingJpy, payment_method: paymentMethod } }));
   }
-  if (insErr) { console.error("order insert failed", insErr.message); if (couponId) await sb.rpc("coupon_release", { p_order_id: orderId }); return NextResponse.json({ error: "注文を作成できませんでした。時間をおいて再度お試しください。" }, { status: 502 }); }
+  if (insErr) {
+    console.error("order insert failed", insErr.code, insErr.message);
+    if (couponId) await sb.rpc("coupon_release", { p_order_id: orderId });
+    // detail = PostgREST 오류 코드·메시지(비밀값 없음) — 키 오류(Invalid API key/permission denied)와 스키마 오류를 화면에서 구분.
+    return NextResponse.json({ error: "注文を作成できませんでした。時間をおいて再度お試しください。", detail: `db: ${insErr.code ?? ""} ${insErr.message ?? ""}`.trim().slice(0, 200) }, { status: 502 });
+  }
 
   try {
     const products = items.map((i) => ({ name: i.name, quantity: i.qty, unitPrice: i.unit_price_tax_in }));
