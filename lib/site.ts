@@ -1,6 +1,6 @@
 // tiby.shop — site-wide configuration (single place the owner edits).
 // Canon source: tiby-content-os/00-canon/brand-facts.md — brand Tiby / タイビー,
-// company Giant Korea Co., Ltd., price ¥999 tax-included, Hair Perfume / ヘアパフューム.
+// company Giant Korea Co., Ltd., Hair Perfume / ヘアパフューム. Store prices are in lib/commerce.ts.
 //
 // ⚠️ 「TODO:」で始まる値は正式な情報が未入力のプレースホルダーです。
 //     このファイルを編集して正しい値に置き換えてください（他のファイルは触らなくてOK）。

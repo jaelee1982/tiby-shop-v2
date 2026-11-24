@@ -12,7 +12,7 @@ import { CinematicHero } from "@/components/home/CinematicHero";
 import { SkuReel } from "@/components/home/SkuReel";
 import { SmoothScroll } from "@/components/home/SmoothScroll";
 import { siteConfig } from "@/lib/site";
-import type { CatalogItemId } from "@/lib/commerce";
+import { displayedPrice, formatJpy, singleItemsTotalExclTax, type SingleItemId } from "@/lib/commerce";
 
 /* ---------- inline icons (lucide paths) ---------- */
 function Icon({ name }: { name: "sparkles" | "heart" | "droplets" | "flower-2" }) {
@@ -59,6 +59,8 @@ function BottleImg({ sku, style }: { sku: { front: string; name: string }; style
 
 function Hero({ skuId, setSkuId }: { skuId: SkuId; setSkuId: (id: SkuId) => void }) {
   const sku = SKUS[skuId];
+  const itemId = sku.slug as SingleItemId;
+  const price = displayedPrice(itemId);
   return (
     <section
       className="t-hero"
@@ -93,10 +95,10 @@ function Hero({ skuId, setSkuId }: { skuId: SkuId; setSkuId: (id: SkuId) => void
 
           <div className="t-price-row">
             <div className="t-price-box">
-              <div className="t-price">¥999<span>税抜</span></div>
-              <div className="t-price-tax">税込 ¥1,099 · Hair Perfume 30ml</div>
+              <div className="t-price">{price.exclTax}<span>税抜</span></div>
+              <div className="t-price-tax">税込 {price.inclTax} · Hair Perfume 30ml</div>
             </div>
-            <AddToCartButton id={sku.slug as CatalogItemId} />
+            <AddToCartButton id={itemId} />
             <Link className="t-cta-ghost" href={`/products/${sku.slug}`}>商品詳細を見る</Link>
           </div>
           <div className="t-trust">
@@ -197,6 +199,7 @@ function HowToUse() {
 }
 
 function Bundle() {
+  const price = displayedPrice("trio-set");
   return (
     <section className="t-bundle" id="bundle">
       <div className="t-bundle-inner">
@@ -207,8 +210,8 @@ function Bundle() {
             3本で、毎日選べる楽しさ。友だちに1本、自分に2本。
           </p>
           <div className="t-bundle-price">
-            <span className="t-bundle-strike">¥2,997</span>
-            <span className="t-bundle-now">¥2,700<small>税抜 · 税込 ¥2,970</small></span>
+            <span style={{ color: "rgba(255,255,255,0.72)" }}><span className="t-bundle-strike">{formatJpy(singleItemsTotalExclTax())}</span><small> 単品3本合計・税抜</small></span>
+            <span className="t-bundle-now">{price.exclTax}<small>税抜 · 税込 {price.inclTax}</small></span>
           </div>
           <AddToCartButton id="trio-set" label="セットをカートに入れる" className="t-cta t-cta-light" />
         </div>

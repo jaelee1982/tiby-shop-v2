@@ -2,6 +2,7 @@
 // All owner-editable business facts live in lib/site.ts — edit them there.
 // Rows whose value starts with「TODO:」render with a visible highlight until filled in.
 import { siteConfig } from "@/lib/site";
+import { compactPrice } from "@/lib/commerce";
 
 export type TokushohoRow = { label: string; value: string; note?: string };
 
@@ -17,7 +18,7 @@ export const tokushoho: TokushohoRow[] = [
   {
     label: "販売価格",
     value:
-      "各商品ページに表示された価格に基づきます。ヘアパフューム各種 ¥999（税抜）／税込 ¥1,099、3本セット ¥2,700（税抜）／税込 ¥2,970",
+      `各商品ページに表示された価格に基づきます。ヘアパフューム各種 ${compactPrice("love-me-me")}、3本セット ${compactPrice("trio-set")}`,
   },
   {
     label: "商品代金以外の必要料金",

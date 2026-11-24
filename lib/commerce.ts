@@ -1,5 +1,5 @@
 // tiby.shop — purchasable catalog & cart types.
-// Prices are TAX-EXCLUDED JPY (¥999 税抜 per SKU — owner decision 2026-07-08);
+// Prices are TAX-EXCLUDED JPY for this store only; other sales channels have separate pricing.
 // the charged amount is always the tax-included gross via taxIncluded().
 // The checkout API validates every cart line against this catalog server-side,
 // so client-side tampering can never change what is charged.
@@ -8,12 +8,17 @@ import { products } from "@/lib/products";
 /** Japanese consumption tax. */
 export const TAX_RATE = 0.1;
 
-/** Tax-included price in JPY (¥999 → ¥1,099, ¥2,700 → ¥2,970). */
+/** Tax-included price in JPY. */
 export function taxIncluded(priceExclTax: number): number {
   return Math.round(priceExclTax * (1 + TAX_RATE));
 }
 
-export type CatalogItemId = "love-me-me" | "hug-me-me" | "kiss-me-me" | "trio-set";
+export const SINGLE_ITEM_IDS = ["love-me-me", "hug-me-me", "kiss-me-me"] as const;
+export type SingleItemId = (typeof SINGLE_ITEM_IDS)[number];
+export type CatalogItemId = SingleItemId | "trio-set";
+
+const SINGLE_PRICE_EXCL_TAX = 1800;
+const TRIO_PRICE_EXCL_TAX = 2700;
 
 export type CatalogItem = {
   id: CatalogItemId;
@@ -58,7 +63,7 @@ export const CATALOG: Record<CatalogItemId, CatalogItem> = {
     nameJa: "ラブ ミーミー",
     sku: "TIBY-HP-LOVE",
     scentName: "Fresh Floral Musk Amber",
-    price: 999,
+    price: SINGLE_PRICE_EXCL_TAX,
     image: img("love-me-me"),
     description: tagline("love-me-me"),
     ...SHARED,
@@ -69,7 +74,7 @@ export const CATALOG: Record<CatalogItemId, CatalogItem> = {
     nameJa: "ハグ ミーミー",
     sku: "TIBY-HP-HUG",
     scentName: "Citrus Floral Vanilla",
-    price: 999,
+    price: SINGLE_PRICE_EXCL_TAX,
     image: img("hug-me-me"),
     description: tagline("hug-me-me"),
     ...SHARED,
@@ -80,7 +85,7 @@ export const CATALOG: Record<CatalogItemId, CatalogItem> = {
     nameJa: "キス ミーミー",
     sku: "TIBY-HP-KISS",
     scentName: "Fruity Floral",
-    price: 999,
+    price: SINGLE_PRICE_EXCL_TAX,
     image: img("kiss-me-me"),
     description: tagline("kiss-me-me"),
     ...SHARED,
@@ -91,13 +96,27 @@ export const CATALOG: Record<CatalogItemId, CatalogItem> = {
     nameJa: "3本セット（LOVE / HUG / KISS）",
     sku: "TIBY-HP-SET3",
     scentName: "LOVE ME ME · HUG ME ME · KISS ME ME",
-    price: 2700,
+    price: TRIO_PRICE_EXCL_TAX,
     image: img("hug-me-me"),
     description:
-      "ときめき・温もり・情熱。3つの香りを、その日の気分で使い分け。単品合計より税込¥327おトクなセットです。",
+      "ときめき・温もり・情熱。3つの香りを、その日の気分で使い分け。",
     ...SHARED,
   },
 };
+
+export function displayedPrice(id: CatalogItemId) {
+  const { price } = CATALOG[id];
+  return { exclTax: formatJpy(price), inclTax: formatJpy(taxIncluded(price)) };
+}
+
+export function compactPrice(id: CatalogItemId): string {
+  const { exclTax, inclTax } = displayedPrice(id);
+  return `${exclTax}（税抜）／税込 ${inclTax}`;
+}
+
+export function singleItemsTotalExclTax(): number {
+  return SINGLE_ITEM_IDS.reduce((sum, id) => sum + CATALOG[id].price, 0);
+}
 
 export type CartLine = { id: CatalogItemId; qty: number };
 

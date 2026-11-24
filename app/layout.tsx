@@ -5,16 +5,17 @@ import { Footer } from "@/components/layout/Footer";
 import { CartProvider } from "@/components/cart/CartContext";
 import { CartDrawer } from "@/components/cart/CartDrawer";
 import { siteConfig } from "@/lib/site";
+import { compactPrice } from "@/lib/commerce";
 
 // Fonts (Jost · Montserrat · Noto Serif/Sans JP) are loaded via the design-system
 // @import in globals.css — see TIBY Design System colors_and_type.css §4.2.
 
 export const metadata: Metadata = {
   title: "Tiby — Hair Perfume（ヘアパフューム）",
-  description: `${siteConfig.masterCopy} Tiby Hair Perfume ¥999（税抜）／税込 ¥1,099 — 公式オンラインストア・全国ドン・キホーテにて発売中。`,
+  description: `${siteConfig.masterCopy} Tiby Hair Perfume 30mL — 公式オンラインストア価格：${compactPrice("love-me-me")}。`,
   openGraph: {
     title: "Tiby — Hair Perfume",
-    description: "すれ違った瞬間の、ズルい残り香。¥999（税抜）／税込 ¥1,099",
+    description: `すれ違った瞬間の、ズルい残り香。公式オンラインストア価格：${compactPrice("love-me-me")}`,
     url: siteConfig.siteUrl,
     siteName: "Tiby",
     locale: "ja_JP",

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { siteConfig } from "@/lib/site";
+import { compactPrice } from "@/lib/commerce";
 
 // Footer — TIBY Design System (ui_kits/pdp/app.jsx · Footer), Soft Ivory.
 export function Footer() {
@@ -9,7 +10,7 @@ export function Footer() {
         <div className="t-foot-brand">
           <div className="t-foot-logo">Tiby</div>
           <p>{siteConfig.masterCopy}</p>
-          <p className="t-foot-cat">Hair Perfume / ヘアパフューム · 30ml · ¥999（税抜）／税込 ¥1,099</p>
+          <p className="t-foot-cat">Hair Perfume / ヘアパフューム · 30ml · {compactPrice("love-me-me")}</p>
         </div>
         <div className="t-foot-col">
           <h4>Products</h4>
