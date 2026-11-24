@@ -4,7 +4,7 @@
 // ① Tokyo scene: the problem (hair smell noticed at passing distance)
 // ② In the bag: 9cm = credit-card height, 30ml portability (canon size anchor)
 // ③ Hair moment: light but lasts to the night (morning→night scent timeline)
-// ④ ¥999 tax-included reveal → shop CTA
+// ④ Store price reveal → shop CTA
 // A floating buy pill stays visible through the story so purchase is one tap away.
 import { useRef } from "react";
 import {
@@ -16,8 +16,10 @@ import {
   type MotionValue,
 } from "framer-motion";
 import { getProduct } from "@/lib/products";
+import { displayedPrice } from "@/lib/commerce";
 import { SKUS } from "@/lib/skus";
 
+const singlePrice = displayedPrice("love-me-me");
 const love = getProduct("love-me-me")!;
 const kiss = getProduct("kiss-me-me")!;
 const SUBWAY_IMG = kiss.scenes[2].image; // Tokyo subway passing scene
@@ -193,11 +195,11 @@ function ChapterPrice() {
       <div className="t-ch-sticky">
         <div className="t-ch-center">
           <motion.div className="t-price-hero" style={{ scale: priceScale, opacity: priceOp }}>
-            ¥999<span>税抜</span>
+            {singlePrice.exclTax}<span>税抜</span>
           </motion.div>
           <motion.div className="t-price-sub" style={{ opacity: subOp, y: subY }}>
             <p>
-              税込 ¥1,099。全3種、どこで買っても同じ価格。
+              税込 {singlePrice.inclTax}。公式オンラインストアでは全3種、同じ価格。
               <br />
               まずは、あなたの香りをひとつ。
             </p>
@@ -237,9 +239,9 @@ function StaticStory() {
       </section>
       <section className="t-static-block">
         <div className="t-price-hero">
-          ¥999<span>税抜</span>
+          {singlePrice.exclTax}<span>税抜</span>
         </div>
-        <p>税込 ¥1,099</p>
+        <p>税込 {singlePrice.inclTax}</p>
         <a className="t-cta" href="#shop">
           香りを選ぶ
         </a>

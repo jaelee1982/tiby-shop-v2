@@ -4,6 +4,7 @@
 // 로직(문항·스코어)은 lib/scent/quiz.ts 그대로, 결과 CTA 는 자체 상품 페이지.
 import { useState } from "react";
 import Link from "next/link";
+import { compactPrice } from "@/lib/commerce";
 import { AnimatePresence, motion } from "framer-motion";
 import { quizQuestions, quizReasons } from "@/lib/scent/quiz";
 import { getProductById, tibyProducts } from "@/lib/scent/products";
@@ -96,7 +97,7 @@ export function QuizFlow() {
               もう一度診断する
             </button>
           </div>
-          <p className="t-result-price">¥999（税抜）／税込 ¥1,099</p>
+          <p className="t-result-price">{compactPrice("love-me-me")}</p>
 
           <div className="t-result-share">
             <a

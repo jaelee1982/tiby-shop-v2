@@ -4,6 +4,7 @@
 // 향수 DB 검색 → 분석 → TIBY 레이어링 추천. 로직=lib/scent/analyzer.ts (동일).
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import { compactPrice } from "@/lib/commerce";
 import { motion } from "framer-motion";
 import perfumeDb from "@/lib/scent/perfume_db.json";
 import {
@@ -151,7 +152,7 @@ export function LayeringLab() {
                 この香りを見る
               </Link>
             </div>
-            <p className="t-result-price">¥999（税抜）／税込 ¥1,099</p>
+            <p className="t-result-price">{compactPrice("love-me-me")}</p>
           </div>
 
           {second && (

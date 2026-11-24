@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { products, getProduct } from "@/lib/products";
 import type { Metadata } from "next";
+import { compactPrice, type SingleItemId } from "@/lib/commerce";
 import { ProductPageClient } from "./ProductPageClient";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -13,12 +14,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const product = getProduct(slug);
   if (!product) return {};
+  const description = `${product.tagline.replace("\n", " ")} 公式オンラインストア価格：${compactPrice(slug as SingleItemId)}。`;
   return {
     title: `${product.name} — TIBY Hair Perfume`,
-    description: product.tagline.replace("\n", " "),
+    description,
     openGraph: {
       title: `${product.name} — TIBY`,
-      description: product.tagline.replace("\n", " "),
+      description,
       images: [product.image],
     },
   };

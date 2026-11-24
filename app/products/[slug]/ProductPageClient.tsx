@@ -2,7 +2,7 @@ import Link from "next/link";
 import { getProduct } from "@/lib/products";
 import { SKUS, SLUG_TO_SKU, SKU_ORDER } from "@/lib/skus";
 import { AddToCartButton } from "@/components/cart/AddToCartButton";
-import type { CatalogItemId } from "@/lib/commerce";
+import { compactPrice, displayedPrice, type SingleItemId } from "@/lib/commerce";
 
 // Rich product detail page — existing content (lib/products.ts) re-skinned in the
 // TIBY Design System tone. Hero · problem · fragrance notes · scenes · reviews · cross-sell.
@@ -11,6 +11,8 @@ export function ProductPageClient({ slug }: { slug: string }) {
   const skuId = SLUG_TO_SKU[slug] ?? "love";
   const sku = SKUS[skuId];
   if (!product) return null;
+  const itemId = slug as SingleItemId;
+  const price = displayedPrice(itemId);
 
   const accent = sku.cap; // deeper, readable accent
   const others = SKU_ORDER.filter((id) => id !== skuId);
@@ -42,10 +44,10 @@ export function ProductPageClient({ slug }: { slug: string }) {
 
             <div className="t-price-row" style={{ marginTop: 24 }}>
               <div className="t-price-box">
-                <div className="t-price">¥999<span>税抜</span></div>
-                <div className="t-price-tax">税込 ¥1,099 · Hair Perfume 30ml</div>
+                <div className="t-price">{price.exclTax}<span>税抜</span></div>
+                <div className="t-price-tax">税込 {price.inclTax} · Hair Perfume 30ml</div>
               </div>
-              <AddToCartButton id={slug as CatalogItemId} />
+              <AddToCartButton id={itemId} />
             </div>
             <div className="t-trust">
               <span>SNSで話題 ✨</span><span>·</span><span>全国のドン・キホーテでも取扱中</span>
@@ -161,9 +163,9 @@ export function ProductPageClient({ slug }: { slug: string }) {
       <div className="t-sticky-buy">
         <div className="t-sticky-buy-info">
           <div className="t-sticky-buy-name">{product.name}</div>
-          <div className="t-sticky-buy-price">¥999（税抜）· 税込 ¥1,099</div>
+          <div className="t-sticky-buy-price">{compactPrice(itemId)}</div>
         </div>
-        <AddToCartButton id={slug as CatalogItemId} className="t-cta t-cta-sm" />
+        <AddToCartButton id={itemId} className="t-cta t-cta-sm" />
       </div>
     </div>
   );
